@@ -1,0 +1,43 @@
+media:
+  input: media
+  output: /media
+content:
+  - name: web
+    label: Contenido de la página
+    type: file
+    path: content/site.json
+    fields:
+      - {name: banda, label: Banda, type: string}
+      - {name: subtitulo, label: Subtítulo, type: string}
+      - {name: album, label: Nuevo álbum, type: string}
+      - {name: descripcion, label: Descripción de portada, type: text}
+      - {name: spotify, label: Enlace Spotify, type: string}
+      - {name: youtube, label: Enlace YouTube, type: string}
+      - {name: instagram, label: Enlace Instagram, type: string}
+      - {name: facebook, label: Enlace Facebook, type: string}
+      - {name: contacto, label: Correo de contacto, type: string}
+      - {name: acerca, label: Historia de la banda, type: text}
+      - name: conciertos
+        label: Conciertos
+        type: object
+        list: true
+        fields:
+          - {name: fecha, label: Fecha, type: string}
+          - {name: ciudad, label: Ciudad, type: string}
+          - {name: lugar, label: Lugar, type: string}
+          - {name: entradas, label: URL entradas, type: string}
+      - name: discos
+        label: Discografía
+        type: object
+        list: true
+        fields:
+          - {name: titulo, label: Disco, type: string}
+          - {name: anio, label: Año, type: string}
+      - name: tienda
+        label: Tienda
+        type: object
+        list: true
+        fields:
+          - {name: producto, label: Producto, type: string}
+          - {name: precio, label: Precio, type: string}
+          - {name: enlace, label: Enlace compra, type: string}
