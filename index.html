@@ -18,9 +18,9 @@
   <link rel="icon" href="assets/logo-emblema.png">
   <link rel="preload" href="assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="assets/site.css?v=20261020-management">
-  <link rel="stylesheet" href="assets/tienda.css?v=20261020-1">
-  <script src="assets/tienda.js?v=20261020-1" defer></script>
-  <script src="assets/contenido.js?v=20261020-tienda" defer></script>
+  <link rel="stylesheet" href="assets/tienda.css?v=20261020-jimmy">
+  <script src="assets/tienda.js?v=20261020-jimmy" defer></script>
+  <script src="assets/contenido.js?v=20261020-jimmy" defer></script>
   <script src="assets/site.js?v=20261020-3" defer></script>
 </head>
 <body>
@@ -35,7 +35,7 @@
 <div class="nav-bar">
   <button class="menu-toggle" type="button" aria-controls="menu" aria-expanded="false">MENÚ <span aria-hidden="true">☰</span></button>
   <nav id="menu" aria-label="Navegación principal">
-    <a href="#inicio" aria-current="location">Inicio</a><a href="#musica">Música</a><a href="#conciertos">Conciertos</a><a href="#historia">Historia</a><a href="#galeria">Galería</a><a href="#tienda">Tienda</a><a href="#contacto">Contacto</a>
+    <a href="#inicio" aria-current="location">Inicio</a><a href="#musica">Música</a><a href="#conciertos">Conciertos</a><a href="#historia">Historia</a><a href="#galeria">Galería</a><a href="#tienda">Tienda</a><a href="#jimmy-jazz">Jimmy Jazz G.P.</a><a href="#contacto">Contacto</a>
   </nav>
   <button class="cart-trigger" type="button" data-open-cart aria-haspopup="dialog" aria-controls="cart-dialog">CARRITO <span data-cart-count>0</span></button>
 </div>
@@ -68,6 +68,12 @@
   <p class="shop-status" id="shop-status" role="status" aria-live="polite" aria-atomic="true"></p>
   <p class="shop-note">Arma tu pedido y envíalo por WhatsApp. Allí confirmamos disponibilidad, pago y envío.</p>
 </section>
+<section class="section shop jimmy-shop" id="jimmy-jazz" aria-labelledby="jimmy-title">
+  <div class="shop-heading"><div><p class="eyebrow">UN ESPACIO PARA JIMMY</p><h2 id="jimmy-title">JIMMY JAZZ G.P.</h2><p>Jaime López «Jimmy Jazz», fundador y líder de GP, es la voz y el bajo de Punkies y Cerebro. Este espacio está dedicado a su trayectoria y sus productos.</p></div><button class="btn secondary" type="button" data-open-cart aria-haspopup="dialog" aria-controls="cart-dialog">VER CARRITO (<span data-cart-count>0</span>) →</button></div>
+  <div id="jimmy-tienda-lista" class="product-grid"><p class="empty">Pronto encontrarás aquí los productos de Jimmy Jazz G.P.</p></div>
+  <p class="shop-status" id="jimmy-shop-status" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="shop-note">Su material se añade al mismo carrito. Al comprar, envía el pedido de Jimmy a su WhatsApp. Si eliges productos de ambos, tendrás un mensaje para cada uno.</p>
+</section>
 <section class="section contact" id="contacto" aria-labelledby="contact-title"><div class="contact-heading"><h2 id="contact-title">HABLEMOS.</h2><p>Contratación, conciertos, colaboraciones y prensa.</p><div class="buttons" id="contactLinks"></div><div class="booking-contact"><h3>Management &amp; Booking</h3><address>Phone: <a href="tel:+573045377640">+57 304 537 76 40</a><br>Email: <a href="mailto:punkiesycerebro@gmail.com">punkiesycerebro@gmail.com</a><br>Juan Camilo R.</address></div></div><div class="contact-form-area"><h3>ENVÍANOS UN MENSAJE</h3><form id="formulario-contacto" method="POST" action="#contacto" autocomplete="on"><div class="contact-form-row"><label>Nombre<input required name="name" type="text" maxlength="120" autocomplete="name" placeholder="Tu nombre"></label><label>Correo electrónico<input required name="email" type="email" maxlength="180" autocomplete="email" placeholder="tucorreo@ejemplo.com"></label></div><label>Asunto<input required name="asunto" type="text" maxlength="180" placeholder="¿Sobre qué quieres escribirnos?"></label><label>Mensaje<textarea required name="mensaje" rows="5" maxlength="5000" placeholder="Escribe aquí tu mensaje"></textarea></label><input type="hidden" name="_subject" value="Nuevo mensaje desde Punkies y Cerebro"><input type="hidden" name="_cc" value=""><input type="hidden" name="_next" id="form-next-url" value=""><input type="hidden" name="_captcha" value="false"><input class="form-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="btn primary" type="submit" disabled>ENVIAR MENSAJE →</button><p class="form-alert" id="form-alert" role="status" aria-live="polite" aria-atomic="true">Formulario pendiente de configurar.</p></form></div></section>
 </main>
 <footer><img src="assets/logo-letras.png" alt="Punkies y Cerebro" width="909" height="198" loading="lazy"><p>MEDELLÍN, COLOMBIA · PUNK ROCK LIBRE E INDEPENDIENTE</p><a href="#inicio">VOLVER ARRIBA ↑</a></footer>
@@ -75,8 +81,8 @@
   <div class="cart-heading"><div><p class="eyebrow">TU SELECCIÓN</p><h2 id="cart-title">CARRITO DE COMPRA</h2></div><button class="btn secondary" type="button" data-close-cart aria-label="Cerrar carrito">×</button></div>
   <div id="cart-items"></div>
   <p id="cart-status" class="shop-status" role="status" aria-live="polite" aria-atomic="true"></p>
-  <div class="cart-summary"><p>Total de productos <strong id="cart-total">$0</strong></p><p class="shop-note">Precios en COP. El envío se acuerda por WhatsApp y no está incluido en este total.</p></div>
-  <div class="cart-actions"><button class="btn secondary" type="button" data-close-cart>SEGUIR COMPRANDO</button><a class="btn primary" id="cart-checkout" target="_blank" rel="noopener noreferrer" hidden>COMPRAR POR WHATSAPP ↗</a></div>
+  <div class="cart-summary"><p>Total de productos <strong id="cart-total">$0</strong></p><div id="cart-seller-totals"></div><p class="shop-note">Precios en COP. El envío se acuerda por WhatsApp y no está incluido en este total.</p></div>
+  <div class="cart-actions"><button class="btn secondary" type="button" data-close-cart>SEGUIR COMPRANDO</button><a class="btn primary" id="cart-checkout" target="_blank" rel="noopener noreferrer" hidden>PEDIR A PUNKIES Y CEREBRO ↗</a><a class="btn primary" id="cart-checkout-jimmy" target="_blank" rel="noopener noreferrer" hidden>PEDIR A JIMMY JAZZ ↗</a></div>
   <p class="shop-note" id="checkout-note" hidden>Se abrirá WhatsApp con tu pedido listo. Pulsa Enviar en WhatsApp para hacérnoslo llegar.</p>
 </dialog>
 <dialog id="photo-dialog" aria-label="Fotografía ampliada de la banda"><button class="dialog-close" type="button" aria-label="Cerrar fotografía">Cerrar ×</button><img id="dialog-image" alt=""><p id="dialog-caption"></p></dialog>

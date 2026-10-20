@@ -68,3 +68,15 @@ body:has(#cart-dialog[open]) { overflow: hidden; }
  .cart-item-controls { grid-template-columns: 80px 1fr; }
  .cart-actions .btn { width: 100%; }
 }
+
+/* Jimmy comparte el carrito y conserva la identidad visual del sitio. */
+.jimmy-shop { background: #0b0b0b; }
+.cart-item .cart-seller { color: var(--bright-red); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.cart-seller-total { display: flex; justify-content: space-between; gap: 18px; font-size: 14px; }
+.cart-summary .cart-seller-total strong { font-size: 16px; }
+.cart-actions > a { flex: 1 1 230px; text-align: center; }
+@media (min-width: 761px) {
+ .nav-bar nav { min-width: 0; flex: 1; }
+ .nav-bar nav a { padding-inline: clamp(7px,1.3vw,25px); font-size: clamp(14px,1.5vw,20px); letter-spacing: .6px; }
+ .cart-trigger { padding-inline: 12px; }
+}
