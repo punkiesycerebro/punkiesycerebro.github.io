@@ -82,7 +82,7 @@ No se envían mensajes reales. No hay productos ficticios en el catálogo public
 ## Organización y nueva tanda de libros
 
 El catálogo de Jimmy muestra Libros primero y Discos debajo, en grupos separados.
-La tienda de Punkies conserva su presentación. Las tarjetas de Jimmy tienen
+Ambas tiendas conservan sus grupos. Las tarjetas de ambas tiendas tienen
 imágenes de 180 px de alto que se muestran completas, con cuatro columnas en
 escritorio y tres, dos o una según el ancho de pantalla.
 
