@@ -58,3 +58,13 @@ Cronología de la banda, formación vigente y fotografías de grupo; portada def
 A petición del propietario y tomando como referencia la captura aportada de Ska-P: logo original ampliado y centrado, redes oficiales visibles arriba, navegación roja con letras blancas, titulares en blanco sólido y fotografía en su color original. Se mantiene el acento militar en llamadas a la acción. Las fotografías de los integrantes todavía están pendientes; no se realizó un montaje sin esos archivos.
 
 Revalidado en Chromium a 320, 390, 768, 1024 y 1440 px, sin desbordamiento horizontal, imágenes rotas ni errores JavaScript; menú móvil y Escape correctos. La versión pública sigue intacta.
+
+## Implementación aprobada para publicación
+
+El propietario aprobó la dirección visual de la maqueta y autorizó aplicarla al sitio público. Subió las cuatro fotografías y un logo a `codex/propuesta-inicio` en `0cb6de3`. La implementación usa esos JPEG originales directamente mediante una cuadrícula CSS; no usa retratos generados ni la maqueta como imagen de la página.
+
+La nueva raíz presenta el logo original, redes, navegación roja, los cuatro integrantes y el anuncio del álbum. Mantiene los contenidos reales y el formulario AJAX, incorpora la historia desplegable y una galería con visor nativo. No se inventaron conciertos, productos ni carátulas. `archivo.html` preserva el documento anterior con noindex y el respaldo Git continúa disponible.
+
+Se añadió la fuente local Anton con licencia, metadatos sociales, canonical del dominio GitHub Pages actual, sitemap y robots.txt. Los datos de contenido siguen en `content/site.json`; el diseño deja de depender de los scripts del editor. El dominio futuro y DNS no se modifican.
+
+Validación final: Chromium a 320, 390, 768, 1024 y 1480 px; imágenes y fuente cargadas; menú móvil, Escape, visor de galería, historia, destinos internos y cuatro redes; formulario con respuestas HTTP simuladas de error/éxito sin envío real. No se observaron errores JavaScript. No se ha validado entrega real del correo.
