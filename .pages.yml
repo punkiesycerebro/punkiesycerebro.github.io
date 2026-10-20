@@ -1,43 +1,228 @@
 media:
   input: media
   output: /media
+  categories:
+  - image
+  rename: safe
 content:
-  - name: web
-    label: Contenido de la página
-    type: file
-    path: content/site.json
+- name: web
+  label: Contenido de la página
+  type: file
+  path: content/site.json
+  fields:
+  - name: banda
+    label: Banda
+    type: string
+  - name: subtitulo
+    label: Subtítulo
+    type: string
+  - name: album
+    label: Nuevo álbum
+    type: string
+  - name: descripcion
+    label: Descripción de portada
+    type: text
+  - name: spotify
+    label: Enlace Spotify
+    type: string
+  - name: youtube
+    label: Enlace YouTube
+    type: string
+  - name: instagram
+    label: Enlace Instagram
+    type: string
+  - name: facebook
+    label: Enlace Facebook
+    type: string
+  - name: contacto
+    label: Correo de contacto
+    type: string
+  - name: acerca
+    label: Historia de la banda
+    type: text
+  - name: conciertos
+    label: Conciertos
+    type: object
+    list: true
     fields:
-      - {name: banda, label: Banda, type: string}
-      - {name: subtitulo, label: Subtítulo, type: string}
-      - {name: album, label: Nuevo álbum, type: string}
-      - {name: descripcion, label: Descripción de portada, type: text}
-      - {name: spotify, label: Enlace Spotify, type: string}
-      - {name: youtube, label: Enlace YouTube, type: string}
-      - {name: instagram, label: Enlace Instagram, type: string}
-      - {name: facebook, label: Enlace Facebook, type: string}
-      - {name: contacto, label: Correo de contacto, type: string}
-      - {name: acerca, label: Historia de la banda, type: text}
-      - name: conciertos
-        label: Conciertos
-        type: object
-        list: true
-        fields:
-          - {name: fecha, label: Fecha, type: string}
-          - {name: ciudad, label: Ciudad, type: string}
-          - {name: lugar, label: Lugar, type: string}
-          - {name: entradas, label: URL entradas, type: string}
-      - name: discos
-        label: Discografía
-        type: object
-        list: true
-        fields:
-          - {name: titulo, label: Disco, type: string}
-          - {name: anio, label: Año, type: string}
-      - name: tienda
-        label: Tienda
-        type: object
-        list: true
-        fields:
-          - {name: producto, label: Producto, type: string}
-          - {name: precio, label: Precio, type: string}
-          - {name: enlace, label: Enlace compra, type: string}
+    - name: fecha
+      label: Fecha
+      type: string
+    - name: ciudad
+      label: Ciudad
+      type: string
+    - name: lugar
+      label: Lugar
+      type: string
+    - name: entradas
+      label: URL entradas
+      type: string
+  - name: discos
+    label: Discografía
+    type: object
+    list: true
+    fields:
+    - name: titulo
+      label: Disco
+      type: string
+    - name: anio
+      label: Año
+      type: string
+  - name: tienda
+    label: Tienda
+    type: object
+    list: true
+    fields:
+    - name: producto
+      label: Producto
+      type: string
+    - name: precio
+      label: Precio
+      type: string
+    - name: enlace
+      label: Enlace compra
+      type: string
+- name: apariencia
+  label: Apariencia, colores, letras e imágenes
+  type: file
+  path: content/apariencia.json
+  fields:
+  - name: color_fondo
+    label: Color general del fondo
+    type: string
+    description: 'Color hexadecimal, por ejemplo #FFFFFF (blanco) o #0B0E0A (negro).'
+  - name: color_secciones
+    label: Color de las secciones oscuras
+    type: string
+    description: 'Color hexadecimal, por ejemplo #FFFFFF (blanco) o #0B0E0A (negro).'
+  - name: color_texto
+    label: Color general del texto
+    type: string
+    description: 'Color hexadecimal, por ejemplo #FFFFFF (blanco) o #0B0E0A (negro).'
+  - name: color_menu
+    label: Color de letras del menú
+    type: string
+    description: 'Color hexadecimal, por ejemplo #FFFFFF (blanco) o #0B0E0A (negro).'
+  - name: color_acento
+    label: Color destacado y botones
+    type: string
+    description: 'Color hexadecimal, por ejemplo #FFFFFF (blanco) o #0B0E0A (negro).'
+  - name: color_tarjetas
+    label: Color de tarjetas
+    type: string
+    description: 'Color hexadecimal, por ejemplo #FFFFFF (blanco) o #0B0E0A (negro).'
+  - name: fuente_menu
+    label: Tipo de letra del menú
+    type: select
+    options:
+      values:
+      - name: Barlow Condensed
+        label: Impactante / condensada
+      - name: DM Sans
+        label: Moderna / limpia
+      - name: Arial
+        label: Arial
+      - name: Georgia
+        label: Clásica / serif
+      - name: Impact
+        label: Impact
+  - name: fuente_titulos
+    label: Tipo de letra de los títulos
+    type: select
+    options:
+      values:
+      - name: Barlow Condensed
+        label: Impactante / condensada
+      - name: DM Sans
+        label: Moderna / limpia
+      - name: Arial
+        label: Arial
+      - name: Georgia
+        label: Clásica / serif
+      - name: Impact
+        label: Impact
+  - name: fuente_cuerpo
+    label: Tipo de letra de los párrafos
+    type: select
+    options:
+      values:
+      - name: Barlow Condensed
+        label: Impactante / condensada
+      - name: DM Sans
+        label: Moderna / limpia
+      - name: Arial
+        label: Arial
+      - name: Georgia
+        label: Clásica / serif
+      - name: Impact
+        label: Impact
+  - name: tamano_menu
+    label: Tamaño menú (px)
+    type: number
+    description: Usa un número en píxeles; evita valores extremos.
+  - name: tamano_marca
+    label: Tamaño nombre del encabezado (px)
+    type: number
+    description: Usa un número en píxeles; evita valores extremos.
+  - name: tamano_titulos
+    label: Tamaño títulos de sección (px)
+    type: number
+    description: Usa un número en píxeles; evita valores extremos.
+  - name: tamano_parrafos
+    label: Tamaño párrafos (px)
+    type: number
+    description: Usa un número en píxeles; evita valores extremos.
+  - name: tamano_historia
+    label: Tamaño historia (px)
+    type: number
+    description: Usa un número en píxeles; evita valores extremos.
+  - name: alto_portada
+    label: Altura mínima de portada (px)
+    type: number
+    description: Usa un número en píxeles; evita valores extremos.
+  - name: fondo_portada
+    label: Imagen del fondo principal
+    type: image
+  - name: fondo_historia
+    label: Imagen del fondo de historia
+    type: image
+  - name: logo_portada
+    label: Logo grande de portada
+    type: image
+  - name: logo_menu
+    label: Logo opcional en el menú
+    type: image
+  - name: imagen_disco
+    label: Imagen de la sección musical
+    type: image
+  - name: mostrar_lema
+    label: Mostrar “22 años haciendo ruido”
+    type: boolean
+  - name: mostrar_historia
+    label: Mostrar sección Historia
+    type: boolean
+  - name: mostrar_tienda
+    label: Mostrar sección Tienda
+    type: boolean
+  - name: mostrar_contacto
+    label: Mostrar sección Contacto
+    type: boolean
+- name: galeria
+  label: Galería de fotografías
+  type: file
+  path: content/galeria.json
+  fields:
+  - name: titulo
+    label: Título de la galería
+    type: string
+  - name: fotos
+    label: Fotografías
+    type: object
+    list: true
+    fields:
+    - name: imagen
+      label: Fotografía
+      type: image
+    - name: pie
+      label: Descripción
+      type: string
