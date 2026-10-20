@@ -9,3 +9,20 @@
 /* Encabezado: letras blancas uniformes y buena legibilidad */
 .nav .brand, .nav .brand span, .nav .links a { color: #ffffff; }
 .nav .links a:hover, .nav .links a:focus-visible { color: #ffffff; text-decoration: underline; text-decoration-color: #a5bd6a; text-underline-offset: 5px; }
+
+
+/* OPCIONES CONFIGURABLES DESDE PAGES CMS */
+:root{--cms-menu:#FFFFFF;--cms-head-font:'Barlow Condensed',Arial,sans-serif;--cms-title-font:'Barlow Condensed',Arial,sans-serif;--cms-body-font:'DM Sans',Arial,sans-serif;--cms-menu-size:15px;--cms-brand-size:28px;--cms-title-size:76px;--cms-text-size:16px;--cms-story-size:19px;--cms-hero-height:680px;--cms-card:#1c2419;--cms-dark:#0c100c;--cms-story-bg:none}
+body{font-family:var(--cms-body-font);font-size:var(--cms-text-size);background:var(--bg);color:var(--cream)}
+.nav .brand,.nav .links a,.nav .brand span{color:var(--cms-menu)!important;font-family:var(--cms-head-font)}
+.nav .links a{font-size:var(--cms-menu-size)} .nav .brand{font-size:var(--cms-brand-size)}
+.section h2{font-family:var(--cms-title-font);font-size:clamp(30px,6.5vw,var(--cms-title-size))}
+.hero h2,.tagline,.info-tile h3,.giant{font-family:var(--cms-title-font)}
+.section p,.item{font-size:var(--cms-text-size)}
+.story-grid div:last-child p:first-child{font-size:var(--cms-story-size);white-space:pre-line;overflow-wrap:anywhere}
+.tile{background:var(--cms-card)}.dark{background:var(--cms-dark)}
+.hero{min-height:var(--cms-hero-height)}
+.story{background-image:linear-gradient(90deg,rgba(9,15,10,.85),rgba(9,15,10,.80)),var(--cms-story-bg);background-size:cover;background-position:center}
+#logo-menu-img{height:48px;max-width:220px;object-fit:contain}#logo-menu-img[hidden]{display:none}
+.galeria-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:25px}.galeria-grid figure{margin:0;background:var(--cms-card);padding:9px}.galeria-grid img{display:block;width:100%;height:220px;object-fit:cover}.galeria-grid figcaption{padding:10px 3px;color:var(--muted);font-size:13px}
+@media(max-width:750px){.nav .brand{font-size:clamp(16px,4vw,var(--cms-brand-size))}#logo-menu-img{height:36px}.galeria-grid img{height:180px}}
