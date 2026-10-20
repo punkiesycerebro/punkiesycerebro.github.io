@@ -6,7 +6,7 @@ const data=JSON.parse(fs.readFileSync(root+'content/site.json'));
 // Synthetic products stay in this test; none is added to the published catalogue.
 const jimmy=[{id:'gorra-punkies',producto:'Disco de prueba de Jimmy',precio:30000,categoria:'Disco',tallas:[]},{id:'camisa-jimmy',producto:'Camisa de prueba de Jimmy',precio:40000,categoria:'Libro',tallas:['M','L']}];
 function load(saved,blocked=false,jimmyCatalog=jimmy){
- const dom=new JSDOM(fs.readFileSync(root+'index.html','utf8'),{url:'https://punkiesycerebro.github.io',runScripts:'outside-only'});
+ const dom=new JSDOM(fs.readFileSync(root+'index.html','utf8'),{url:process.env.PYC_TEST_ORIGIN||'https://punkiesycerebro.github.io',runScripts:'outside-only'});
  const w=dom.window;
  w.HTMLElement.prototype.scrollIntoView=function(){w.scrolled=this.id};
  w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute('open','')};
@@ -65,7 +65,7 @@ const removed=load(restored.localStorage.getItem('pyc-cart-v1'));removed.renderS
 assert.equal(removed.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,0);assert.equal(checkout(removed,'jimmy').url,null);
 assert.ok(data.tienda_jimmy.every(product=>!product.producto.includes('prueba')),'no invented Jimmy products in production');
 const cms=load();cms.fetch=async()=>({ok:true,json:async()=>({...data,tienda_jimmy:jimmy})});cms.eval(fs.readFileSync(root+'assets/contenido.js','utf8'));
-setTimeout(()=>{assert.equal(cms.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,2);console.log('PASS: mixed orders isolated by seller, correct phone numbers and subtotals, colliding IDs, sizes, edits, removals, empty carts, legacy data, reload, tabs, blocked storage, return to Jimmy section, CMS and no fabricated products.');},0);
+setTimeout(()=>{assert.equal(cms.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,2);assert.equal(cms.document.querySelector('#form-next-url').value,new URL('/gracias.html',cms.location.origin).href);console.log('PASS: mixed orders isolated by seller, correct phone numbers and subtotals, colliding IDs, sizes, edits, removals, empty carts, legacy data, reload, tabs, blocked storage, return to Jimmy section, CMS and no fabricated products.');},0);
 
 // Exercise the actual published catalogue as well as the isolation fixtures.
 const actual=load();actual.renderShop(data.tienda,data.tienda_jimmy);
