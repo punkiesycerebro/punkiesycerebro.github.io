@@ -103,9 +103,18 @@
     cart = normalizeCart(cart);
     persist();
     loaded = true;
-    const cards = seller => catalog.filter(product => product.seller === seller).map((product, index) => `<article class="product-card">${photo(product)}<div class="product-info"><p class="product-category">${escape(product.categoria)}</p><h3>${escape(product.producto)}</h3>${product.descripcion ? `<p class="product-description">${escape(product.descripcion)}</p>` : ''}<p class="product-price">${money(product.precio)} <small>COP</small></p><form data-product="${escape(product.id)}"><div class="product-options">${product.tallas.length ? `<label for="size-${seller}-${index}">Talla<select id="size-${seller}-${index}" name="size" required><option value="">Elige tu talla</option>${product.tallas.map(size => `<option value="${escape(size)}">${escape(size)}</option>`).join('')}</select></label>` : ''}<label for="quantity-${seller}-${index}">Cantidad<input id="quantity-${seller}-${index}" name="quantity" type="number" min="1" max="${maxQuantity}" step="1" value="1" required></label></div><button class="btn primary" type="submit">AÑADIR AL CARRITO +</button></form></div></article>`).join('');
+    const groupOf = product => {
+      const category = String(product.categoria || '').trim().toLocaleLowerCase('es');
+      if (/^libros?$/.test(category)) return 'libros';
+      if (/^(discos?|cd|vinilos?)$/.test(category)) return 'discos';
+      return 'otros';
+    };
+    const cards = (seller, group = null) => catalog.filter(product => product.seller === seller && (!group || groupOf(product) === group)).map(product => ({product, index: catalog.indexOf(product)})).map(({product, index}) => `<article class="product-card">${photo(product)}<div class="product-info"><p class="product-category">${escape(product.categoria)}</p><${seller === 'jimmy' ? 'h4' : 'h3'}>${escape(product.producto)}</${seller === 'jimmy' ? 'h4' : 'h3'}>${product.descripcion ? `<p class="product-description">${escape(product.descripcion)}</p>` : ''}<p class="product-price">${money(product.precio)} <small>COP</small></p><form data-product="${escape(product.id)}"><div class="product-options">${product.tallas.length ? `<label for="size-${seller}-${index}">Talla<select id="size-${seller}-${index}" name="size" required><option value="">Elige tu talla</option>${product.tallas.map(size => `<option value="${escape(size)}">${escape(size)}</option>`).join('')}</select></label>` : ''}<label for="quantity-${seller}-${index}">Cantidad<input id="quantity-${seller}-${index}" name="quantity" type="number" min="1" max="${maxQuantity}" step="1" value="1" required></label></div><button class="btn primary" type="submit">AÑADIR AL CARRITO +</button></form></div></article>`).join('');
     host.innerHTML = cards('punkies') || '<p class="empty">Pronto tendremos más productos.</p>';
-    if (jimmyHost) jimmyHost.innerHTML = cards('jimmy') || '<p class="empty">Pronto encontrarás aquí los productos de Jimmy Jazz G.P.</p>';
+    if (jimmyHost) jimmyHost.innerHTML = [['libros', 'LIBROS'], ['discos', 'DISCOS'], ['otros', 'OTROS PRODUCTOS']].map(([group, title]) => {
+      const content = cards('jimmy', group);
+      return content ? `<section class="jimmy-category" data-jimmy-category="${group}" aria-labelledby="jimmy-${group}-title"><h3 id="jimmy-${group}-title">${title}</h3><div class="product-grid">${content}</div></section>` : '';
+    }).join('') || '<p class="empty">Pronto encontrarás aquí los productos de Jimmy Jazz G.P.</p>';
     [host, jimmyHost].filter(Boolean).flatMap(element => [...element.querySelectorAll('img')]).forEach(img => img.addEventListener('error', () => {
       const placeholder = document.createElement('div');
       placeholder.className = 'product-placeholder';

@@ -49,8 +49,7 @@ Caso de referencia: CD ×1 + camisa M ×2 + camisa L ×1 + gorra ×1 = $275.000.
 El enlace del menú `#jimmy-jazz` lleva a la sección dedicada a Jimmy, con una
 presentación breve basada en la historia de la banda. Su catálogo independiente
 está en `tienda_jimmy` de `content/site.json` y se edita en Pages CMS con los
-mismos campos que la tienda de Punkies. Incluye los cuatro productos aportados
-por el propietario: los discos Humores y En la sima ($20.000 cada uno),
+mismos campos que la tienda de Punkies. Sus primeros cuatro productos son: los discos Humores y En la sima ($20.000 cada uno),
 Las píldoras de la ira ($30.000) y Manual práctico del suicida ($50.000).
 Sus cuatro fotos originales están en `media/productos/jimmy-jazz/`.
 
@@ -79,3 +78,17 @@ NODE_PATH=/tmp/pyc-tests/node_modules node tests/carrito-vendedores.cjs
 ```
 
 No se envían mensajes reales. No hay productos ficticios en el catálogo publicado.
+
+## Organización y nueva tanda de libros
+
+El catálogo de Jimmy muestra Libros primero y Discos debajo, en grupos separados.
+La tienda de Punkies conserva su presentación. Las tarjetas de Jimmy tienen
+imágenes de 180 px de alto que se muestran completas, con cuatro columnas en
+escritorio y tres, dos o una según el ancho de pantalla.
+
+Se añadieron los 24 libros de `Libros.zip` con sus PNG originales y el precio
+provisional indicado de $50.000 COP cada uno. Se conservaron los precios de los
+cuatro artículos anteriores. El catálogo tiene 26 libros y dos discos.
+La prueba del catálogo verifica los grupos en ese orden, los 28 productos,
+los IDs únicos de los controles, los precios y un pedido de $1.320.000 por una
+unidad de cada artículo de Jimmy. La lista definitiva de precios queda pendiente.
