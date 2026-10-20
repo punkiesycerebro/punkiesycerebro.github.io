@@ -26,7 +26,7 @@ function add(w,id,quantity,size){
 function checkout(w,seller){const el=w.document.querySelector(seller==='jimmy'?'#cart-checkout-jimmy':'#cart-checkout');return {el,url:el.hasAttribute('href')?new URL(el.href):null}}
 function msg(w,seller){return checkout(w,seller).url?.searchParams.get('text')}
 const w=load();const d=w.document;
-assert.equal(d.querySelectorAll('#tienda-lista .product-card').length,3);
+assert.equal(d.querySelectorAll('#tienda-lista .product-card').length,4);
 assert.equal(d.querySelectorAll('#jimmy-tienda-lista .product-card').length,2);
 assert.equal(new Set([...d.querySelectorAll('[id]')].map(x=>x.id)).size,d.querySelectorAll('[id]').length,'IDs remain unique across catalogues');
 add(w,'gorra-punkies',1);
@@ -93,3 +93,23 @@ const repriced=load(JSON.stringify([{id:'jimmy:libro-los-pecados-capitales',size
 assert.match(msg(repriced,'jimmy'),/80[.]000/);
 assert.match(msg(repriced,'jimmy'),/15[.]000/);
 assert.match(msg(repriced,'jimmy'),/Vademécum argólico, volumen II/);
+
+// Upcoming Punkies album is displayed first but cannot enter a purchase.
+assert.deepEqual([...actual.document.querySelectorAll('[data-punkies-category]')].map(el=>el.dataset.punkiesCategory),['discos','otros']);
+const discCards=[...actual.document.querySelectorAll('[data-punkies-category="discos"] .product-card')];
+assert.equal(discCards.length,2);
+assert.equal(discCards[0].dataset.productCard,'este-lado-hacia-el-enemigo-2026');
+assert.match(discCards[0].textContent,/PRÓXIMAMENTE/);
+assert.equal(discCards[0].querySelector('.product-price'),null);
+assert.equal(discCards[0].querySelector('form,button,input'),null);
+assert.equal(actual.document.querySelectorAll('[data-punkies-category="otros"] .product-card').length,2);
+const nonPurchasable=load(JSON.stringify([{id:'este-lado-hacia-el-enemigo-2026',size:'',quantity:1},{id:'gorra-punkies',size:'',quantity:1}]));
+assert.match(msg(nonPurchasable,'punkies'),/45[.]000/);
+assert.doesNotMatch(msg(nonPurchasable,'punkies'),/Este lado hacia el enemigo/);
+const forged=nonPurchasable.document.createElement('form');
+forged.dataset.product='este-lado-hacia-el-enemigo-2026';
+nonPurchasable.document.querySelector('#tienda-lista').append(forged);
+forged.dispatchEvent(new nonPurchasable.Event('submit',{bubbles:true,cancelable:true}));
+assert.doesNotMatch(msg(nonPurchasable,'punkies'),/Este lado hacia el enemigo/);
+const upcomingOnly=load(JSON.stringify([{id:'este-lado-hacia-el-enemigo-2026',quantity:1}]));
+assert.equal(checkout(upcomingOnly,'punkies').url,null);
