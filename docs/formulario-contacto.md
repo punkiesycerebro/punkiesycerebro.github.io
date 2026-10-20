@@ -11,7 +11,9 @@ no contiene la respuesta del proveedor, por lo que no permite determinar la caus
 - Los rechazos del servicio se muestran como texto, nunca HTML.
 - Se distinguen activación, límite de solicitudes, fallo del servidor, respuesta no JSON, fallo de conexión y tiempo de espera.
 - Una respuesta de activación nunca se considera entrega aunque incluya `success: true`.
-- Tiempo máximo de 20 segundos, sin reintentos automáticos ni borrado de campos ante fallo. Un timeout no prueba que el servidor no haya procesado el envío.
+- Aviso de demora a los 20 segundos y tiempo máximo de 60 segundos, sin reintentos
+  automáticos ni borrado de campos ante fallo. Un timeout no prueba que el servidor
+  no haya procesado el envío.
 - El estado de éxito indica aceptación por el servicio; no garantiza llegada a la bandeja de entrada.
 - Ante error se ofrecen WhatsApp de management y el correo configurado, con nombre,
   correo, asunto y mensaje completos. El visitante debe confirmar el envío en la
@@ -20,6 +22,9 @@ no contiene la respuesta del proveedor, por lo que no permite determinar la caus
 ## Incidente de tiempo de espera
 
 El propietario confirmó de nuevo la activación y conservar `juancamilo1504@gmail.com`.
+Después confirmó que el mensaje de la prueba sí llegó normalmente a su buzón,
+aunque la página mostró timeout. Se amplió la espera de confirmación a 60 segundos
+y a los 20 se indica demora, sin habilitar un segundo envío ni anunciar fallo.
 Su captura muestra que se agotaron los 20 segundos, sin respuesta del proveedor.
 También fallaron por timeout las consultas de solo lectura a la ayuda de FormSubmit
 durante la revisión. Esto no permite determinar si recibió el POST original ni
