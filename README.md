@@ -1,6 +1,7 @@
 # Punkies y Cerebro — sitio oficial
 
-Sitio estático para GitHub Pages: https://punkiesycerebro.github.io/.
+Sitio estático para GitHub Pages. Dominio principal preparado: https://punkiesycerebro.com/.
+Activación DNS y HTTPS: véase `docs/dominio-personalizado.md`.
 No necesita framework, compilación, cuentas adicionales ni un editor visual.
 
 ## Estructura
@@ -25,7 +26,8 @@ definidas directamente en el HTML con sus encuadres en CSS.
 
 Trabajar en una rama `codex/…`, comprobar cambios y abrir un pull request.
 Fusionar únicamente con aprobación del propietario. GitHub Pages publica desde main.
-No cambiar DNS ni conectar `punkiesycerebro.com` sin una instrucción nueva.
+El propietario autorizó conectar `punkiesycerebro.com` conservando GoDaddy y GitHub Pages.
+Coordinar la activación con los cambios DNS; no trasladar el registro ni contratar hosting.
 
 Respaldo anterior al rediseño: `codex/respaldo-antes-rediseno-20261020`.
 
