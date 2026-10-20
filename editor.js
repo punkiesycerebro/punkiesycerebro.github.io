@@ -3,6 +3,7 @@
 (()=>{'use strict';
 const $=s=>document.querySelector(s), T=$('#properties'), frame=$('#preview');
 const sections=['inicio','musica','conciertos','historia','tienda','galeria','contacto'];
+const blockLabels={disco:'Tarjeta del nuevo disco',streaming:'Tarjeta de plataformas musicales',redes:'Enlaces de redes sociales',formulario:'Formulario de contacto',botones_portada:'Botones de portada',botones_musica:'Botones de música'};
 const names={inicio:'Portada',musica:'Música',conciertos:'Conciertos',historia:'Historia',tienda:'Tienda',galeria:'Galería',contacto:'Contacto'};
 const fields=[
  ['banda','Nombre de la banda','#nombre-menu','site'],['subtitulo','Subtítulo de portada','#subtitulo','site'],
@@ -10,6 +11,8 @@ const fields=[
  ['acerca','Historia completa','#acerca','site'],['lema','Lema de la portada','.tagline','dis'],
  ['titular_musica','Título: Música','#musica>.section-head h2','dis'],['presentacion_musica','Texto: Música','#musica>.section-head+p','dis'],
  ['titular_streaming','Título: Plataformas musicales','.info-tile h3','dis'],
+ ['etiqueta_disco','Etiqueta del disco nuevo','.album-tile [data-texto-bloque="etiqueta_disco"]','dis'],
+ ['estado_disco','Estado del disco nuevo','.album-tile [data-texto-bloque="estado_disco"]','dis'],
  ['titular_conciertos','Título: Conciertos','#conciertos>.section-head h2','dis'],['presentacion_conciertos','Texto: Conciertos','#conciertos>.section-head+p','dis'],
  ['titular_historia','Título: Historia','#historia>.section-head h2','dis'],
  ['titular_tienda','Título: Tienda','#tienda>.section-head h2','dis'],['presentacion_tienda','Texto: Tienda','#tienda>.section-head+p','dis'],
@@ -21,7 +24,7 @@ const colors=[['color_menu','Letras del menú'],['color_texto','Texto general'],
 const fonts=[['Barlow Condensed','Punk / condensada'],['DM Sans','Moderna'],['Impact','Impact'],['Georgia','Georgia'],['Arial','Arial'],['Verdana','Verdana']];
 const fallbackAppearance={color_fondo:'#11140F',color_secciones:'#0C100C',color_texto:'#E9E7D8',color_menu:'#FFFFFF',color_acento:'#A5BD6A',color_tarjetas:'#1C2419',fuente_menu:'Barlow Condensed',fuente_titulos:'Barlow Condensed',fuente_cuerpo:'DM Sans',tamano_menu:15,tamano_marca:28,tamano_titulos:76,tamano_parrafos:16,tamano_historia:19,alto_portada:680,fondo_portada:'/assets/pantano.jpg',fondo_historia:'',logo_portada:'/assets/logo-letras.png',logo_menu:'',imagen_disco:'/assets/logo-emblema.png',mostrar_lema:true,mostrar_historia:true,mostrar_tienda:true,mostrar_contacto:true};
 const initial={site:{},app:fallbackAppearance,dis:{textos:{},secciones:{},orden:sections.slice(),extras:[],formato:{}},gal:{titulo:'GALERÍA',fotos:[]}};
-const state={site:{},app:{},dis:{},gal:{}};let tab='textos',selText='subtitulo',selSection='inicio',imageTarget=null,images={},pending=false,undo=[],toastTimeout=null,loaded=false;
+const state={site:{},app:{},dis:{},gal:{}};let tab='textos',selText='subtitulo',selSection='inicio',selBlock='disco',selPhotoIndex=0,imageTarget=null,images={},pending=false,undo=[],toastTimeout=null,loaded=false;
 const clone=o=>JSON.parse(JSON.stringify(o));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const attr=esc;
@@ -40,7 +43,7 @@ function commit(){pending=true;setStatus('● Cambios sin publicar');remember();
 function modify(callback){snapshot();callback();commit()}
 const persistControl=(obj,key,v)=>modify(()=>obj[key]=v);
 function previewNow(){if(!loaded)return;const w=frame.contentWindow;
- try{w.__visualImages=images;w.renderCMSContent?.(state.site);w.aplicarApariencia?.(state.app);w.actualizarGaleria?.(state.gal);w.aplicarDiseno?.(state.dis)}catch(e){console.error('vista previa',e);alertMsg('Espera un momento: la vista está actualizando')}
+ try{w.__visualImages=images;w.renderCMSContent?.(state.site);w.aplicarApariencia?.(state.app);w.actualizarGaleria?.(state.gal);w.aplicarDiseno?.(state.dis);w.configurarHeaderSocials?.(state.dis.encabezado_sociales||{});w.document.querySelectorAll('#galeria-grid figure').forEach(el=>el.setAttribute('draggable','true'))}catch(e){console.error('vista previa',e);alertMsg('Espera un momento: la vista está actualizando')}
 }
 function fieldValue(f){return f[3]==='site'?state.site[f[0]]:state.dis.textos?.[f[0]]}
 function selectTab(t){tab=t;$('#tabs').querySelectorAll('button').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));renderProps()}
@@ -95,7 +98,7 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
  let h='';
  if(tab==='textos'){
    const f=fields.find(x=>x[0]===selText)||fields[1];
-   h=`<h2>Editar textos</h2><p class="note">Haz clic sobre un texto de la vista previa o selecciónalo aquí.</p>${selectHTML('field','Texto que quieres editar',selText,fields.map(x=>[x[0],x[1]]),'selection')}${textBlock(f)}${formatControls(selText)}<h3>Otros contenidos</h3><p class="note">Los conciertos, discos y productos continúan en Pages CMS; así conservamos las fichas y enlaces de la banda.</p><a class="action" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://app.pagescms.org/">Abrir Pages CMS ↗</a>`;
+   h=`<h2>Editar textos</h2><p class="note">Haz clic sobre un texto de la vista previa o selecciónalo aquí.</p>${selectHTML('field','Texto que quieres editar',selText,fields.map(x=>[x[0],x[1]]),'selection')}${textBlock(f)}${formatControls(selText)}<button class="action danger" id="toggle-text">${state.dis.ocultos_texto?.[selText]?'↺ Restaurar texto':'✕ Quitar este texto del sitio'}</button>${['album','etiqueta_disco','estado_disco'].includes(selText)?'<button class="action danger" id="hide-album-card">✕ Quitar tarjeta completa del nuevo disco</button>':''}<h3>Otros contenidos</h3><p class="note">Los conciertos, discos y productos continúan en Pages CMS; así conservamos las fichas y enlaces de la banda.</p><a class="action" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://app.pagescms.org/">Abrir Pages CMS ↗</a>`;
  }else if(tab==='estilo'){
    h='<h2>Colores y fuentes</h2><p class="note">Cambia una opción y verás el resultado inmediatamente.</p>';
    h+=colors.map(([k,l])=>colorHTML(k,l,state.app)).join('');
@@ -114,21 +117,50 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
    h='<h2>Secciones y distribución</h2><p class="note">Arrastra las filas o utiliza las flechas para cambiar el orden. Las secciones ocultas desaparecen de la web.</p>';
    h+=`<div class="ordered">${(state.dis.orden||all).filter(k=>all.includes(k)).map(id=>`<div class="row-ordered" draggable="true" data-drag="${id}"><span>${esc(names[id]||((state.dis.extras||[]).find(x=>x.id===id)?.titulo||'Sección nueva'))}</span><button title="Subir" data-move="${id}" data-dir="-1">↑</button><button title="Bajar" data-move="${id}" data-dir="1">↓</button><button title="Editar" data-section="${id}">✎</button></div>`).join('')}</div>`;
    h+=`<button class="big-action" id="add-section">＋ Añadir nueva sección</button><h3>Editar sección seleccionada</h3>${selectHTML('sec','Sección',selSection,all.map(id=>[id,names[id]||(state.dis.extras||[]).find(x=>x.id===id)?.titulo||id]),'selectSection')}`;
-   h+=`<label class="control-check"><input type="checkbox" data-kind="section" data-key="oculta" ${sect.oculta===true?'checked':''}> Ocultar esta sección</label>`;
+   h+=`<label class="control-check"><input type="checkbox" data-kind="section" data-key="oculta" ${sect.oculta===true?'checked':''}> Quitar esta sección de la página (reversible)</label>
+   <div class="actions-row"><button class="action danger" id="hide-section">${sect.oculta?'↺ Recuperar sección':'✕ Eliminar de la vista pública'}</button><button class="action" id="section-up">↑ Subir sección</button><button class="action" id="section-down">↓ Bajar sección</button></div>`;
    if(selSection!=='inicio')h+=colorHTML('color','Color de fondo',sect,'section')+advancedImage('section','imagen',sect,'Imagen de fondo de sección');
    if(extra){h+=`<h3>Contenido del bloque añadido</h3>${['titulo','texto','boton','enlace'].map((k)=>`<div class="control"><label>${{titulo:'Título',texto:'Párrafo',boton:'Texto del botón',enlace:'Enlace HTTPS del botón'}[k]}</label>${k==='texto'?`<textarea data-kind="extra" data-key="${k}" rows="5">${esc(extra[k]||'')}</textarea>`:`<input type="text" value="${attr(extra[k]||'')}" data-kind="extra" data-key="${k}">`}</div>`).join('')}${imgHTML('imagen','Imagen del bloque',extra,'extra')}<button class="action danger" id="delete-extra">Eliminar sección nueva</button>`}
+ }else if(tab==='bloques'){
+   state.dis.bloques??={};const block=state.dis.bloques[selBlock]||{};
+   h=`<h2>Editar elemento</h2><p class="note">Haz clic sobre una tarjeta, formulario, botones o foto de la vista previa para seleccionarlos. Puedes quitarlos de la página sin borrar su información.</p>
+   ${selectHTML('block','Elemento seleccionado',selBlock,Object.entries(blockLabels),'selectBlock')}
+   <div class="selected-element"><strong>${esc(blockLabels[selBlock]||selBlock)}</strong><p class="note">Si lo ocultas, podrás volver a mostrarlo aquí cuando quieras.</p></div>
+   <label class="control-check"><input type="checkbox" data-kind="block" data-key="oculto" ${block.oculto===true?'checked':''}> Ocultar / quitar este elemento de la web</label>
+   <button class="big-action" type="button" id="toggle-block">${block.oculto?'↺ Recuperar elemento':'✕ Quitar elemento de la página'}</button>`;
+   if(selBlock==='disco')h+='<p class="note">Para cambiar la portada del disco, selecciona la imagen en la vista previa. El título y el estado se editan haciendo clic en los textos.</p>';
+   if(selBlock==='formulario')h+='<button class="big-action" type="button" id="go-form">✉ Configurar formulario y correo</button>';
+   h+=`<h3>Secciones completas</h3><p class="note">Puedes seleccionar una sección y ocultarla sin destruirla.</p>`;
+   h+=Object.keys(names).map(k=>`<button class="action" style="margin:5px" data-section="${k}">${esc(names[k])}</button>`).join('');
+ }else if(tab==='contacto'){
+   state.dis.formulario??={};const form=state.dis.formulario;
+   h=`<h2>Formulario de contacto</h2><p class="note">Selecciona el formulario en la vista previa o configura aquí dónde llegan los mensajes. No necesitas modificar ningún código.</p>
+   <div class="control"><label>Correo que recibe los mensajes</label><input type="email" data-kind="site" data-key="correo_formulario" value="${attr(state.site.correo_formulario||'')}" placeholder="contacto@tudominio.com"></div>
+   <div class="control"><label>Correo público de la banda (opcional)</label><input type="email" data-kind="site" data-key="contacto" value="${attr(state.site.contacto||'')}" placeholder="banda@ejemplo.com"></div>
+   <p class="note">El correo receptor puede quedar visible en el código de la web. El servicio FormSubmit solicitará una confirmación por email cuando se active.</p>`;
+   h+=[['titulo','Título del formulario','ENVÍANOS UN MENSAJE'],['etiqueta_name','Texto: nombre','Nombre'],['etiqueta_email','Texto: correo','Correo electrónico'],['etiqueta_asunto','Texto: asunto','Asunto'],['etiqueta_mensaje','Texto: mensaje','Mensaje'],['placeholder_name','Ejemplo en nombre','Tu nombre'],['placeholder_email','Ejemplo en correo','tucorreo@ejemplo.com'],['placeholder_asunto','Ejemplo en asunto','¿Sobre qué quieres escribirnos?'],['placeholder_mensaje','Ejemplo en mensaje','Escribe aquí tu mensaje']].map(([k,l,d])=>`<div class="control"><label>${esc(l)}</label><input type="text" data-kind="formulario" data-key="${k}" value="${attr(form[k]??d)}"></div>`).join('');
+   h+=`<button type="button" class="action danger" id="hide-form">${state.dis.bloques?.formulario?.oculto?'Mostrar formulario':'Ocultar formulario'}</button>`;
  }else if(tab==='galeria'){
-   h='<h2>Galería visual</h2><p class="note">Elige la presentación, ajusta cada foto y cambia el orden con las flechas o arrastrando las tarjetas.</p>';
+   h='<h2>Galería visual</h2><p class="note">Haz clic sobre una foto en la página para seleccionarla y ajustar su tamaño. Elige la presentación, ajusta cada foto y cambia el orden con las flechas o arrastrando las tarjetas.</p>';
    h+=`<div class="control"><label>Título de galería</label><input type="text" data-kind="gal" data-key="titulo" value="${attr(state.gal.titulo||'GALERÍA')}"></div>`;
    h+=selectHTML('modo','Presentación',state.gal.modo||'cuadricula',[['cuadricula','Cuadrícula'],['carrusel','Carrusel con flechas'],['mosaico','Mosaico']],'gal');
    h+=slider('alto','Altura general de las fotos',state.gal,120,750,10,'gal');
    h+=slider('columnas','Columnas (cuadrícula y mosaico)',state.gal,1,5,1,'gal');
    h+=slider('espacio','Separación entre fotografías',state.gal,0,55,1,'gal');
    h+='<button id="add-photo" class="big-action">＋ Añadir fotografía</button>';
-   h+=(state.gal.fotos||[]).map((f,i)=>`<div class="img-item" draggable="true" data-photo-drag="${i}"><div class="row-ordered"><strong>☰ Foto ${i+1}</strong><span></span><button data-photo-move="${i}" data-dir="-1" title="Anterior">↑</button><button data-photo-move="${i}" data-dir="1" title="Siguiente">↓</button></div>${f.imagen?`<img class="img-preview" src="${attr(images[f.imagen]||f.imagen)}" alt="Foto">`:''}<button type="button" class="file-btn" data-gallery-img="${i}">Cambiar fotografía</button><div class="control"><label>Descripción</label><input value="${attr(f.pie||'')}" type="text" data-gallery-caption="${i}"></div>${selectHTML('ajuste','Ajuste de esta imagen',f.ajuste||'cover',[['cover','Llenar marco (recorta)'],['contain','Mostrar completa (sin recortar)'],['fill','Estirar al marco']],'photo:'+i)}${slider('posX','Encuadre horizontal',f,0,100,1,'photo:'+i)}${slider('posY','Encuadre vertical',f,0,100,1,'photo:'+i)}${slider('alto','Altura individual',f,120,750,10,'photo:'+i)}${advancedImage('photo','imagen',{...f,__index:i},'Fotografía '+(i+1))}<button class="action danger" data-remove-photo="${i}">Eliminar fotografía</button></div>`).join('');
+   if(state.gal.fotos.length)h+=`<p class="note">Foto seleccionada: ${Math.min(selPhotoIndex+1,state.gal.fotos.length)} de ${state.gal.fotos.length}. También puedes arrastrar la esquina de la foto seleccionada en la vista previa.</p><button type="button" class="action danger" id="delete-selected-photo">✕ Eliminar foto seleccionada</button>`;
+   h+=(state.gal.fotos||[]).map((f,i)=>`<div class="img-item" draggable="true" data-photo-drag="${i}"><div class="row-ordered"><strong>☰ Foto ${i+1}</strong><button type="button" data-focus-photo="${i}" title="Seleccionar foto">Editar</button><span></span><button data-photo-move="${i}" data-dir="-1" title="Anterior">↑</button><button data-photo-move="${i}" data-dir="1" title="Siguiente">↓</button></div>${f.imagen?`<img class="img-preview" src="${attr(images[f.imagen]||f.imagen)}" alt="Foto">`:''}<button type="button" class="file-btn" data-gallery-img="${i}">Cambiar fotografía</button><div class="control"><label>Descripción</label><input value="${attr(f.pie||'')}" type="text" data-gallery-caption="${i}"></div>${selectHTML('ajuste','Ajuste de esta imagen',f.ajuste||'cover',[['cover','Llenar marco (recorta)'],['contain','Mostrar completa (sin recortar)'],['fill','Estirar al marco']],'photo:'+i)}${slider('posX','Encuadre horizontal',f,0,100,1,'photo:'+i)}${slider('posY','Encuadre vertical',f,0,100,1,'photo:'+i)}${slider('alto','Altura individual',f,120,750,10,'photo:'+i)}${slider('ancho','Ancho de esta foto (%)',f,25,100,5,'photo:'+i)}${advancedImage('photo','imagen',{...f,__index:i},'Fotografía '+(i+1))}<button class="action danger" data-remove-photo="${i}">Eliminar fotografía</button></div>`).join('');
  }else if(tab==='enlaces'){
    h='<h2>Enlaces y contacto</h2><p class="note">Cambia las redes, el correo visible y el destinatario del formulario. Para activar el formulario, haz un envío de prueba y confirma el mensaje que te envíe FormSubmit al buzón elegido. Los visitantes podrán escribir nombre, asunto, correo y mensaje. El correo de destino quedará visible en el HTML como parte de la integración estática.</p>';
-   h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo público de contacto'],['correo_formulario','Correo que recibe los mensajes del formulario']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
+   
+   const header=state.dis.encabezado_sociales||{};
+   h+='<div class="selected-element"><strong>Redes sociales del encabezado</strong><p class="note">Se verán en la parte superior derecha de la web. Los botones utilizan los enlaces que configuras más abajo. Puedes seleccionar los íconos desde la vista previa.</p></div>';
+   h+=`<label class="control-check"><input type="checkbox" data-kind="socialheader" data-key="mostrar" ${header.mostrar!==false?'checked':''}> Mostrar iconos de redes en la cabecera</label>`;
+   h+=[['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['spotify','Spotify']].map(([k,l])=>`<label class="control-check"><input type="checkbox" data-kind="socialheader" data-key="mostrar_${k}" ${header['mostrar_'+k]!==false?'checked':''}> Mostrar ${l} en el encabezado</label>`).join('');
+   h+=colorHTML('color','Color de los iconos',{color:header.color||'#FFFFFF'},'socialheader');
+   h+=slider('tamano','Tamaño de los iconos (px)',{tamano:header.tamano||22},16,38,1,'socialheader');
+   h+='<h3>Direcciones de cada red</h3><p class="note">Al pulsar un icono, el visitante abrirá la red social correspondiente en otra pestaña.</p>';
+h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo público de contacto'],['correo_formulario','Correo que recibe los mensajes del formulario']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
  }
  T.innerHTML=h;
 }
@@ -137,9 +169,19 @@ function routeEvent(e){const target=e.target;const kind=target.dataset.kind,key=
  if(!kind)return;
  if(kind==='selection'){selText=target.value;renderProps();return}
  if(kind==='selectSection'){selSection=target.value;renderProps();return}
+ if(kind==='selectBlock'){selBlock=target.value;renderProps();return}
+ if(kind==='block'){modify(()=>{state.dis.bloques??={};state.dis.bloques[selBlock]??={};state.dis.bloques[selBlock][key]=target.checked});renderProps();return}
+ if(kind==='formulario'){modify(()=>{state.dis.formulario??={};state.dis.formulario[key]=target.value});return}
  if(kind==='text'){
   const f=currentField(key);if(!f)return;
   modify(()=>{if(f[3]==='site')state.site[key]=target.value;else state.dis.textos[key]=target.value});return
+ }
+ if(kind==='socialheader'){
+  let val=target.type==='checkbox'?target.checked:target.type==='range'?Number(target.value):target.value;
+  if(key==='color'&&target.type==='text'&&!/^#[a-fA-F0-9]{6}$/.test(val))return;
+  modify(()=>{state.dis.encabezado_sociales??={};state.dis.encabezado_sociales[key]=val});
+  if(target.type==='color')T.querySelectorAll('[data-kind="socialheader"][data-key="color"][type="text"]').forEach(x=>x.value=val);
+  if(target.type==='range')target.closest('.control').querySelector('output').textContent=val+'px';return;
  }
  if(kind==='site'){persistControl(state.site,key,target.value);return}
  if(kind==='format'){
@@ -162,7 +204,7 @@ function routeEvent(e){const target=e.target;const kind=target.dataset.kind,key=
   return;
  }
  if(kind.startsWith('photo:')){const i=Number(kind.split(':')[1]);const photo=state.gal.fotos?.[i];if(photo){persistControl(photo,key,target.type==='range'?Number(target.value):target.value);if(target.type==='range')target.closest('.control').querySelector('output').textContent=target.value+'px'}return}
- if(kind==='gal'){persistControl(state.gal,key,target.value);return}
+ if(kind==='gal'){persistControl(state.gal,key,target.type==='range'?Number(target.value):target.value);return}
  if(kind==='app'||kind==='dis'){
   let val=target.value;if(target.type==='range')val=Number(val);
   if(target.type==='text'&&key.startsWith('color')&&!/^#[0-9a-fA-F]{6}$/.test(val))return;
@@ -182,20 +224,28 @@ T.addEventListener('input',e=>{
 T.addEventListener('change',e=>{if(e.target.matches('select,[type=checkbox]'))routeEvent(e)});
 T.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.focusPhoto!==undefined){selPhotoIndex=Number(b.dataset.focusPhoto);selectTab('galeria');return}
  if(b.dataset.resetCrop){const [scope,key,index]=b.dataset.resetCrop.split(':');const obj=scope==='app'?state.app:scope==='section'?(state.dis.secciones[selSection]??={}):state.gal.fotos?.[Number(index)];if(obj){modify(()=>{Object.assign(obj,{[key+'_fit']:'contain',[key+'_zoom']:100,[key+'_x']:50,[key+'_y']:50,[key+'_opacity']:100,[key+'_overlay']:scope==='photo'?0:35})});renderProps()}return}
  if(b.dataset.format){modify(()=>{state.dis.formato??={};state.dis.formato[selText]??={};const obj=state.dis.formato[selText];obj[b.dataset.format]=!obj[b.dataset.format]});renderProps();return}
+ if(b.id==='toggle-text'){modify(()=>{state.dis.ocultos_texto??={};state.dis.ocultos_texto[selText]=!state.dis.ocultos_texto[selText]});renderProps();return}
+ if(b.id==='hide-album-card'){modify(()=>{state.dis.bloques??={};state.dis.bloques.disco??={};state.dis.bloques.disco.oculto=true});selBlock='disco';selectTab('bloques');return}
+ if(b.id==='hide-section'){modify(()=>{state.dis.secciones[selSection]??={};state.dis.secciones[selSection].oculta=!state.dis.secciones[selSection].oculta});renderProps();return}
+ if(b.id==='section-up'||b.id==='section-down'){const i=state.dis.orden.indexOf(selSection),j=i+(b.id==='section-up'?-1:1);if(j>=0&&j<state.dis.orden.length)modify(()=>{state.dis.orden.splice(j,0,state.dis.orden.splice(i,1)[0])});renderProps();return}
+ if(b.id==='go-form'){selectTab('contacto');return}
+ if(b.id==='toggle-block'||b.id==='hide-form'){const id=b.id==='hide-form'?'formulario':selBlock;modify(()=>{state.dis.bloques??={};state.dis.bloques[id]??={};state.dis.bloques[id].oculto=!state.dis.bloques[id].oculto});renderProps();return}
  if(b.id==='reset-format'){modify(()=>{if(state.dis.formato)delete state.dis.formato[selText]});renderProps();return}
  if(b.dataset.imgKind){imageTarget={kind:b.dataset.imgKind,key:b.dataset.imgKey,i:b.dataset.galleryImg!==undefined?Number(b.dataset.galleryImg):undefined};$('#fileinput').click();return}
  if(b.dataset.clearImg){const k=b.dataset.clearImg,kind=b.dataset.imgKind;modify(()=>{if(kind==='section'){state.dis.secciones[selSection]??={};state.dis.secciones[selSection][k]=''}else if(kind==='extra'){const x=state.dis.extras.find(x=>x.id===selSection);if(x)x[k]=''}else state.app[k]=''});renderProps();return}
  if(b.dataset.galleryImg!==undefined){imageTarget={kind:'galphoto',i:Number(b.dataset.galleryImg)};$('#fileinput').click();return}
  if(b.dataset.photoMove!==undefined){const i=Number(b.dataset.photoMove),j=i+Number(b.dataset.dir);if(j>=0&&j<state.gal.fotos.length){modify(()=>{const a=state.gal.fotos;a.splice(j,0,a.splice(i,1)[0])});renderProps()}return}
  if(b.dataset.removePhoto!==undefined){modify(()=>state.gal.fotos.splice(Number(b.dataset.removePhoto),1));renderProps();return}
- if(b.dataset.section){selSection=b.dataset.section;renderProps();return}
+ if(b.dataset.section){selSection=b.dataset.section;selectTab('secciones');return}
  if(b.dataset.move){const i=state.dis.orden.indexOf(b.dataset.move),j=i+Number(b.dataset.dir);if(j>=0&&j<state.dis.orden.length)modify(()=>{const a=state.dis.orden;a.splice(j,0,a.splice(i,1)[0])});renderProps();return}
  if(b.id==='add-section'){if(state.dis.extras.length>=20){alertMsg('Máximo 20 secciones nuevas');return}
   let id='x'+String(Date.now()).slice(-11);while(state.dis.orden.includes(id))id='x'+String(Date.now()+Math.floor(Math.random()*1000)).slice(-11);
   modify(()=>{state.dis.extras.push({id,titulo:'Nueva sección',texto:'Escribe aquí el contenido de esta sección.',boton:'',enlace:'',imagen:''});state.dis.orden.push(id)});selSection=id;renderProps();return}
  if(b.id==='delete-extra'){modify(()=>{state.dis.extras=state.dis.extras.filter(x=>x.id!==selSection);state.dis.orden=state.dis.orden.filter(x=>x!==selSection);delete state.dis.secciones[selSection]});selSection='inicio';renderProps();return}
+ if(b.id==='delete-selected-photo'){if(state.gal.fotos[selPhotoIndex]&&confirm('¿Quitar esta fotografía de la galería?')){modify(()=>state.gal.fotos.splice(selPhotoIndex,1));selPhotoIndex=Math.max(0,selPhotoIndex-1);renderProps()}return}
  if(b.id==='add-photo'){imageTarget={kind:'galnew'};$('#fileinput').click();return}
 });
 let cropDrag=null;
@@ -213,26 +263,42 @@ T.addEventListener('drop',e=>{const row=e.target.closest('[data-drag]');if(!row|
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('button[data-tab]');if(b)selectTab(b.dataset.tab)});
 function hookPreview(){const doc=frame.contentDocument;if(!doc)return;
  let old=null;
- const style=doc.createElement('style');style.textContent='[data-editor-selected]{outline:3px solid #cfff80!important;outline-offset:3px!important} #subtitulo:hover,#album:hover,#descripcion:hover,#acerca:hover,.tagline:hover,.section-head h2:hover{outline:2px dashed #cfff8099;outline-offset:4px} a,button,[data-extra]{cursor:pointer!important} [contenteditable=true]{outline:3px solid #cfff80!important;background:#1b2716db!important;cursor:text!important}';doc.head.appendChild(style);
+ const style=doc.createElement('style');style.textContent='[data-editor-selected]{outline:3px solid #cfff80!important;outline-offset:3px!important} #subtitulo:hover,#album:hover,#descripcion:hover,#acerca:hover,.tagline:hover,.section-head h2:hover,.tile:hover,.contact-form-area:hover,.galeria-grid figure:hover{outline:2px dashed #cfff8099;outline-offset:3px} a,button{cursor:pointer!important} [contenteditable=true]{outline:3px solid #cfff80!important;background:#1b2716db!important;cursor:text!important}';doc.head.appendChild(style);
+ const select=(node)=>{if(old)old.removeAttribute('data-editor-selected');old=node;if(node)node.setAttribute('data-editor-selected','true')};
  doc.addEventListener('dblclick',e=>{
-  const el=e.target;const f=fields.find(f=>el.closest(f[2]));if(!f)return;
-  e.preventDefault();e.stopPropagation();const node=el.closest(f[2]);if(!node)return;
+  const el=e.target;const f=fields.find(f=>el.closest(f[2]))||(el.closest('#album-music')?fields.find(f=>f[0]==='album'):null);if(!f)return;
+  e.preventDefault();e.stopPropagation();const node=el.closest(f[2])||el.closest('#album-music');if(!node)return;
   node.setAttribute('contenteditable','true');node.setAttribute('spellcheck','true');node.focus();
   const selection=doc.getSelection(),range=doc.createRange();range.selectNodeContents(node);selection.removeAllRanges();selection.addRange(range);
-  const update=()=>{node.removeEventListener('blur',update);node.removeAttribute('contenteditable');
-   const val=node.textContent;if(f[3]==='site')modify(()=>state.site[f[0]]=val);else modify(()=>state.dis.textos[f[0]]=val);
-   selText=f[0];selectTab('textos');alertMsg('Texto actualizado en el borrador');
+  const update=()=>{node.removeEventListener('blur',update);node.removeAttribute('contenteditable');const val=node.textContent;
+   if(f[3]==='site')modify(()=>state.site[f[0]]=val);else modify(()=>state.dis.textos[f[0]]=val);
+   selText=f[0];selectTab('textos');alertMsg('Texto guardado en el borrador');
   };node.addEventListener('blur',update,{once:true});
  },true);
  doc.addEventListener('click',e=>{
   e.preventDefault();e.stopPropagation();const el=e.target;
-  const matching=fields.find(f=>el.closest(f[2]));
-  if(old)old.removeAttribute('data-editor-selected');
-  if(matching){selText=matching[0];selectTab('textos');old=el.closest(matching[2]);old?.setAttribute('data-editor-selected','true');alertMsg('Seleccionado: '+matching[1]);return}
-  const image=el.closest('#logo-portada-img,#logo-menu-img,#imagen-disco-img');if(image){selectTab('imagenes');old=image;old.setAttribute('data-editor-selected','true');return}
-  const sect=el.closest('main section');if(sect){selSection=sect.id;selectTab('secciones');old=sect;old.setAttribute('data-editor-selected','true');return}
-  alertMsg('Selecciona un título, un texto o una sección');
+  const photo=el.closest('#galeria-grid figure');if(photo){const i=Array.from(photo.parentNode.children).indexOf(photo);if(i>=0){selPhotoIndex=i;select(photo);selectTab('galeria');addGrip(doc,photo,i);const card=T.querySelector(`[data-photo-drag="${i}"]`);card?.scrollIntoView({block:'nearest'})}return}
+  const img=el.closest('#logo-portada-img,#logo-menu-img,#imagen-disco-img');if(img){select(img);selectTab('imagenes');return}
+  const matching=fields.find(f=>el.closest(f[2]))||(el.closest('#album-music')?fields.find(f=>f[0]==='album'):null);
+  if(matching){selText=matching[0];select(el.closest(matching[2])||el.closest('#album-music'));selectTab('textos');return}
+  const form=el.closest('.contact-form-area');if(form){select(form);selectTab('contacto');return}
+  const headerSocial=el.closest('#header-socials a,#header-socials');if(headerSocial){select(headerSocial);selectTab('enlaces');return}
+ const social=el.closest('#contactLinks a,#musicLinks a');if(social){select(social);selectTab('enlaces');return}
+  const block=el.closest('[data-visual-block]');if(block){selBlock=block.dataset.visualBlock;select(block);selectTab('bloques');return}
+  const sect=el.closest('main section');if(sect){selSection=sect.id;select(sect);selectTab('secciones');return}
+  alertMsg('Haz clic sobre una foto, texto, tarjeta o formulario');
  },true);
+ // Reorganización de fotografías con el mouse sobre la vista previa.
+ let from=null;
+ doc.addEventListener('dragstart',e=>{const fig=e.target.closest('#galeria-grid figure');if(fig){from=Array.from(fig.parentNode.children).indexOf(fig);e.dataTransfer.effectAllowed='move'}});
+ doc.addEventListener('dragover',e=>{if(e.target.closest('#galeria-grid figure'))e.preventDefault()});
+ doc.addEventListener('drop',e=>{const fig=e.target.closest('#galeria-grid figure');if(!fig||from===null)return;e.preventDefault();const to=Array.from(fig.parentNode.children).indexOf(fig);if(from>=0&&to>=0&&from!==to){modify(()=>{const a=state.gal.fotos;a.splice(to,0,a.splice(from,1)[0])});selPhotoIndex=to;renderProps()}from=null});
+ doc.querySelectorAll('#galeria-grid figure').forEach(el=>el.setAttribute('draggable','true'));
+}
+function addGrip(doc,fig,i){doc.querySelectorAll('.editor-grip').forEach(x=>x.remove());const grip=doc.createElement('div');grip.className='editor-grip';grip.textContent='↘ Tamaño';grip.title='Arrastra para cambiar el tamaño';fig.append(grip);
+ let start=null;grip.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();grip.setPointerCapture(e.pointerId);start={x:e.clientX,y:e.clientY,w:fig.clientWidth,h:fig.querySelector('img')?.clientHeight||300};});
+ grip.addEventListener('pointermove',e=>{if(!start)return;let h=Math.round(Math.max(120,Math.min(750,start.h+e.clientY-start.y)));const w=Math.round(Math.max(25,Math.min(100,((start.w+e.clientX-start.x)/Math.max(1,fig.parentNode.clientWidth))*100)));fig.querySelector('img').style.height=h+'px';fig.style.setProperty('--item-width',w+'%');});
+ grip.addEventListener('pointerup',e=>{if(!start)return;const img=fig.querySelector('img'),h=Math.round(Math.max(120,Math.min(750,img.clientHeight))),w=Math.round(Math.max(25,Math.min(100,fig.clientWidth/Math.max(1,fig.parentNode.clientWidth)*100)));start=null;if(state.gal.fotos?.[i])modify(()=>{state.gal.fotos[i].alto=h;state.gal.fotos[i].ancho=w});renderProps()});
 }
 frame.addEventListener('load',()=>{loaded=true;hookPreview();setTimeout(previewNow,150);setTimeout(previewNow,900)});
 $('#desktop').addEventListener('click',()=>{$('#frame-shell').classList.remove('mobile');$('#desktop').classList.add('active');$('#mobile').classList.remove('active')});
@@ -282,16 +348,32 @@ function makeZIP(files){let position=0;const local=[],center=[];const now=new Da
  const cdlen=center.reduce((a,b)=>a+b.length,0),end=new Uint8Array(22);write32(end,0,0x06054b50);write16(end,8,center.length);write16(end,10,center.length);write32(end,12,cdlen);write32(end,16,position);return new Blob([...local,...center,end],{type:'application/zip'});
 }
 function fromBase64(uri){const base=uri.split(',')[1]||'',raw=atob(base),arr=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)arr[i]=raw.charCodeAt(i);return arr}
-$('#export').addEventListener('click',()=>{if(!Object.keys(state.site).length){alertMsg('Todavía no se cargaron los datos');return}
- const data=[];
- for(const [k,p] of [['site','content/site.json'],['app','content/apariencia.json'],['gal','content/galeria.json'],['dis','content/diseno.json']]){
-  if(JSON.stringify(state[k])!==JSON.stringify(serverBaseline?.[k]))data.push([p,JSON.stringify(state[k],null,2)+'\n']);
- }
- if(!data.length){alertMsg('No hay cambios para publicar. Modifica algo primero.');return}
-
- let count=0;for(const [path,uri] of Object.entries(images)){if(!path.startsWith('/media/visual/')||!uri.startsWith('data:image/'))continue;data.push([path.slice(1),fromBase64(uri)]);count++}
- data.push(['LEEME-PARA-PUBLICAR.txt',`PUNKIES Y CEREBRO — CÓMO PUBLICAR LOS CAMBIOS\n\n1. Descomprime este ZIP en tu computador.\n2. Abre https://github.com/punkiesycerebro/punkiesycerebro.github.io\n3. Add file > Upload files.\n4. ARRASTRA LAS CARPETAS content y media (si existe), NO la carpeta exterior.\n5. Verifica rutas content/site.json, content/apariencia.json, content/diseno.json, content/galeria.json.\n6. Pulsa Commit changes y espera unos minutos.\n7. Actualiza https://punkiesycerebro.github.io con Ctrl+F5.\n\nAVISO: Esta exportación conserva los datos leídos al abrir el editor. Si cambiaste algo en Pages CMS después, recarga el editor primero para no sobrescribir esos cambios.\nNo subas este archivo de instrucciones si no quieres; es solo una guía.\n\nImágenes nuevas: ${count}.\n`]);
- const zip=makeZIP(data),a=document.createElement('a'),url=URL.createObjectURL(zip);a.href=url;a.download='punkies-cambios-visuales.zip';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),45000);alertMsg('ZIP descargado. Descomprímelo y súbelo a GitHub para publicar.');
+const mediaPaths=()=>{const seen=new Set();const walk=o=>{if(typeof o==='string'){if(/^\/?media\/visual\/[a-zA-Z0-9_.-]+$/.test(o))seen.add('/'+o.replace(/^\//,''));return}if(Array.isArray(o)){o.forEach(walk);return}if(o&&typeof o==='object')Object.values(o).forEach(walk)};walk(state.app);walk(state.gal);walk(state.dis);return [...seen]};
+async function mediaAvailable(path){
+ const uri=images[path];if(typeof uri==='string'&&/^data:image\/(png|jpeg|webp);base64,/.test(uri))return fromBase64(uri);
+ try{const response=await fetch(path,{cache:'no-store'});if(response.ok&&response.headers.get('content-type')?.startsWith('image/'))return new Uint8Array(await response.arrayBuffer())}catch{}
+ return null;
+}
+$('#export').addEventListener('click',async()=>{
+ if(!Object.keys(state.site).length){alertMsg('Todavía no se cargaron los datos');return}
+ const btn=$('#export');btn.disabled=true;btn.textContent='Comprobando fotografías...';
+ try{
+  const data=[];
+  for(const [k,path] of [['site','content/site.json'],['app','content/apariencia.json'],['gal','content/galeria.json'],['dis','content/diseno.json']]){
+   if(JSON.stringify(state[k])!==JSON.stringify(serverBaseline?.[k]))data.push([path,JSON.stringify(state[k],null,2)+'\n']);
+  }
+  const missing=[];let count=0;
+  for(const path of mediaPaths()){
+   const bytes=await mediaAvailable(path);
+   if(!bytes){missing.push(path);continue}
+   data.push([path.slice(1),bytes]);count++;
+  }
+  if(missing.length){alert('NO SE GENERÓ EL ZIP porque faltan '+missing.length+' fotografía(s).\n\n'+missing.join('\n')+'\n\nVuelve a subir esas imágenes en el editor y descarga de nuevo. Así evitamos publicar fotos rotas.');return}
+  if(!data.length){alertMsg('No hay cambios para publicar.');return}
+  data.push(['INSTRUCCIONES-PARA-SUBIR.txt',`PUNKIES Y CEREBRO — PUBLICACIÓN SIN FOTOS PERDIDAS\n\nCONTENIDO DEL ZIP: ${data.length} archivo(s) de datos o imágenes. Imágenes verificadas: ${count}.\n\n1. Descomprime este ZIP en tu computador.\n2. Abre https://github.com/punkiesycerebro/punkiesycerebro.github.io\n3. Add file → Upload files.\n4. Entra a la carpeta que acabas de descomprimir. Arrastra TODO su contenido a la raíz de GitHub, incluyendo las carpetas CONTENT y MEDIA. No subas el ZIP ni solo archivos sueltos.\n5. ANTES de hacer Commit changes, verifica que GitHub muestre las rutas media/visual/pyc-... y content/galeria.json. Si NO aparecen las fotos, cancela la operación.\n6. Confirma Commit changes, espera la publicación y actualiza la web con Ctrl+F5.\n\nLas fotos antiguas que ya estaban publicadas se incluyen para que el ZIP sea una entrega completa.\nSi editaste Pages CMS después de abrir este editor, primero respalda tu borrador y vuelve a cargar la versión publicada para no sobrescribir datos ajenos.\n`]);
+  const zip=makeZIP(data),a=document.createElement('a'),url=URL.createObjectURL(zip);a.href=url;a.download='punkies-V6-publicar-con-fotos.zip';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),45000);
+  alertMsg(`ZIP listo: ${count} imágenes comprobadas y archivos de configuración. Sube las carpetas content y media.`);
+ }catch(e){console.error(e);alert('No se pudo preparar el ZIP. No se perdió el borrador. '+e.message)}finally{btn.disabled=false;btn.textContent='⬇ Comprobar fotos y descargar ZIP'}
 });
 async function start(){setStatus('Leyendo tu web...');assetsDb=await openDB();await restoreImages();
  const [site,app,gal,dis]=await Promise.all([

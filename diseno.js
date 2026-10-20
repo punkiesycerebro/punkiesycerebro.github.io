@@ -1,7 +1,7 @@
 /* Estructura editable: orden, bloques, titulares y fondos. */
 (()=>{
  const mapa={
-  lema:'.tagline',presentacion_musica:'#musica>.section-head+p',titular_musica:'#musica>.section-head h2',
+  lema:'.tagline',etiqueta_disco:'.album-tile [data-texto-bloque="etiqueta_disco"]',estado_disco:'.album-tile [data-texto-bloque="estado_disco"]',presentacion_musica:'#musica>.section-head+p',titular_musica:'#musica>.section-head h2',
   titular_conciertos:'#conciertos>.section-head h2',presentacion_conciertos:'#conciertos>.section-head+p',
   titular_historia:'#historia>.section-head h2',titular_tienda:'#tienda>.section-head h2',
   presentacion_tienda:'#tienda>.section-head+p',titular_contacto:'#contacto>.section-head h2',
@@ -28,10 +28,11 @@
   for(const [k,sel] of Object.entries(mapa))setText(document.querySelector(sel),texts[k]);
   // Aplicación segura de formato individual: solo propiedades CSS permitidas.
   const safeFont=/^(Barlow Condensed|DM Sans|Impact|Georgia|Arial|Verdana)$/;
-  const formatTargets={...mapa,banda:'#nombre-menu',subtitulo:'#subtitulo',album:'#album',descripcion:'#descripcion',acerca:'#acerca'};
+  const formatTargets={...mapa,album_bloque:'#album-music',banda:'#nombre-menu',subtitulo:'#subtitulo',album:'#album',descripcion:'#descripcion',acerca:'#acerca'};
   for(const [key,sel] of Object.entries(formatTargets)){
    const el=document.querySelector(sel);if(!el)continue;
    const f=d.formato?.[key]||{};
+   el.dataset.visualText=key;el.hidden=d.ocultos_texto?.[key]===true;
    el.style.fontWeight=f.negrita===true?'800':'';
    el.style.fontStyle=f.cursiva===true?'italic':'';
    el.style.textDecoration=f.subrayado===true?'underline':'';
@@ -52,6 +53,25 @@
   const extras=Array.isArray(d.extras)?d.extras.slice(0,30):[];
   for(const x of extras){const node=addExtra(x);if(node)main.append(node)}
   const secciones=d.secciones||{};
+  for(const [name,sel] of Object.entries({disco:'.album-tile',streaming:'.info-tile',redes:'#contactLinks',formulario:'.contact-form-area',botones_portada:'.hero .buttons',botones_musica:'#musicLinks'})){
+    const e=document.querySelector(sel);if(e)e.hidden=d.bloques?.[name]?.oculto===true;
+  }
+  window.configurarHeaderSocials?.(d.encabezado_sociales||{});
+  const formCfg=d.formulario||{};
+  const form=document.getElementById('formulario-contacto');
+  if(form){
+    const title=document.getElementById('titulo-formulario');if(title && typeof formCfg.titulo==='string')title.textContent=formCfg.titulo;
+    for(const [name,text] of [['name','Nombre'],['email','Correo electrónico'],['asunto','Asunto'],['mensaje','Mensaje']]){
+      const input=form.elements.namedItem(name);const label=input?.closest('label');
+      if(label && typeof formCfg['etiqueta_'+name]==='string'){
+        // Preserva el control al sustituir únicamente el nodo de texto del label.
+        const textNode=[...label.childNodes].find(n=>n.nodeType===Node.TEXT_NODE);
+        if(textNode)textNode.textContent=formCfg['etiqueta_'+name];
+      }
+      if(input && typeof formCfg['placeholder_'+name]==='string')input.placeholder=formCfg['placeholder_'+name];
+    }
+  }
+
   const order=Array.isArray(d.orden)?d.orden:ids;
   [...ids,...extras.map(x=>x.id)].forEach(id=>{
    const el=document.getElementById(id);if(!el)return;

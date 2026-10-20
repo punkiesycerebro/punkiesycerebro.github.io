@@ -63,3 +63,26 @@ main{display:flex;flex-direction:column}
 
 /* Formulario de contacto V5 */
 .contact-form-area{max-width:790px;margin:28px 0 0;padding:26px;border:1px solid #536348;background:rgba(7,12,8,.72);border-radius:12px}.contact-form-area h3{margin:0 0 18px;color:#fff}.contact-form-area form{display:grid;gap:16px}.contact-form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}.contact-form-area label{display:flex;flex-direction:column;color:#e8eede;font-weight:650;gap:7px;font-size:14px}.contact-form-area input,.contact-form-area textarea{box-sizing:border-box;min-width:0;width:100%;padding:13px 14px;color:#fff;background:#192119;border:1px solid #68765d;border-radius:6px;font:inherit}.contact-form-area input:focus,.contact-form-area textarea:focus{outline:2px solid #a5bd6a;outline-offset:2px}.contact-form-area textarea{resize:vertical}.contact-form-area button{justify-self:start;cursor:pointer}.contact-form-area button:disabled{opacity:.4;cursor:not-allowed}.contact-form-area .form-alert{margin:0;color:#aabb9c;font-size:12px}.form-honey{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;opacity:0!important}@media(max-width:620px){.contact-form-row{grid-template-columns:1fr}.contact-form-area{padding:17px}}
+
+/* Editor visual V6 — ocultación real, selección y ajustes directos */
+[data-visual-block][hidden],.contact-form-area[hidden],.tile[hidden],.buttons[hidden]{display:none!important}
+.editor-grip{position:absolute;bottom:14px;right:14px;z-index:9;background:#d4f0a3;color:#111;box-shadow:0 2px 12px #000;cursor:nwse-resize;font:bold 14px Arial;padding:9px;border-radius:5px;user-select:none}
+.galeria-grid figure[data-editor-selected]{outline:3px solid #e1ff9f;outline-offset:2px}
+
+[data-visual-text][hidden]{display:none!important}
+
+/* V6.1: iconos de redes en el encabezado; enlaces y colores controlados desde el editor. */
+.nav {gap:clamp(9px,1.35vw,20px)}
+.nav .brand{flex:0 1 auto;min-width:0;white-space:nowrap}
+.nav .links {margin-left:auto;gap:clamp(9px,1.55vw,22px)}
+.header-socials{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex:0 0 auto;
+ --social-color:#ffffff;--social-size:22px}
+.header-socials:empty{display:none}
+.header-socials a{display:inline-grid;place-items:center;width:calc(var(--social-size) + 12px);height:calc(var(--social-size) + 12px);
+ color:var(--social-color);border:1px solid transparent;border-radius:8px;transition:background .15s,transform .15s;flex:0 0 auto}
+.header-socials a:hover,.header-socials a:focus-visible{background:#a5bd6a26;border-color:#a5bd6a80;transform:translateY(-2px);outline:none}
+.header-socials svg{width:var(--social-size)!important;height:var(--social-size)!important;display:block;margin:0!important}
+@media(max-width:1100px){.nav{padding-left:20px;padding-right:20px}.nav .brand{font-size:clamp(18px,2.3vw,var(--cms-brand-size))}.nav .links a{font-size:clamp(11px,1.15vw,var(--cms-menu-size))}}
+@media(max-width:900px){.nav .menu{display:block;order:3;margin-left:4px}.nav .links{display:none;position:absolute;top:76px;left:0;right:0;background:#10150f;flex-direction:column;padding:25px;gap:20px}.nav .links.open{display:flex}.header-socials{margin-left:auto}}
+@media(max-width:750px){.nav .links{top:65px}}
+@media(max-width:470px){.nav{gap:3px;padding:0 10px}.nav .brand{font-size:clamp(14px,4vw,19px);max-width:46vw;white-space:normal;line-height:1}.header-socials{gap:0}.header-socials a{width:calc(min(var(--social-size),20px) + 8px);height:calc(min(var(--social-size),20px) + 8px)}.header-socials svg{width:min(var(--social-size),20px)!important;height:min(var(--social-size),20px)!important}}
