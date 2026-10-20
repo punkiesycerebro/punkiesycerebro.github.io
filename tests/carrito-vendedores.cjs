@@ -63,6 +63,18 @@ const blocked=load(undefined,true);add(blocked,'jimmy:gorra-punkies',1);assert.m
 assert.match(blocked.document.querySelector('#jimmy-shop-status').textContent,/solo durante esta visita/);
 const removed=load(restored.localStorage.getItem('pyc-cart-v1'));removed.renderShop(data.tienda,[]);
 assert.equal(removed.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,0);assert.equal(checkout(removed,'jimmy').url,null);
-assert.equal(data.tienda_jimmy.length,0,'no invented Jimmy products in production');
+assert.ok(data.tienda_jimmy.every(product=>!product.producto.includes('prueba')),'no invented Jimmy products in production');
 const cms=load();cms.fetch=async()=>({ok:true,json:async()=>({...data,tienda_jimmy:jimmy})});cms.eval(fs.readFileSync(root+'assets/contenido.js','utf8'));
 setTimeout(()=>{assert.equal(cms.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,2);console.log('PASS: mixed orders isolated by seller, correct phone numbers and subtotals, colliding IDs, sizes, edits, removals, empty carts, legacy data, reload, tabs, blocked storage, return to Jimmy section, CMS and no fabricated products.');},0);
+
+// Exercise the actual published catalogue as well as the isolation fixtures.
+const actual=load();actual.renderShop(data.tienda,data.tienda_jimmy);
+assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,4);
+for(const product of data.tienda_jimmy){assert.ok(fs.existsSync(root+product.imagen));add(actual,'jimmy:'+product.id,1);}
+assert.match(msg(actual,'jimmy'),/120[.]000/);
+assert.equal(checkout(actual,'jimmy').url.pathname,'/573052318020');
+assert.equal(checkout(actual,'punkies').url,null);
+assert.match(msg(actual,'jimmy'),/Las píldoras de la ira/);
+assert.match(msg(actual,'jimmy'),/Manual práctico del suicida/);
+assert.match(msg(actual,'jimmy'),/En la sima/);
+assert.match(msg(actual,'jimmy'),/Humores/);

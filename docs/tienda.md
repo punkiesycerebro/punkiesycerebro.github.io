@@ -49,8 +49,10 @@ Caso de referencia: CD ×1 + camisa M ×2 + camisa L ×1 + gorra ×1 = $275.000.
 El enlace del menú `#jimmy-jazz` lleva a la sección dedicada a Jimmy, con una
 presentación breve basada en la historia de la banda. Su catálogo independiente
 está en `tienda_jimmy` de `content/site.json` y se edita en Pages CMS con los
-mismos campos que la tienda de Punkies. Inicialmente está vacío, a la espera de
-los productos del propietario.
+mismos campos que la tienda de Punkies. Incluye los cuatro productos aportados
+por el propietario: los discos Humores y En la sima ($20.000 cada uno),
+Las píldoras de la ira ($30.000) y Manual práctico del suicida ($50.000).
+Sus cuatro fotos originales están en `media/productos/jimmy-jazz/`.
 
 `renderShop(tienda, tienda_jimmy)` determina el vendedor por la lista de origen.
 Los IDs de Jimmy usan internamente el prefijo reservado `jimmy:`; no incluir

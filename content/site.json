@@ -43,5 +43,42 @@
       "tallas": []
     }
   ],
-  "tienda_jimmy": []
+  "tienda_jimmy": [
+    {
+      "id": "disco-humores",
+      "producto": "Disco — Humores",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-humores.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-pildoras-de-la-ira",
+      "producto": "Libro — Las píldoras de la ira",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/libro-pildoras-de-la-ira.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-manual-practico-del-suicida",
+      "producto": "Libro — Manual práctico del suicida",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-manual-practico-del-suicida.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-en-la-sima",
+      "producto": "Disco — En la sima",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-en-la-sima.png",
+      "tallas": []
+    }
+  ]
 }
