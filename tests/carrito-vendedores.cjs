@@ -5,7 +5,7 @@ const root=require('node:path').resolve(__dirname,'..')+require('node:path').sep
 const data=JSON.parse(fs.readFileSync(root+'content/site.json'));
 // Synthetic products stay in this test; none is added to the published catalogue.
 const jimmy=[{id:'gorra-punkies',producto:'Disco de prueba de Jimmy',precio:30000,categoria:'Disco',tallas:[]},{id:'camisa-jimmy',producto:'Camisa de prueba de Jimmy',precio:40000,categoria:'Libro',tallas:['M','L']}];
-function load(saved,blocked=false){
+function load(saved,blocked=false,jimmyCatalog=jimmy){
  const dom=new JSDOM(fs.readFileSync(root+'index.html','utf8'),{url:'https://punkiesycerebro.github.io',runScripts:'outside-only'});
  const w=dom.window;
  w.HTMLElement.prototype.scrollIntoView=function(){w.scrolled=this.id};
@@ -14,7 +14,7 @@ function load(saved,blocked=false){
  if(saved)w.localStorage.setItem('pyc-cart-v1',saved);
  if(blocked)Object.defineProperty(w,'localStorage',{get(){throw Error('blocked')}});
  w.eval(fs.readFileSync(root+'assets/tienda.js','utf8'));
- w.renderShop(data.tienda,jimmy);
+ w.renderShop(data.tienda,jimmyCatalog);
  return w;
 }
 function add(w,id,quantity,size){
@@ -69,20 +69,27 @@ setTimeout(()=>{assert.equal(cms.document.querySelectorAll('#jimmy-tienda-lista 
 
 // Exercise the actual published catalogue as well as the isolation fixtures.
 const actual=load();actual.renderShop(data.tienda,data.tienda_jimmy);
-assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,28);
+assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,29);
 assert.deepEqual([...actual.document.querySelectorAll('[data-jimmy-category]')].map(el=>el.dataset.jimmyCategory),['libros','discos']);
-assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] .product-card').length,26);
+assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] .product-card').length,27);
 assert.equal(actual.document.querySelectorAll('[data-jimmy-category="discos"] .product-card').length,2);
-assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] h4').length,26);
+assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] h4').length,27);
 const inputs=[...actual.document.querySelectorAll('#jimmy-tienda-lista input')];
 assert.equal(new Set(inputs.map(el=>el.id)).size,inputs.length,'quantity IDs are unique across groups');
-for(const product of data.tienda_jimmy.filter(p=>p.categoria==='Libro'&&p.id!=='libro-pildoras-de-la-ira'))assert.equal(product.precio,50000);
+assert.equal(data.tienda_jimmy.filter(p=>p.categoria==='Libro').reduce((total,p)=>total+p.precio,0),1295000);
 assert.equal(data.tienda_jimmy.find(p=>p.id==='libro-pildoras-de-la-ira').precio,30000);
-for(const product of data.tienda_jimmy){assert.ok(fs.existsSync(root+product.imagen));add(actual,'jimmy:'+product.id,1);}
-assert.match(msg(actual,'jimmy'),/1[.]320[.]000/);
+for(const product of data.tienda_jimmy){if(product.imagen)assert.ok(fs.statSync(root+product.imagen).isFile());add(actual,'jimmy:'+product.id,1);}
+assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-placeholder').length,1);
+assert.match(msg(actual,'jimmy'),/1[.]335[.]000/);
 assert.equal(checkout(actual,'jimmy').url.pathname,'/573052318020');
 assert.equal(checkout(actual,'punkies').url,null);
 assert.match(msg(actual,'jimmy'),/Las píldoras de la ira/);
 assert.match(msg(actual,'jimmy'),/Manual práctico del suicida/);
 assert.match(msg(actual,'jimmy'),/En la sima/);
 assert.match(msg(actual,'jimmy'),/Humores/);
+
+// Stored carts must use current prices and full updated titles.
+const repriced=load(JSON.stringify([{id:'jimmy:libro-los-pecados-capitales',size:'',quantity:2,precio:50000},{id:'jimmy:libro-vademecum-argolico-ii',size:'',quantity:1}]),false,data.tienda_jimmy);
+assert.match(msg(repriced,'jimmy'),/80[.]000/);
+assert.match(msg(repriced,'jimmy'),/15[.]000/);
+assert.match(msg(repriced,'jimmy'),/Vademécum argólico, volumen II/);

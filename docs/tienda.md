@@ -91,4 +91,18 @@ provisional indicado de $50.000 COP cada uno. Se conservaron los precios de los
 cuatro artículos anteriores. El catálogo tiene 26 libros y dos discos.
 La prueba del catálogo verifica los grupos en ese orden, los 28 productos,
 los IDs únicos de los controles, los precios y un pedido de $1.320.000 por una
-unidad de cada artículo de Jimmy. La lista definitiva de precios queda pendiente.
+unidad de cada artículo de Jimmy. La tanda inicial se publicó con precios provisionales; la lista definitiva ya se incorporó según se describe a continuación.
+
+## Lista definitiva de precios
+
+Se aplicó la lista de 27 libros aportada por el propietario. Se completó el título
+Catálogo de tronquitos con anecdotario y se distinguió Tablaturas de canciones
+rosa, volumen II. Vademécum argólico, volumen II se añadió como producto separado
+a $50.000, con `imagen` vacía hasta recibir su portada original. No se reutiliza
+la foto del primer volumen; la tarjeta muestra «Imagen pendiente».
+
+El catálogo tiene 27 libros y dos discos. Una unidad de cada libro suma
+$1.295.000 COP; el total con los dos discos es $1.335.000 COP. Se comprobaron
+el pedido con esos importes y la recuperación de carritos guardados usando
+los precios actuales, incluso si el navegador contiene importes anteriores.
+Los precios de los discos no cambian.
