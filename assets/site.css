@@ -182,3 +182,10 @@ footer p, footer a { font-size: 10px; letter-spacing: 1px; color: var(--muted); 
 .band-lineup ul{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px 32px;list-style:none;margin:0;padding:0}
 .band-lineup li{font-size:18px;line-height:1.5;color:var(--text)}
 .band-lineup strong{color:var(--bright-red)}
+
+/* Datos de Management & Booking, junto al formulario existente. */
+.booking-contact { margin-top: 32px; padding-top: 26px; border-top: 1px solid var(--line); }
+.booking-contact h3 { margin: 0 0 14px; font-size: 26px; letter-spacing: .5px; }
+.booking-contact address { font-style: normal; line-height: 1.9; color: var(--muted); overflow-wrap: anywhere; }
+.booking-contact a { text-decoration: underline; text-underline-offset: 4px; }
+.booking-contact a:hover { color: var(--bright-red); }
