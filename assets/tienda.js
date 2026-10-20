@@ -33,7 +33,7 @@
     for (const row of rows) {
       if (!row || typeof row !== 'object') continue;
       const product = findProduct(row.id);
-      if (!product || !Number.isInteger(row.quantity) || row.quantity < 1) continue;
+      if (!product || product.proximamente === true || !Number.isInteger(row.quantity) || row.quantity < 1) continue;
       const size = String(row.size || '');
       if (product.tallas.length ? !product.tallas.includes(size) : size !== '') continue;
       const existing = valid.find(item => item.id === row.id && item.size === size);
@@ -95,8 +95,8 @@
   window.renderShop = (products, jimmyProducts = []) => {
     const seen = new Set();
     const normalizeProducts = (products, seller) => (Array.isArray(products) ? products : [])
-      .filter(product => product && typeof product.id === 'string' && product.id && !product.id.startsWith('jimmy:') && typeof product.producto === 'string' && Number.isSafeInteger(product.precio) && product.precio > 0)
-      .map(product => ({ ...product, id: seller === 'jimmy' ? 'jimmy:' + product.id : product.id, seller, tallas: Array.isArray(product.tallas) ? product.tallas.filter(size => typeof size === 'string' && size) : [] }))
+      .filter(product => product && typeof product.id === 'string' && product.id && !product.id.startsWith('jimmy:') && typeof product.producto === 'string' && (product.proximamente === true || (Number.isSafeInteger(product.precio) && product.precio > 0)))
+      .map(product => ({ ...product, id: seller === 'jimmy' ? 'jimmy:' + product.id : product.id, seller, proximamente: product.proximamente === true, tallas: Array.isArray(product.tallas) ? product.tallas.filter(size => typeof size === 'string' && size) : [] }))
       .filter(product => { if (seen.has(product.id)) return false; seen.add(product.id); return true; });
     catalog = [...normalizeProducts(products, 'punkies'), ...normalizeProducts(jimmyProducts, 'jimmy')];
     const previous = JSON.stringify(cart);
@@ -106,14 +106,25 @@
     const groupOf = product => {
       const category = String(product.categoria || '').trim().toLocaleLowerCase('es');
       if (/^libros?$/.test(category)) return 'libros';
-      if (/^(discos?|cd|vinilos?)$/.test(category)) return 'discos';
+      if (/^(discos?|cd|vinilos?)(?:\s|$)/.test(category)) return 'discos';
       return 'otros';
     };
-    const cards = (seller, group = null) => catalog.filter(product => product.seller === seller && (!group || groupOf(product) === group)).map(product => ({product, index: catalog.indexOf(product)})).map(({product, index}) => `<article class="product-card">${photo(product)}<div class="product-info"><p class="product-category">${escape(product.categoria)}</p><${seller === 'jimmy' ? 'h4' : 'h3'}>${escape(product.producto)}</${seller === 'jimmy' ? 'h4' : 'h3'}>${product.descripcion ? `<p class="product-description">${escape(product.descripcion)}</p>` : ''}<p class="product-price">${money(product.precio)} <small>COP</small></p><form data-product="${escape(product.id)}"><div class="product-options">${product.tallas.length ? `<label for="size-${seller}-${index}">Talla<select id="size-${seller}-${index}" name="size" required><option value="">Elige tu talla</option>${product.tallas.map(size => `<option value="${escape(size)}">${escape(size)}</option>`).join('')}</select></label>` : ''}<label for="quantity-${seller}-${index}">Cantidad<input id="quantity-${seller}-${index}" name="quantity" type="number" min="1" max="${maxQuantity}" step="1" value="1" required></label></div><button class="btn primary" type="submit">AÑADIR AL CARRITO +</button></form></div></article>`).join('');
-    host.innerHTML = cards('punkies') || '<p class="empty">Pronto tendremos más productos.</p>';
+    const cards = (seller, group = null) => catalog
+      .filter(product => product.seller === seller && (!group || groupOf(product) === group))
+      .map(product => {
+        const index = catalog.indexOf(product);
+        const purchase = product.proximamente
+          ? '<p class="product-coming-soon">PRÓXIMAMENTE</p>'
+          : `<p class="product-price">${money(product.precio)} <small>COP</small></p><form data-product="${escape(product.id)}"><div class="product-options">${product.tallas.length ? `<label for="size-${seller}-${index}">Talla<select id="size-${seller}-${index}" name="size" required><option value="">Elige tu talla</option>${product.tallas.map(size => `<option value="${escape(size)}">${escape(size)}</option>`).join('')}</select></label>` : ''}<label for="quantity-${seller}-${index}">Cantidad<input id="quantity-${seller}-${index}" name="quantity" type="number" min="1" max="${maxQuantity}" step="1" value="1" required></label></div><button class="btn primary" type="submit">AÑADIR AL CARRITO +</button></form>`;
+        return `<article class="product-card" data-product-card="${escape(product.id)}">${photo(product)}<div class="product-info"><p class="product-category">${escape(product.categoria)}</p><h4>${escape(product.producto)}</h4>${product.descripcion ? `<p class="product-description">${escape(product.descripcion)}</p>` : ''}${purchase}</div></article>`;
+      }).join('');
+    host.innerHTML = [['discos', 'DISCOS'], ['otros', 'DEMÁS ARTÍCULOS'], ['libros', 'LIBROS']].map(([group, title]) => {
+      const content = cards('punkies', group);
+      return content ? `<section class="catalog-category" data-punkies-category="${group}" aria-labelledby="punkies-${group}-title"><h3 id="punkies-${group}-title">${title}</h3><div class="product-grid">${content}</div></section>` : '';
+    }).join('') || '<p class="empty">Pronto tendremos más productos.</p>';
     if (jimmyHost) jimmyHost.innerHTML = [['libros', 'LIBROS'], ['discos', 'DISCOS'], ['otros', 'OTROS PRODUCTOS']].map(([group, title]) => {
       const content = cards('jimmy', group);
-      return content ? `<section class="jimmy-category" data-jimmy-category="${group}" aria-labelledby="jimmy-${group}-title"><h3 id="jimmy-${group}-title">${title}</h3><div class="product-grid">${content}</div></section>` : '';
+      return content ? `<section class="jimmy-category catalog-category" data-jimmy-category="${group}" aria-labelledby="jimmy-${group}-title"><h3 id="jimmy-${group}-title">${title}</h3><div class="product-grid">${content}</div></section>` : '';
     }).join('') || '<p class="empty">Pronto encontrarás aquí los productos de Jimmy Jazz G.P.</p>';
     [host, jimmyHost].filter(Boolean).flatMap(element => [...element.querySelectorAll('img')]).forEach(img => img.addEventListener('error', () => {
       const placeholder = document.createElement('div');
@@ -131,7 +142,7 @@
     event.preventDefault();
     if (!form.reportValidity()) return;
     const product = findProduct(form.dataset.product);
-    if (!product) return;
+    if (!product || product.proximamente) return;
     activeShop = product.seller === 'jimmy' ? 'jimmy-jazz' : 'tienda';
     const size = form.elements.namedItem('size')?.value || '';
     const quantity = Number(form.elements.namedItem('quantity').value);

@@ -85,6 +85,9 @@ content:
     - name: categoria
       label: Categoría
       type: string
+    - name: proximamente
+      label: Próximamente (sin precio ni compra)
+      type: boolean
     - name: precio
       label: Precio en COP (solo números, sin puntos)
       type: number

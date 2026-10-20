@@ -107,3 +107,17 @@ $1.295.000 COP; el total con los dos discos es $1.335.000 COP. Se comprobaron
 el pedido con esos importes y la recuperación de carritos guardados usando
 los precios actuales, incluso si el navegador contiene importes anteriores.
 Los precios de los discos no cambian.
+
+## Próximamente en la tienda de Punkies
+
+Este lado hacia el enemigo · 2026 abre el grupo Discos, seguido del CD de 2018.
+Debajo aparece el grupo Demás artículos con camisa y gorra. El nuevo álbum
+usa `proximamente: true`, precio nulo y la carátula original de la sección Música.
+Solo muestra «Próximamente»: no presenta precio, cantidad ni botón de compra.
+Pages CMS permite cambiar el indicador cuando se confirme su lanzamiento.
+
+El renderizador admite productos próximos sin precio, pero los excluye de los
+carritos restaurados y de las altas al carrito. Las pruebas verifican el orden,
+el reconocimiento de la categoría «CD · 2018», la ausencia de controles de compra
+y la exclusión del álbum de pedidos incluso ante datos guardados o formularios
+manipulados. El resto del carrito y los catálogos conservan su funcionamiento.
