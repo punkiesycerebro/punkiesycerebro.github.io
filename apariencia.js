@@ -1,23 +1,32 @@
-/* Apariencia editable. No modifica los datos de la banda. */
-const cmsCSS=(k,v)=>document.documentElement.style.setProperty(k,v);
-const validHex=s=>typeof s==='string' && /^#[a-fA-F0-9]{6}$/.test(s);
-const fonts={'Barlow Condensed':"'Barlow Condensed',Arial,sans-serif",'DM Sans':"'DM Sans',Arial,sans-serif",'Arial':'Arial,sans-serif','Georgia':'Georgia,serif','Impact':'Impact,Arial,sans-serif'};
-const nsize=(n,min,max)=>Number.isFinite(Number(n))?Math.max(min,Math.min(max,Number(n)))+'px':null;
-const localImg=s=>typeof s==='string' && /^(\/)?(?:assets|media)\/[a-zA-Z0-9_./%\-]+$/.test(s) && !s.includes('..');
-const imgurl=s=>s.startsWith('/')?s:'/'+s;
-fetch('/content/apariencia.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('No se cargó apariencia');return r.json()}).then(d=>{
- for(const [key,css] of Object.entries({color_fondo:'--bg',color_secciones:'--cms-dark',color_texto:'--cream',color_menu:'--cms-menu',color_acento:'--olive',color_tarjetas:'--cms-card'}))if(validHex(d[key]))cmsCSS(css,d[key]);
- for(const [key,css] of Object.entries({fuente_menu:'--cms-head-font',fuente_titulos:'--cms-title-font',fuente_cuerpo:'--cms-body-font'}))if(fonts[d[key]])cmsCSS(css,fonts[d[key]]);
- for(const [key,css,min,max] of [['tamano_menu','--cms-menu-size',10,28],['tamano_marca','--cms-brand-size',16,52],['tamano_titulos','--cms-title-size',28,130],['tamano_parrafos','--cms-text-size',12,24],['tamano_historia','--cms-story-size',14,28],['alto_portada','--cms-hero-height',350,1100]]){const v=nsize(d[key],min,max);if(v)cmsCSS(css,v)}
- if(localImg(d.fondo_portada))document.querySelector('.hero').style.backgroundImage=`linear-gradient(90deg,rgba(4,8,4,.54),rgba(4,8,4,.26),rgba(4,8,4,.54)),url("${imgurl(d.fondo_portada)}")`;
- if(localImg(d.fondo_historia))cmsCSS('--cms-story-bg',`url("${imgurl(d.fondo_historia)}")`);
- for(const [key,id] of [['logo_portada','logo-portada-img'],['imagen_disco','imagen-disco-img']]){if(localImg(d[key]))document.getElementById(id).src=imgurl(d[key])}
- if(localImg(d.logo_menu)){const i=document.getElementById('logo-menu-img');i.src=imgurl(d.logo_menu);i.hidden=false;document.getElementById('nombre-menu').hidden=true}
- for(const [key,id] of [['mostrar_lema','.tagline'],['mostrar_historia','#historia'],['mostrar_tienda','#tienda'],['mostrar_contacto','#contacto']])if(d[key]===false){const e=document.querySelector(id);if(e)e.hidden=true}
-}).catch(e=>console.warn('Apariencia personalizada no disponible:',e));
-const textOnly=s=>String(s??'');
-fetch('/content/galeria.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('No se encontró galeria.json');return r.json()}).then(d=>{
- const heading=document.getElementById('titulo-galeria');if(d.titulo)heading.textContent=d.titulo;
- const grid=document.getElementById('galeria-grid');const photos=Array.isArray(d.fotos)?d.fotos.filter(x=>localImg(x.imagen)):[];
- if(!photos.length)return;grid.replaceChildren();for(const photo of photos){const fig=document.createElement('figure'),im=document.createElement('img'),cap=document.createElement('figcaption');im.src=imgurl(photo.imagen);im.loading='lazy';im.alt=textOnly(photo.pie)||'Fotografía de Punkies y Cerebro';cap.textContent=textOnly(photo.pie);fig.append(im,cap);grid.append(fig)}
-}).catch(e=>console.warn('Galería no disponible:',e));
+/* Apariencia desde Pages CMS y desde el editor visual de vista previa. */
+(()=>{
+ const fonts={'Barlow Condensed':"'Barlow Condensed',Arial,sans-serif",'DM Sans':"'DM Sans',Arial,sans-serif",Arial:'Arial,sans-serif',Georgia:'Georgia,serif',Impact:'Impact,Arial,sans-serif',Verdana:'Verdana,Arial,sans-serif'};
+ const validHex=v=>typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v);
+ const localImg=p=>typeof p==='string'&&/^\/?(?:assets|media)\/[a-zA-Z0-9_./%\-]+$/.test(p)&&!p.includes('..');
+ const imgSrc=(p)=>window.__visualImages?.[p]||p;
+ const vars={color_fondo:'--bg',color_secciones:'--cms-dark',color_texto:'--cream',color_menu:'--cms-menu',color_acento:'--olive',color_tarjetas:'--cms-card'};
+ const fontVars={fuente_menu:'--cms-head-font',fuente_titulos:'--cms-title-font',fuente_cuerpo:'--cms-body-font'};
+ const sizeVars={tamano_menu:['--cms-menu-size',10,28],tamano_marca:['--cms-brand-size',16,52],tamano_titulos:['--cms-title-size',28,130],tamano_parrafos:['--cms-text-size',12,24],tamano_historia:['--cms-story-size',14,30],alto_portada:['--cms-hero-height',350,1100]};
+ window.aplicarApariencia=d=>{
+  if(!d)return;
+  for(const [k,v] of Object.entries(vars))if(validHex(d[k]))document.documentElement.style.setProperty(v,d[k]);
+  for(const [k,v] of Object.entries(fontVars))if(fonts[d[k]])document.documentElement.style.setProperty(v,fonts[d[k]]);
+  for(const [k,[v,min,max]] of Object.entries(sizeVars)){const n=Number(d[k]);if(Number.isFinite(n))document.documentElement.style.setProperty(v,Math.min(max,Math.max(min,n))+'px')}
+  const hero=document.querySelector('.hero');
+  if(hero&&localImg(d.fondo_portada))hero.style.backgroundImage=`linear-gradient(90deg,rgba(4,8,4,.52),rgba(4,8,4,.27),rgba(4,8,4,.52)),url("${imgSrc(d.fondo_portada)}")`;
+  document.documentElement.style.setProperty('--cms-story-bg',localImg(d.fondo_historia)?`url("${imgSrc(d.fondo_historia)}")`:'none');
+  for(const [k,id] of [['logo_portada','logo-portada-img'],['imagen_disco','imagen-disco-img']])if(localImg(d[k])){const e=document.getElementById(id);if(e)e.src=imgSrc(d[k])}
+  const menuImg=document.getElementById('logo-menu-img'),menuTxt=document.getElementById('nombre-menu');
+  if(menuImg&&menuTxt){if(localImg(d.logo_menu)){menuImg.src=imgSrc(d.logo_menu);menuImg.hidden=false;menuTxt.hidden=true}else{menuImg.hidden=true;menuTxt.hidden=false}}
+  for(const [k,s] of [['mostrar_lema','.tagline'],['mostrar_historia','#historia'],['mostrar_tienda','#tienda'],['mostrar_contacto','#contacto']]){const e=document.querySelector(s);if(e)e.hidden=d[k]===false}
+ };
+ window.actualizarGaleria=d=>{
+  if(!d)return;const h=document.getElementById('titulo-galeria');if(h&&d.titulo)h.textContent=String(d.titulo);
+  const grid=document.getElementById('galeria-grid');if(!grid)return;
+  const fotos=Array.isArray(d.fotos)?d.fotos.filter(x=>localImg(x.imagen)):[];
+  grid.replaceChildren();if(!fotos.length){const p=document.createElement('p');p.className='empty';p.textContent='Próximamente fotografías de la banda.';grid.append(p);return}
+  for(const photo of fotos){const fig=document.createElement('figure'),im=document.createElement('img'),cap=document.createElement('figcaption');im.src=imgSrc(photo.imagen);im.loading='lazy';im.alt=String(photo.pie||'Fotografía de la banda');cap.textContent=String(photo.pie||'');fig.append(im,cap);grid.append(fig)}
+ };
+ fetch('content/apariencia.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('apariencia.json');return r.json()}).then(window.aplicarApariencia).catch(console.warn);
+ fetch('content/galeria.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('galeria.json');return r.json()}).then(window.actualizarGaleria).catch(console.warn);
+})();

@@ -1,0 +1,29 @@
+{
+  "textos": {
+    "lema": "22 AÑOS HACIENDO RUIDO",
+    "presentacion_musica": "Escucha nuestra discografía y sigue el lanzamiento del nuevo álbum.",
+    "titular_musica": "MÚSICA",
+    "titular_conciertos": "CONCIERTOS",
+    "presentacion_conciertos": "Nos vemos frente al escenario.",
+    "titular_historia": "NUESTRA HISTORIA",
+    "titular_tienda": "TIENDA",
+    "presentacion_tienda": "Discos físicos y material oficial de la banda.",
+    "titular_contacto": "CONTACTO",
+    "presentacion_contacto": "Conciertos, prensa, colaboraciones y contratación.",
+    "titular_streaming": "PUNK DESDE MEDELLÍN.",
+    "menu_inicio": "INICIO",
+    "menu_musica": "MÚSICA",
+    "menu_conciertos": "CONCIERTOS",
+    "menu_historia": "HISTORIA",
+    "menu_tienda": "TIENDA",
+    "menu_galeria": "GALERÍA",
+    "menu_contacto": "CONTACTO"
+  },
+  "orden": ["inicio", "musica", "conciertos", "historia", "tienda", "galeria", "contacto"],
+  "secciones": {},
+  "extras": [],
+  "espaciado": 76,
+  "radio_tarjetas": 7,
+  "ancho_contenido": 1200,
+  "alineacion_portada": "centro"
+}

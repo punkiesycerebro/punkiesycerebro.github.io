@@ -26,3 +26,19 @@ body{font-family:var(--cms-body-font);font-size:var(--cms-text-size);background:
 #logo-menu-img{height:48px;max-width:220px;object-fit:contain}#logo-menu-img[hidden]{display:none}
 .galeria-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-top:25px}.galeria-grid figure{margin:0;background:var(--cms-card);padding:9px}.galeria-grid img{display:block;width:100%;height:220px;object-fit:cover}.galeria-grid figcaption{padding:10px 3px;color:var(--muted);font-size:13px}
 @media(max-width:750px){.nav .brand{font-size:clamp(16px,4vw,var(--cms-brand-size))}#logo-menu-img{height:36px}.galeria-grid img{height:180px}}
+/* Ajustes del editor visual, compatibles con Pages CMS */
+main{display:flex;flex-direction:column}
+:root{--editor-spacing:76px;--editor-card-radius:7px;--editor-content-width:1200px}
+.section{padding-top:var(--editor-spacing);padding-bottom:var(--editor-spacing)}
+.section:not(.hero){scroll-margin-top:82px}
+.tile,.item,.galeria-grid figure{border-radius:var(--editor-card-radius)}
+.section:not(.hero)>:not(.full-width){max-width:var(--editor-content-width)}
+.hero[style*="text-align: left"] .hero-inner{text-align:left}
+.hero[style*="text-align: left"] .hero-logo,.hero[style*="text-align: left"] .divider,.hero[style*="text-align: left"] h2{margin-left:0}
+.hero[style*="text-align: left"] .hero .buttons,.hero[style*="text-align: left"] .buttons{justify-content:flex-start}
+.custom-section{position:relative}
+.custom-section .custom-cover{max-width:850px;width:100%;aspect-ratio:16/8;object-fit:cover;margin:20px 0;border:1px solid #536347}
+.custom-section h2{margin-bottom:15px}.custom-section p{white-space:pre-line;overflow-wrap:anywhere;max-width:800px}
+.custom-section .btn{margin-top:15px}
+[data-visual-hidden="true"]{display:none!important}
+@media(max-width:750px){.section{padding-top:min(var(--editor-spacing),65px);padding-bottom:min(var(--editor-spacing),65px)}}

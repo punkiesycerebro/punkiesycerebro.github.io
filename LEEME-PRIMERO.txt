@@ -1,0 +1,70 @@
+PUNKIES Y CEREBRO — EDITOR VISUAL PARA GITHUB PAGES
+===================================================
+
+UNA ACTUALIZACIÓN DE TU PÁGINA, NO UN SITIO NUEVO
+Este paquete NO incluye content/site.json ni tus imágenes de assets.
+Por eso no borra la historia, conciertos, enlaces o fotografías que ya tienes.
+
+1. INSTALAR EL EDITOR (una sola vez)
+------------------------------------
+- Descarga y DESCOMPRIME el ZIP en tu computador.
+- Abre https://github.com/punkiesycerebro/punkiesycerebro.github.io
+- En la pestaña Code, selecciona Add file > Upload files.
+- Abre la carpeta descomprimida y arrastra LOS ARCHIVOS DE ADENTRO,
+  incluyendo la carpeta content. No arrastres la carpeta exterior.
+- Verifica que editor.html e index.html queden en la RAÍZ del repositorio.
+- Verifica que content/diseno.json quede DENTRO de content/.
+- Pulsa Commit changes. No elimines assets ni content/site.json.
+- Espera 1-3 minutos y abre https://punkiesycerebro.github.io/editor.html
+
+2. MODIFICAR EL DISEÑO
+---------------------
+- Un clic sobre un texto: lo selecciona y abre sus opciones en la barra izquierda.
+- Doble clic sobre un texto: permite ESCRIBIR DIRECTAMENTE sobre la vista previa.
+- Colores y fuentes: selecciona color, letra o tamaño y ve los cambios en vivo.
+- Imágenes: sube tus fotografías desde el computador y el editor las optimiza.
+- Secciones: arrastra los renglones para cambiar el orden, oculta o agrega bloques.
+- Galería: sube fotos reales y escribe sus descripciones.
+- Enlaces: edita redes sociales y correo de contacto.
+- Computador / Celular: alterna entre las dos vistas.
+- Deshacer: revierte el último ajuste.
+
+3. PUBLICAR LOS CAMBIOS
+----------------------
+- En el editor, haz clic en "Descargar cambios ZIP".
+- Descomprime ese ZIP NUEVO en una carpeta aparte.
+- En GitHub, Add file > Upload files, desde la RAÍZ.
+- Arrastra las carpetas content y media (si existe); no arrastres la carpeta exterior.
+- Comprueba que GitHub muestre rutas como content/diseno.json,
+  content/apariencia.json o media/visual/pyc-...jpg.
+- Pulsa Commit changes.
+- Espera el despliegue y actualiza la web con Ctrl + F5.
+
+IMPORTANTE
+----------
+* El sitio permanece alojado GRATIS en GitHub Pages (sin suscripción a Wix).
+* No es idéntico a Wix: no hay arrastre de cada píxel ni publicación instantánea.
+  Sí hay edición visual en vivo, doble clic sobre textos, imágenes, estilos,
+  botones, ocultar/ordenar secciones y añadir bloques.
+* El editor no pide claves, contraseñas ni tokens, ni publica sin tu permiso.
+* El editor se abre públicamente, pero los visitantes no pueden modificar tu web.
+* Los borradores se guardan LOCALMENTE en este navegador; no borres sus datos antes de exportar.
+* Las imágenes subidas se guardan temporalmente en el almacenamiento local del navegador.
+* Pages CMS seguirá funcionando en https://app.pagescms.org/.
+* Si modificas la historia, los conciertos o enlaces desde Pages CMS mientras
+  el editor sigue abierto, recarga el editor antes de exportar para no sobrescribir información posterior.
+* Las nuevas imágenes pueden aumentar el tamaño de los archivos; evita subir fotos enormes.
+
+Estructura instalada:
+  index.html
+  styles.css
+  script.js
+  apariencia.js
+  diseno.js
+  editor.html
+  editor.css
+  editor.js
+  .pages.yml
+  content/diseno.json
+  + content/site.json existente (se conserva)
+  + assets existentes (se conservan)
