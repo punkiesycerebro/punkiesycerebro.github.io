@@ -62,7 +62,13 @@ window.renderCMSContent=function(d){
  }
  const gigs=(d.conciertos||[]).map(c=>`<div class="item"><strong>${safe(c.fecha)} · ${safe(c.ciudad)}</strong><span>${safe(c.lugar)}</span>${button(c.entradas,'Entradas')}</div>`).join('');
  document.getElementById('conciertos-lista').innerHTML=gigs||'<div class="empty">Próximas fechas por anunciar.</div>';
- document.getElementById('discos').innerHTML=(d.discos||[]).map(c=>`<div class="item"><strong>${safe(c.titulo)}</strong><span>${safe(c.anio)}</span></div>`).join('');
+ document.getElementById('discos').innerHTML=(Array.isArray(d.discos)?d.discos:[]).map(c=>{
+  let image='';
+  try { if(c.imagen){const url=new URL(c.imagen,location.href);if(url.origin===location.origin||url.protocol==='https:')image=`<img src="${safe(url.href)}" alt="Carátula de ${safe(c.titulo)}" loading="lazy">`;} } catch {}
+  const cover=image||'<div class="discography-placeholder"><strong>DEMO</strong><span>Carátula pendiente</span></div>';
+  const action=c.tipo==='proximamente'?'<p class="discography-soon">PRÓXIMAMENTE</p>':button(c.enlace,c.tipo==='spotify'?'Escuchar en Spotify':'Descargar');
+  return `<article class="discography-card">${cover}<div class="discography-info"><p class="discography-year">${safe(c.anio)}</p><h4>${safe(c.titulo)}</h4>${action}</div></article>`;
+ }).join('');
  window.renderShop?.(d.tienda||[],d.tienda_jimmy||[]);
 };
 fetch('content/site.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('No se encontró content/site.json');return r.json()}).then(window.renderCMSContent).catch(err=>console.error('Error cargando contenido:',err));
