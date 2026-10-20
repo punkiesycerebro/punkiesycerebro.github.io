@@ -68,52 +68,118 @@ window.renderCMSContent=function(d){
 };
 fetch('content/site.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('No se encontró content/site.json');return r.json()}).then(window.renderCMSContent).catch(err=>console.error('Error cargando contenido:',err));
 
-/* Envío AJAX: mantiene a la persona en nuestra página (sin redirección). */
-let enviandoContacto=false;
-let ultimoEnvio=0;
-const contactStatus=(msg,type)=>{const el=document.getElementById('form-alert');if(el){el.textContent=msg;el.dataset.state=type;el.setAttribute('role',type==='error'?'alert':'status')}};
-document.getElementById('formulario-contacto')?.addEventListener('submit',async event=>{
- event.preventDefault();
- const form=event.currentTarget;
- const button=form.querySelector('button[type="submit"]');
- const destino=form.dataset.destino;
- if(location.search.includes('editor=1')){
-  contactStatus('Esta es la vista previa. Para probar el envío real, abre la página pública.','hint');return;
- }
- if(!destino){contactStatus('El formulario todavía no tiene configurado un correo receptor.','error');return}
- if(!form.reportValidity())return;
- if(enviandoContacto)return;
- if(Date.now()-ultimoEnvio<10000){contactStatus('Espera unos segundos antes de enviar otro mensaje.','error');return}
- const honey=form.elements.namedItem('_honey');
- if(honey?.value){contactStatus('No pudimos verificar tu envío. Actualiza la página e inténtalo nuevamente.','error');return}
- enviandoContacto=true;button.disabled=true;
- const btnText=button.textContent;
- button.textContent='ENVIANDO MENSAJE…';contactStatus('Enviando tu mensaje, espera un momento…','loading');
- const payload={
-  name:String(form.elements.namedItem('name').value||'').trim(),
-  email:String(form.elements.namedItem('email').value||'').trim(),
-  asunto:String(form.elements.namedItem('asunto').value||'').trim(),
-  mensaje:String(form.elements.namedItem('mensaje').value||'').trim(),
-  _subject:'Nuevo mensaje a Punkies y Cerebro: '+String(form.elements.namedItem('asunto').value||'Contacto').trim().slice(0,100),
-  _cc:String(form.elements.namedItem('_cc')?.value||''),
-  _captcha:'false',
-  _honey:'',
-  _template:'table',
-  _url:window.location.href
- };
- try{
-  const response=await fetch('https://formsubmit.co/ajax/'+encodeURIComponent(destino),{
-   method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
-   body:JSON.stringify(payload),mode:'cors'
+/* Envío AJAX sin navegación. Un error conserva todos los campos. */
+let enviandoContacto = false;
+let ultimoEnvio = 0;
+
+function contactStatus(message, type) {
+  const status = document.getElementById('form-alert');
+  if (!status) return;
+  status.textContent = message;
+  status.dataset.state = type;
+  status.setAttribute('role', type === 'error' ? 'alert' : 'status');
+  const recipient = document.getElementById('formulario-contacto')?.dataset.destino;
+  if (type === 'error' && recipient) {
+    const alternative = document.createElement('a');
+    alternative.href = 'mailto:' + recipient;
+    alternative.textContent = 'También puedes escribirnos a ' + recipient + '.';
+    alternative.style.display = 'block';
+    alternative.style.textDecoration = 'underline';
+    status.append(document.createTextNode(' '), alternative);
+  }
+}
+
+function contactFailure(response, result) {
+  const detail = typeof result?.message === 'string' ? result.message.trim().slice(0, 350) : '';
+  // Activation responses must never be announced as delivery, even with success:true.
+  if (/(?:activat|confirm (?:your |the )?email|check (?:your )?(?:email|inbox))/i.test(detail)) {
+    return 'El servicio indica que falta activar el formulario. La banda debe confirmar el correo de FormSubmit en su buzón. Tus datos siguen aquí.';
+  }
+  if (response.status === 429) return 'El servicio ha limitado temporalmente los envíos. Espera unos minutos antes de volver a intentarlo; tus datos siguen aquí.';
+  if (response.status >= 500) return 'El servicio de correo no está disponible temporalmente. No hemos recibido confirmación del envío; tus datos siguen aquí.';
+  if (!response.ok || !(result?.success === true || result?.success === 'true')) {
+    return detail
+      ? 'El servicio no confirmó el envío. Respuesta: ' + detail + ' Tus datos siguen aquí.'
+      : 'El servicio devolvió una respuesta que no confirma el envío. Tus datos siguen aquí.';
+  }
+  return null;
+}
+
+document.getElementById('formulario-contacto')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const submit = form.querySelector('button[type="submit"]');
+  const recipient = form.dataset.destino;
+  if (new URLSearchParams(location.search).get('editor') === '1') {
+    contactStatus('Esta es una vista previa. El envío está desactivado.', 'hint');
+    return;
+  }
+  if (!recipient) {
+    contactStatus('El formulario todavía no tiene configurado un correo receptor.', 'error');
+    return;
+  }
+  if (!form.reportValidity() || enviandoContacto) return;
+  if (Date.now() - ultimoEnvio < 10000) {
+    contactStatus('Espera unos segundos antes de enviar otro mensaje.', 'error');
+    return;
+  }
+  if (form.elements.namedItem('_honey')?.value) {
+    contactStatus('No pudimos verificar tu envío. Actualiza la página e inténtalo nuevamente.', 'error');
+    return;
+  }
+  const field = name => String(form.elements.namedItem(name)?.value || '').trim();
+  const payload = new URLSearchParams({
+    name: field('name'),
+    email: field('email'),
+    asunto: field('asunto'),
+    mensaje: field('mensaje'),
+    _subject: 'Nuevo mensaje a Punkies y Cerebro: ' + field('asunto').slice(0, 100),
+    _captcha: 'false',
+    _template: 'table',
+    _url: location.origin + location.pathname
   });
-  let result={};try{result=await response.json()}catch{}
-  const ok=response.ok && (result.success===true||result.success==='true');
-  if(!ok)throw new Error(String(result.message||'El servicio no confirmó el envío.'));
-  ultimoEnvio=Date.now();
-  for(const field of ['name','email','asunto','mensaje'])form.elements.namedItem(field).value='';
-  contactStatus('✓ ¡Mensaje enviado correctamente! Gracias por escribirnos. Pronto nos pondremos en contacto contigo.','success');
- }catch(error){
-  console.error('No fue posible enviar el mensaje',error);
-  contactStatus('No se pudo enviar el mensaje en este momento. Revisa tu conexión e inténtalo de nuevo; tus datos siguen aquí.','error');
- }finally{enviandoContacto=false;button.disabled=false;button.textContent=btnText}
+  // Only send optional recipients when configured, never an empty email address.
+  const copies = field('_cc');
+  if (copies) payload.set('_cc', copies);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
+  const originalLabel = submit.textContent;
+  enviandoContacto = true;
+  submit.disabled = true;
+  form.setAttribute('aria-busy', 'true');
+  submit.textContent = 'ENVIANDO MENSAJE…';
+  contactStatus('Enviando tu mensaje…', 'loading');
+  try {
+    // Standard form encoding avoids the JSON request's extra CORS preflight.
+    const response = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(recipient), {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: payload,
+      mode: 'cors',
+      signal: controller.signal
+    });
+    let result = null;
+    try { result = await response.json(); } catch (error) {
+      if (error.name === 'AbortError') throw error;
+    }
+    const failure = contactFailure(response, result);
+    if (failure) {
+      contactStatus(failure, 'error');
+      return;
+    }
+    ultimoEnvio = Date.now();
+    for (const name of ['name', 'email', 'asunto', 'mensaje']) form.elements.namedItem(name).value = '';
+    contactStatus('El servicio aceptó tu mensaje. Gracias por escribirnos.', 'success');
+  } catch (error) {
+    const message = error.name === 'AbortError'
+      ? 'No recibimos confirmación a tiempo. El envío podría haberse procesado; revisa antes de repetirlo. Tus datos siguen aquí.'
+      : 'No pudimos confirmar el envío con el servicio de correo. Puede ser un problema de conexión o un bloqueo del servicio. Tus datos siguen aquí.';
+    contactStatus(message, 'error');
+  } finally {
+    clearTimeout(timeout);
+    enviandoContacto = false;
+    submit.disabled = false;
+    submit.textContent = originalLabel;
+    form.removeAttribute('aria-busy');
+  }
 });
