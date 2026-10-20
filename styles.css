@@ -86,3 +86,9 @@ main{display:flex;flex-direction:column}
 @media(max-width:900px){.nav .menu{display:block;order:3;margin-left:4px}.nav .links{display:none;position:absolute;top:76px;left:0;right:0;background:#10150f;flex-direction:column;padding:25px;gap:20px}.nav .links.open{display:flex}.header-socials{margin-left:auto}}
 @media(max-width:750px){.nav .links{top:65px}}
 @media(max-width:470px){.nav{gap:3px;padding:0 10px}.nav .brand{font-size:clamp(14px,4vw,19px);max-width:46vw;white-space:normal;line-height:1}.header-socials{gap:0}.header-socials a{width:calc(min(var(--social-size),20px) + 8px);height:calc(min(var(--social-size),20px) + 8px)}.header-socials svg{width:min(var(--social-size),20px)!important;height:min(var(--social-size),20px)!important}}
+
+/* V6.2: feedback claro del formulario AJAX sin redirigir visitantes. */
+#form-alert[data-state="success"]{background:#213f26;border:1px solid #5ab870;color:#eaffec;border-radius:7px;padding:13px 15px;font-size:14px;font-weight:700}
+#form-alert[data-state="error"]{background:#442323;border:1px solid #bd7474;color:#ffe5e5;border-radius:7px;padding:13px 15px;font-size:14px}
+#form-alert[data-state="loading"]{color:#e1e4c7;font-weight:600}
+#formulario-contacto button[disabled]{opacity:.65;cursor:progress}

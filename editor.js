@@ -135,9 +135,10 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
  }else if(tab==='contacto'){
    state.dis.formulario??={};const form=state.dis.formulario;
    h=`<h2>Formulario de contacto</h2><p class="note">Selecciona el formulario en la vista previa o configura aquí dónde llegan los mensajes. No necesitas modificar ningún código.</p>
-   <div class="control"><label>Correo que recibe los mensajes</label><input type="email" data-kind="site" data-key="correo_formulario" value="${attr(state.site.correo_formulario||'')}" placeholder="contacto@tudominio.com"></div>
+   <div class="control"><label>Correo principal — recibe todos los mensajes</label><input type="email" data-kind="site" data-key="correo_formulario" value="${attr(state.site.correo_formulario||'')}" placeholder="contacto@tudominio.com"></div>
+   <div class="control"><label>Otros correos que reciben copia (uno por línea)</label><textarea rows="4" data-kind="site" data-key="copias_formulario" placeholder="integrante1@gmail.com&#10;integrante2@gmail.com">${esc(String(state.site.copias_formulario||'').replace(/[,;]+/g,'\n'))}</textarea><p class="note">Puedes agregar 2, 3 o más correos; presiona Enter para escribir el siguiente. Cada uno recibirá una copia del mismo mensaje.</p></div>
    <div class="control"><label>Correo público de la banda (opcional)</label><input type="email" data-kind="site" data-key="contacto" value="${attr(state.site.contacto||'')}" placeholder="banda@ejemplo.com"></div>
-   <p class="note">El correo receptor puede quedar visible en el código de la web. El servicio FormSubmit solicitará una confirmación por email cuando se active.</p>`;
+   <p class="note">Los mensajes se envían sin sacar a los visitantes de la página y les mostramos una confirmación. Cuando cambies el correo principal, deberás activarlo mediante el enlace de FormSubmit que llegará al nuevo buzón. Los destinatarios pueden quedar visibles en el código público.</p>`;
    h+=[['titulo','Título del formulario','ENVÍANOS UN MENSAJE'],['etiqueta_name','Texto: nombre','Nombre'],['etiqueta_email','Texto: correo','Correo electrónico'],['etiqueta_asunto','Texto: asunto','Asunto'],['etiqueta_mensaje','Texto: mensaje','Mensaje'],['placeholder_name','Ejemplo en nombre','Tu nombre'],['placeholder_email','Ejemplo en correo','tucorreo@ejemplo.com'],['placeholder_asunto','Ejemplo en asunto','¿Sobre qué quieres escribirnos?'],['placeholder_mensaje','Ejemplo en mensaje','Escribe aquí tu mensaje']].map(([k,l,d])=>`<div class="control"><label>${esc(l)}</label><input type="text" data-kind="formulario" data-key="${k}" value="${attr(form[k]??d)}"></div>`).join('');
    h+=`<button type="button" class="action danger" id="hide-form">${state.dis.bloques?.formulario?.oculto?'Mostrar formulario':'Ocultar formulario'}</button>`;
  }else if(tab==='galeria'){
@@ -160,7 +161,8 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
    h+=colorHTML('color','Color de los iconos',{color:header.color||'#FFFFFF'},'socialheader');
    h+=slider('tamano','Tamaño de los iconos (px)',{tamano:header.tamano||22},16,38,1,'socialheader');
    h+='<h3>Direcciones de cada red</h3><p class="note">Al pulsar un icono, el visitante abrirá la red social correspondiente en otra pestaña.</p>';
-h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo público de contacto'],['correo_formulario','Correo que recibe los mensajes del formulario']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
+h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo público de contacto'],['correo_formulario','Correo principal que recibe los mensajes']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
+ h+='<p class="note">Para agregar dos o más correos en copia, utiliza la pestaña ✉ Formulario.</p>';
  }
  T.innerHTML=h;
 }
