@@ -1,9 +1,9 @@
 :root {
   color-scheme:dark;
-  --bg:#111310;
-  --paper:#eeeee5;
-  --muted:#b9bcb1;
-  --olive:#c4ca86;
+  --bg:#080808;
+  --paper:#ffffff;
+  --muted:#dedede;
+  --olive:#dfed93;
   --line:#3a3d33;
   --display:Impact,'Arial Narrow','Liberation Sans Narrow',sans-serif;
 }
@@ -175,8 +175,8 @@ a:hover {
 }
 
 .outline {
-  color:transparent;
-  -webkit-text-stroke:1px var(--paper);
+  color:#ffffff;
+  -webkit-text-stroke:0;
 }
 
 .hero-description {
@@ -249,7 +249,7 @@ a:hover {
   height:100%;
   object-fit:cover;
   object-position:43% center;
-  filter:grayscale(1);
+  filter:none;
   position:absolute;
 }
 
@@ -500,7 +500,7 @@ a:hover {
   justify-content:space-between;
   align-items:center;
   gap:30px;
-  background:#242b1d;
+  background:#20251a;
 }
 
 .contact h2 {
@@ -800,4 +800,101 @@ footer {
 .arrow .direction {
   width:.8em;
   height:.8em;
+}
+
+/* Cabecera con identidad protagonista y redes siempre visibles. */
+.header {
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+  padding:0;
+  background:#000;
+  border-bottom:0;
+}
+.header-socials {
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  padding:16px 4% 0;
+}
+.header-socials .social-link {
+  color:#fff;
+  border-color:#666;
+  font-weight:700;
+  font-size:13px;
+  padding:10px 14px;
+  gap:9px;
+}
+.header-socials .social-link svg {
+  width:22px;
+  height:22px;
+}
+.header-socials .social-link:hover {
+  background:#b90e18;
+  border-color:#fff;
+}
+.header .brand {
+  width:min(650px,72vw);
+  justify-self:center;
+  margin:30px 0 42px;
+}
+.header nav {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:0;
+  padding:0 3%;
+  background:#bd101a;
+}
+.header nav a {
+  color:#fff;
+  font-size:14px;
+  letter-spacing:1px;
+  padding:17px 25px;
+  min-height:54px;
+}
+.header nav [aria-current],.header nav a:hover {
+  background:#000;
+  color:#fff;
+}
+@media(max-width:760px) {
+  .header-socials {
+    justify-content:center;
+    gap:7px;
+    padding:14px 12px 0;
+  }
+  .header-socials .social-link {
+    width:48px;
+    height:48px;
+    padding:12px;
+    font-size:0;
+    gap:0;
+  }
+  .header .brand {
+    width:88%;
+    max-width:500px;
+    margin:28px 0;
+  }
+  .header .menu-toggle {
+    display:flex;
+    justify-content:space-between;
+    background:#bd101a;
+    border:0;
+    padding:15px 6%;
+    font-size:13px;
+    color:#fff;
+  }
+  .header nav {
+    display:none;
+    padding:8px 3%;
+  }
+  .header nav.open {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+  .header nav a {
+    font-size:12px;
+    padding:13px;
+  }
 }

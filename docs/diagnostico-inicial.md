@@ -52,3 +52,9 @@ La página lleva `noindex, nofollow` y una franja de revisión. No añade canoni
 ## Próximos datos a confirmar después de revisar el inicio
 
 Cronología de la banda, formación vigente y fotografías de grupo; portada definitiva, canciones y fecha del nuevo álbum; discografía con años y enlaces; agenda real; productos y precios; destinatarios y proveedor del formulario. No es necesario completar estos datos para comentar la propuesta visual.
+
+## Segunda revisión visual
+
+A petición del propietario y tomando como referencia la captura aportada de Ska-P: logo original ampliado y centrado, redes oficiales visibles arriba, navegación roja con letras blancas, titulares en blanco sólido y fotografía en su color original. Se mantiene el acento militar en llamadas a la acción. Las fotografías de los integrantes todavía están pendientes; no se realizó un montaje sin esos archivos.
+
+Revalidado en Chromium a 320, 390, 768, 1024 y 1440 px, sin desbordamiento horizontal, imágenes rotas ni errores JavaScript; menú móvil y Escape correctos. La versión pública sigue intacta.
