@@ -45,13 +45,15 @@ window.renderCMSContent=function(d){
  if(form && status){
   const submit=form.querySelector('button[type="submit"]');
   if(validEmail(destino)){
-   form.action='https://formsubmit.co/'+encodeURIComponent(destino);
+   const token=/^[a-f0-9]{32}$/.test(d.formsubmit_id||'')?d.formsubmit_id:destino;
+   form.action='https://formsubmit.co/'+encodeURIComponent(token);
    form.dataset.destino=destino;
+   form.dataset.envio=d.envio_formulario==='directo'?'directo':'ajax';
    const cc=form.querySelector('[name="_cc"]');if(cc)cc.value=copias.join(',');
    const next=document.getElementById('form-next-url');if(next)next.value=new URL('gracias.html',window.location.href).href;
    // No anunciar éxito antes de que FormSubmit acepte la petición.
    if(status.dataset.state!=='success'&&status.dataset.state!=='error'){
-     status.dataset.state='hint';status.textContent='Tus datos se utilizarán para responder a tu mensaje.';
+     status.dataset.state='hint';status.textContent=form.dataset.envio==='directo'?'Al enviar, se abrirá la verificación de seguridad del servicio de correo. Tus datos se utilizarán para responder a tu mensaje.':'Tus datos se utilizarán para responder a tu mensaje.';
    }
    submit.disabled=false;
   }else{
@@ -147,6 +149,18 @@ document.getElementById('formulario-contacto')?.addEventListener('submit', async
     return;
   }
   const field = name => String(form.elements.namedItem(name)?.value || '').trim();
+  if (form.dataset.envio === 'directo') {
+    form.elements.namedItem('_subject').value = 'Nuevo mensaje a Punkies y Cerebro: ' + field('asunto').slice(0, 100);
+    const copies = form.elements.namedItem('_cc');
+    if (copies) copies.disabled = !copies.value.trim();
+    // Use the provider's default security challenge, rather than disabling it.
+    // The provider handles acceptance/errors as a normal browser navigation.
+    const captcha = form.elements.namedItem('_captcha');
+    if (captcha) captcha.disabled = true;
+    contactStatus('Abriendo el servicio de correo para verificar y enviar tu mensaje…', 'loading');
+    HTMLFormElement.prototype.submit.call(form);
+    return;
+  }
   const payload = new URLSearchParams({
     name: field('name'),
     email: field('email'),

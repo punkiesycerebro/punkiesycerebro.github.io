@@ -1,49 +1,43 @@
 # Formulario de contacto: envío y diagnóstico
 
-El sitio usa FormSubmit con el correo configurado en `content/site.json`.
-El propietario confirmó que ya activó el destinatario. La captura del error original
-no contiene la respuesta del proveedor, por lo que no permite determinar la causa.
+## Configuración actual
 
-## Ajustes
+El sitio usa POST nativo a FormSubmit, con el identificador público aportado en el
+correo de activación (`formsubmit_id`) y `envio_formulario: directo` en
+`content/site.json`. El destinatario continúa siendo `juancamilo1504@gmail.com`.
+El identificador es un destino público del formulario, no una contraseña.
 
-- POST AJAX con `URLSearchParams`, codificación de formulario estándar y `Accept: application/json`. Evita el preflight adicional requerido por Content-Type application/json.
-- No se envía `_cc` cuando no hay destinatarios en copia.
-- Los rechazos del servicio se muestran como texto, nunca HTML.
-- Se distinguen activación, límite de solicitudes, fallo del servidor, respuesta no JSON, fallo de conexión y tiempo de espera.
-- Una respuesta de activación nunca se considera entrega aunque incluya `success: true`.
-- Aviso de demora a los 20 segundos y tiempo máximo de 60 segundos, sin reintentos
-  automáticos ni borrado de campos ante fallo. Un timeout no prueba que el servidor
-  no haya procesado el envío.
-- El estado de éxito indica aceptación por el servicio; no garantiza llegada a la bandeja de entrada.
-- Ante error se ofrecen WhatsApp de management y el correo configurado, con nombre,
-  correo, asunto y mensaje completos. El visitante debe confirmar el envío en la
-  aplicación elegida; no se envían mensajes automáticamente.
+La verificación antispam del proveedor queda habilitada: no se envía `_captcha=false`.
+El navegador abre la respuesta de FormSubmit, que puede mostrar la verificación,
+una aceptación o un error. `_next` dirige a `gracias.html` al aceptar el servicio.
+Esa página no garantiza recepción en la bandeja de entrada.
+No se envían copias vacías ni se reintenta automáticamente. El formulario conserva
+sus campos y diseño. La vista del editor bloquea los envíos.
 
-## Incidente de tiempo de espera
+## Incidente
 
-El propietario confirmó de nuevo la activación y conservar `juancamilo1504@gmail.com`.
-Después confirmó que el mensaje de la prueba sí llegó normalmente a su buzón,
-aunque la página mostró timeout. Se amplió la espera de confirmación a 60 segundos
-y a los 20 se indica demora, sin habilitar un segundo envío ni anunciar fallo.
-Su captura muestra que se agotaron los 20 segundos, sin respuesta del proveedor.
-También fallaron por timeout las consultas de solo lectura a la ayuda de FormSubmit
-durante la revisión. Esto no permite determinar si recibió el POST original ni
-asegurar que el correo llegó. Las alternativas mitigan el fallo, pero no reparan
-ni verifican la disponibilidad del proveedor externo.
+Las pruebas por AJAX agotaron primero 20 y después 60 segundos sin confirmación.
+El propietario inicialmente dijo que recibió un correo, pero la captura posterior
+mostró que era una solicitud de activación, no prueba de recepción del mensaje.
+Luego confirmó que pulsó ACTIVATE FORM y vio la confirmación de activación; aun así,
+la siguiente prueba por AJAX quedó esperando. No se conoce la respuesta HTTP de
+esas peticiones, por lo que no se atribuye una causa definitiva a los timeouts.
 
-`NODE_PATH=/tmp/tienda-check/node_modules node tests/contacto-alternativas.cjs`
-comprueba el timeout simulado, los datos conservados, el texto íntegro en ambas
-alternativas, la seguridad del contenido y la ausencia de reintentos automáticos.
+El envío directo permite ver la respuesta del proveedor y usar su verificación
+antispam recomendada, sin el timeout artificial del código AJAX. Esto no garantiza
+la disponibilidad de FormSubmit ni la entrega de correo; hace falta una prueba
+del propietario que confirme la recepción del contenido, no otro correo de activación.
 
 ## Validación
 
-Nueve escenarios simulados en Chromium: activación, HTTP 429, HTTP 503, rechazo de validación,
-respuesta no JSON, fallo de red, timeout, mensaje con etiquetas HTML y aceptación.
-Comprobados el POST codificado, la ausencia de `_cc` vacío, conservación de campos ante fallo,
-limpieza al aceptar, botón recuperado y permanencia en la página.
-No se enviaron mensajes reales. La prueba desde el navegador del propietario sigue siendo
-necesaria para conocer la respuesta real y confirmar recepción.
+`NODE_PATH=/tmp/tienda-check/node_modules node tests/contacto-alternativas.cjs`
+comprueba, sin solicitudes reales, que el modo directo usa el identificador correcto,
+envía todos los campos y el retorno HTTPS, habilita la seguridad del proveedor,
+excluye copias vacías y no realiza AJAX ni inicia temporizadores.
+También comprueba la ruta AJAX conservada: demora, aceptación tardía, conservación
+de campos ante timeout y alternativas de WhatsApp/correo con el mensaje completo.
+Se ejecutó además la regresión del carrito y la comprobación de sintaxis y diff.
 
-Referencias oficiales consultadas:
-- https://formsubmit.co/documentation
-- https://formsubmit.co/help
+No se enviaron correos reales desde las herramientas.
+
+Documentación oficial: https://formsubmit.co/documentation

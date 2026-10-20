@@ -8,6 +8,8 @@ const dom = new JSDOM(fs.readFileSync('index.html', 'utf8'), {
 });
 const { window } = dom;
 const config = JSON.parse(fs.readFileSync('content/site.json', 'utf8'));
+const directConfig = { ...config };
+config.envio_formulario = 'ajax';
 let requests = 0;
 window.fetch = async (url, options) => {
   if (url === 'content/site.json') return { ok: true, json: async () => config };
@@ -59,6 +61,27 @@ window.eval(fs.readFileSync('assets/contenido.js', 'utf8'));
   assert.equal(status.dataset.state, 'success', 'accept a delayed acknowledgement');
   assert.equal(form.elements.namedItem('mensaje').value, '');
   assert.equal(timers.size, 0, 'clear both timers after acceptance');
+
+  // Production uses native submission. Inspect without contacting FormSubmit.
+  window.renderCMSContent(directConfig);
+  for (const [name, value] of Object.entries(values)) form.elements.namedItem(name).value = value;
+  let nativeSubmissions = 0;
+  window.HTMLFormElement.prototype.submit = function () {
+    nativeSubmissions++;
+    assert.equal(this.action, 'https://formsubmit.co/' + directConfig.formsubmit_id);
+    const sent = new window.FormData(this);
+    assert.equal(sent.has('_captcha'), false, 'keep provider security verification enabled');
+    assert.equal(sent.has('_cc'), false, 'never send empty copies');
+    assert.equal(sent.get('_next'), 'https://punkiesycerebro.com/gracias.html');
+    assert.equal(sent.get('_subject'), 'Nuevo mensaje a Punkies y Cerebro: ' + values.asunto);
+    for (const [name, value] of Object.entries(values)) assert.equal(sent.get(name), value);
+  };
+  window.fetch = () => { throw Error('native submission must not use AJAX'); };
+  // The preceding successful AJAX scenario set its local duplicate-send cooldown.
+  window.Date.now = () => Date.now() + 20000;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  assert.equal(nativeSubmissions, 1);
+  assert.equal(timers.size, 0, 'native submission has no artificial acknowledgement timeout');
   dom.window.close();
   console.log('Contacto: timeout, alternativas, conservación de datos y aceptación después del aviso de demora: OK');
 })().catch(error => { dom.window.close(); console.error(error); process.exitCode = 1; });

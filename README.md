@@ -39,7 +39,9 @@ No se presentan carátulas, fechas, canciones, precios o productos sin confirmar
 La sección Música muestra la carátula oficial de Este lado hacia el enemigo, aportada por el propietario.
 Los nombres y funciones de las fotografías proceden de los archivos aportados por el propietario.
 
-El formulario usa FormSubmit por AJAX, con destinatario `correo_formulario` o `contacto`
+El formulario usa el envío directo de FormSubmit con verificación antispam y el identificador
+público recibido en su activación (`formsubmit_id`). Conserva compatibilidad AJAX si
+`envio_formulario` no es `directo`. El destinatario es `correo_formulario` o `contacto`
 y copias opcionales `copias_formulario` en `content/site.json`. Los controles de destinatarios
 se mantienen fuera del navegador como configuración pública del sitio; no son secretos.
 La entrega real y la activación del servicio requieren verificación con los destinatarios.
