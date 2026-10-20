@@ -19,11 +19,19 @@
     "menu_galeria": "GALERÍA",
     "menu_contacto": "CONTACTO"
   },
-  "orden": ["inicio", "musica", "conciertos", "historia", "tienda", "galeria", "contacto"],
+  "orden": [
+    "inicio",
+    "musica",
+    "conciertos",
+    "historia",
+    "tienda",
+    "galeria",
+    "contacto"
+  ],
   "secciones": {},
   "extras": [],
   "espaciado": 76,
-  "radio_tarjetas": 7,
-  "ancho_contenido": 1200,
+  "radio_tarjetas": 20,
+  "ancho_contenido": 1140,
   "alineacion_portada": "centro"
 }
