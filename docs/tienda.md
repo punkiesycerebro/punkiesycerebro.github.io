@@ -98,8 +98,9 @@ unidad de cada artículo de Jimmy. La tanda inicial se publicó con precios prov
 Se aplicó la lista de 27 libros aportada por el propietario. Se completó el título
 Catálogo de tronquitos con anecdotario y se distinguió Tablaturas de canciones
 rosa, volumen II. Vademécum argólico, volumen II se añadió como producto separado
-a $50.000, con `imagen` vacía hasta recibir su portada original. No se reutiliza
-la foto del primer volumen; la tarjeta muestra «Imagen pendiente».
+a $50.000. Su portada original, recibida en un ZIP independiente, está en
+`media/productos/jimmy-jazz/libro-vademecum-argolico-ii.png`. Se distingue
+de la imagen del primer volumen y se comprobó la integridad del PNG.
 
 El catálogo tiene 27 libros y dos discos. Una unidad de cada libro suma
 $1.295.000 COP; el total con los dos discos es $1.335.000 COP. Se comprobaron

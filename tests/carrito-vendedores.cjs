@@ -79,7 +79,7 @@ assert.equal(new Set(inputs.map(el=>el.id)).size,inputs.length,'quantity IDs are
 assert.equal(data.tienda_jimmy.filter(p=>p.categoria==='Libro').reduce((total,p)=>total+p.precio,0),1295000);
 assert.equal(data.tienda_jimmy.find(p=>p.id==='libro-pildoras-de-la-ira').precio,30000);
 for(const product of data.tienda_jimmy){if(product.imagen)assert.ok(fs.statSync(root+product.imagen).isFile());add(actual,'jimmy:'+product.id,1);}
-assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-placeholder').length,1);
+assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-placeholder').length,0);
 assert.match(msg(actual,'jimmy'),/1[.]335[.]000/);
 assert.equal(checkout(actual,'jimmy').url.pathname,'/573052318020');
 assert.equal(checkout(actual,'punkies').url,null);
