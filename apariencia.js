@@ -21,11 +21,37 @@
   for(const [k,s] of [['mostrar_lema','.tagline'],['mostrar_historia','#historia'],['mostrar_tienda','#tienda'],['mostrar_contacto','#contacto']]){const e=document.querySelector(s);if(e)e.hidden=d[k]===false}
  };
  window.actualizarGaleria=d=>{
-  if(!d)return;const h=document.getElementById('titulo-galeria');if(h&&d.titulo)h.textContent=String(d.titulo);
+  if(!d)return;
+  const h=document.getElementById('titulo-galeria');if(h)h.textContent=String(d.titulo||'GALERÍA');
   const grid=document.getElementById('galeria-grid');if(!grid)return;
   const fotos=Array.isArray(d.fotos)?d.fotos.filter(x=>localImg(x.imagen)):[];
-  grid.replaceChildren();if(!fotos.length){const p=document.createElement('p');p.className='empty';p.textContent='Próximamente fotografías de la banda.';grid.append(p);return}
-  for(const photo of fotos){const fig=document.createElement('figure'),im=document.createElement('img'),cap=document.createElement('figcaption');im.src=imgSrc(photo.imagen);im.loading='lazy';im.alt=String(photo.pie||'Fotografía de la banda');cap.textContent=String(photo.pie||'');fig.append(im,cap);grid.append(fig)}
+  const mode=['cuadricula','carrusel','mosaico'].includes(d.modo)?d.modo:'cuadricula';
+  const height=Math.min(750,Math.max(120,Number(d.alto)||300));
+  const columns=Math.min(5,Math.max(1,Number(d.columnas)||3));
+  const gap=Math.min(55,Math.max(0,Number(d.espacio)??16));
+  grid.replaceChildren();grid.className='galeria-grid gallery-'+mode;
+  grid.style.setProperty('--gal-height',height+'px');grid.style.setProperty('--gal-cols',columns);grid.style.setProperty('--gal-gap',gap+'px');
+  if(!fotos.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='Próximamente fotografías de la banda.';grid.append(empty);return}
+  for(let i=0;i<fotos.length;i++){
+   const photo=fotos[i],fig=document.createElement('figure'),im=document.createElement('img'),cap=document.createElement('figcaption');
+   im.src=imgSrc(photo.imagen);im.loading='lazy';im.alt=String(photo.pie||'Fotografía de Punkies y Cerebro');
+   im.style.objectFit=['cover','contain','fill'].includes(photo.ajuste)?photo.ajuste:'cover';
+   im.style.objectPosition=`${Math.min(100,Math.max(0,Number(photo.posX)??50))}% ${Math.min(100,Math.max(0,Number(photo.posY)??50))}%`;
+   if(photo.alto)fig.style.setProperty('--item-height',Math.min(750,Math.max(120,Number(photo.alto)))+'px');
+   if(photo.ancho&&mode!=='carrusel')fig.style.setProperty('--item-width',Math.min(100,Math.max(25,Number(photo.ancho)))+'%');
+   cap.textContent=String(photo.pie||'');fig.append(im,cap);grid.append(fig);
+  }
+  const section=document.getElementById('galeria');let nav=section?.querySelector('.gallery-controls');nav?.remove();
+  if(mode==='carrusel'&&fotos.length>1&&section){
+   nav=document.createElement('div');nav.className='gallery-controls';
+   const prev=document.createElement('button'),next=document.createElement('button');
+   prev.type=next.type='button';prev.textContent='← Anterior';next.textContent='Siguiente →';
+   prev.setAttribute('aria-label','Fotografía anterior');next.setAttribute('aria-label','Fotografía siguiente');
+   const status=document.createElement('span');status.setAttribute('aria-live','polite');
+   const jump=(step)=>{const index=Math.round(grid.scrollLeft/Math.max(1,grid.clientWidth));const newIndex=Math.max(0,Math.min(fotos.length-1,index+step));grid.children[newIndex]?.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});status.textContent=(newIndex+1)+' / '+fotos.length};
+   prev.onclick=()=>jump(-1);next.onclick=()=>jump(1);status.textContent='1 / '+fotos.length;
+   nav.append(prev,status,next);grid.after(nav);
+  }
  };
  fetch('content/apariencia.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('apariencia.json');return r.json()}).then(window.aplicarApariencia).catch(console.warn);
  fetch('content/galeria.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('galeria.json');return r.json()}).then(window.actualizarGaleria).catch(console.warn);

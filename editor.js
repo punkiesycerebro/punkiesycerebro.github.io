@@ -99,9 +99,14 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
    if(selSection!=='inicio')h+=colorHTML('color','Color de fondo',sect,'section')+imgHTML('imagen','Imagen de fondo de sección',sect,'section');
    if(extra){h+=`<h3>Contenido del bloque añadido</h3>${['titulo','texto','boton','enlace'].map((k)=>`<div class="control"><label>${{titulo:'Título',texto:'Párrafo',boton:'Texto del botón',enlace:'Enlace HTTPS del botón'}[k]}</label>${k==='texto'?`<textarea data-kind="extra" data-key="${k}" rows="5">${esc(extra[k]||'')}</textarea>`:`<input type="text" value="${attr(extra[k]||'')}" data-kind="extra" data-key="${k}">`}</div>`).join('')}${imgHTML('imagen','Imagen del bloque',extra,'extra')}<button class="action danger" id="delete-extra">Eliminar sección nueva</button>`}
  }else if(tab==='galeria'){
-   h='<h2>Galería fotográfica</h2><p class="note">Agrega fotos reales de la banda. Se verán en la galería después de publicar.</p>';
-   h+=`<div class="control"><label>Título de la galería</label><input type="text" data-kind="gal" data-key="titulo" value="${attr(state.gal.titulo||'GALERÍA')}"></div><button id="add-photo" class="big-action">＋ Añadir fotografía</button>`;
-   h+=(state.gal.fotos||[]).map((f,i)=>`<div class="img-item"><strong>Fotografía ${i+1}</strong>${f.imagen?`<img class="img-preview" src="${attr(images[f.imagen]||f.imagen)}" alt="Foto">`:''}<button type="button" class="file-btn" data-gallery-img="${i}">Cambiar fotografía</button><div class="control" style="margin-top:10px"><label>Descripción</label><input value="${attr(f.pie||'')}" type="text" data-gallery-caption="${i}"></div><button class="action danger" data-remove-photo="${i}">Eliminar</button></div>`).join('');
+   h='<h2>Galería visual</h2><p class="note">Elige la presentación, ajusta cada foto y cambia el orden con las flechas o arrastrando las tarjetas.</p>';
+   h+=`<div class="control"><label>Título de galería</label><input type="text" data-kind="gal" data-key="titulo" value="${attr(state.gal.titulo||'GALERÍA')}"></div>`;
+   h+=selectHTML('modo','Presentación',state.gal.modo||'cuadricula',[['cuadricula','Cuadrícula'],['carrusel','Carrusel con flechas'],['mosaico','Mosaico']],'gal');
+   h+=slider('alto','Altura general de las fotos',state.gal,120,750,10,'gal');
+   h+=slider('columnas','Columnas (cuadrícula y mosaico)',state.gal,1,5,1,'gal');
+   h+=slider('espacio','Separación entre fotografías',state.gal,0,55,1,'gal');
+   h+='<button id="add-photo" class="big-action">＋ Añadir fotografía</button>';
+   h+=(state.gal.fotos||[]).map((f,i)=>`<div class="img-item" draggable="true" data-photo-drag="${i}"><div class="row-ordered"><strong>☰ Foto ${i+1}</strong><span></span><button data-photo-move="${i}" data-dir="-1" title="Anterior">↑</button><button data-photo-move="${i}" data-dir="1" title="Siguiente">↓</button></div>${f.imagen?`<img class="img-preview" src="${attr(images[f.imagen]||f.imagen)}" alt="Foto">`:''}<button type="button" class="file-btn" data-gallery-img="${i}">Cambiar fotografía</button><div class="control"><label>Descripción</label><input value="${attr(f.pie||'')}" type="text" data-gallery-caption="${i}"></div>${selectHTML('ajuste','Ajuste de esta imagen',f.ajuste||'cover',[['cover','Llenar marco (recorta)'],['contain','Mostrar completa (sin recortar)'],['fill','Estirar al marco']],'photo:'+i)}${slider('posX','Encuadre horizontal',f,0,100,1,'photo:'+i)}${slider('posY','Encuadre vertical',f,0,100,1,'photo:'+i)}${slider('alto','Altura individual',f,120,750,10,'photo:'+i)}<button class="action danger" data-remove-photo="${i}">Eliminar fotografía</button></div>`).join('');
  }else if(tab==='enlaces'){
    h='<h2>Enlaces y contacto</h2><p class="note">Actualiza redes y correo. Se reflejarán en las secciones de música y contacto.</p>';
    h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo de contacto']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
@@ -126,6 +131,7 @@ function routeEvent(e){const target=e.target;const kind=target.dataset.kind,key=
   if(target.type==='range')target.closest('.control').querySelector('output').textContent=val+'px';return;
  }
 
+ if(kind.startsWith('photo:')){const i=Number(kind.split(':')[1]);const photo=state.gal.fotos?.[i];if(photo){persistControl(photo,key,target.type==='range'?Number(target.value):target.value);if(target.type==='range')target.closest('.control').querySelector('output').textContent=target.value+'px'}return}
  if(kind==='gal'){persistControl(state.gal,key,target.value);return}
  if(kind==='app'||kind==='dis'){
   let val=target.value;if(target.type==='range')val=Number(val);
@@ -151,6 +157,7 @@ T.addEventListener('click',e=>{
  if(b.dataset.imgKind){imageTarget={kind:b.dataset.imgKind,key:b.dataset.imgKey};$('#fileinput').click();return}
  if(b.dataset.clearImg){const k=b.dataset.clearImg,kind=b.dataset.imgKind;modify(()=>{if(kind==='section'){state.dis.secciones[selSection]??={};state.dis.secciones[selSection][k]=''}else if(kind==='extra'){const x=state.dis.extras.find(x=>x.id===selSection);if(x)x[k]=''}else state.app[k]=''});renderProps();return}
  if(b.dataset.galleryImg!==undefined){imageTarget={kind:'galphoto',i:Number(b.dataset.galleryImg)};$('#fileinput').click();return}
+ if(b.dataset.photoMove!==undefined){const i=Number(b.dataset.photoMove),j=i+Number(b.dataset.dir);if(j>=0&&j<state.gal.fotos.length){modify(()=>{const a=state.gal.fotos;a.splice(j,0,a.splice(i,1)[0])});renderProps()}return}
  if(b.dataset.removePhoto!==undefined){modify(()=>state.gal.fotos.splice(Number(b.dataset.removePhoto),1));renderProps();return}
  if(b.dataset.section){selSection=b.dataset.section;renderProps();return}
  if(b.dataset.move){const i=state.dis.orden.indexOf(b.dataset.move),j=i+Number(b.dataset.dir);if(j>=0&&j<state.dis.orden.length)modify(()=>{const a=state.dis.orden;a.splice(j,0,a.splice(i,1)[0])});renderProps();return}
@@ -160,6 +167,10 @@ T.addEventListener('click',e=>{
  if(b.id==='delete-extra'){modify(()=>{state.dis.extras=state.dis.extras.filter(x=>x.id!==selSection);state.dis.orden=state.dis.orden.filter(x=>x!==selSection);delete state.dis.secciones[selSection]});selSection='inicio';renderProps();return}
  if(b.id==='add-photo'){imageTarget={kind:'galnew'};$('#fileinput').click();return}
 });
+let draggedPhoto=null;
+T.addEventListener('dragstart',e=>{const item=e.target.closest('[data-photo-drag]');if(item){draggedPhoto=Number(item.dataset.photoDrag);e.dataTransfer.effectAllowed='move'}});
+T.addEventListener('dragover',e=>{if(e.target.closest('[data-photo-drag]'))e.preventDefault()});
+T.addEventListener('drop',e=>{const item=e.target.closest('[data-photo-drag]');if(!item||draggedPhoto===null)return;e.preventDefault();const dest=Number(item.dataset.photoDrag);if(dest!==draggedPhoto)modify(()=>{const a=state.gal.fotos;a.splice(dest,0,a.splice(draggedPhoto,1)[0])});draggedPhoto=null;renderProps()});
 let dragId=null;
 T.addEventListener('dragstart',e=>{const row=e.target.closest('[data-drag]');if(row){dragId=row.dataset.drag;e.dataTransfer.effectAllowed='move'}});
 T.addEventListener('dragover',e=>{if(e.target.closest('[data-drag]'))e.preventDefault()});
@@ -252,7 +263,7 @@ async function start(){setStatus('Leyendo tu web...');assetsDb=await openDB();aw
  fetchJson('content/site.json',null),fetchJson('content/apariencia.json',fallbackAppearance),fetchJson('content/galeria.json',{titulo:'GALERÍA',fotos:[]}),fetchJson('content/diseno.json',initial.dis)]);
  if(!site||typeof site!=='object'||!site.banda){T.innerHTML='<h2>No se encontraron los datos</h2><p class="note">Falta <code>content/site.json</code> en el repositorio. No edites hasta subir ese archivo.</p>';setStatus('Falta site.json');return}
  Object.assign(state,{site,app:{...fallbackAppearance,...(app||{})},gal:gal||{titulo:'GALERÍA',fotos:[]},dis:dis||clone(initial.dis)});
- state.dis.textos??={};state.dis.secciones??={};state.dis.extras??=[];state.dis.formato??={};state.dis.orden??=sections.slice();state.gal.fotos??=[];serverBaseline=clone(state);
+ state.dis.textos??={};state.dis.secciones??={};state.dis.extras??=[];state.dis.formato??={};state.dis.orden??=sections.slice();state.gal.fotos??=[];state.gal.modo??="cuadricula";state.gal.alto??=300;state.gal.columnas??=3;state.gal.espacio??=16;for(const foto of state.gal.fotos){foto.posX??=50;foto.posY??=50;foto.alto??=300;}serverBaseline=clone(state);
  const past=localStorage.getItem(projectBase);if(past){try{const remembered=JSON.parse(past);if(remembered?.state?.site?.banda){Object.assign(state,remembered.state);pending=true;setStatus('● Borrador local recuperado');alertMsg('Se recuperaron los cambios que dejaste en este navegador')}}catch{}}
  if(!pending)setStatus('✓ Lista para editar · sin publicar');renderProps();previewNow();
 }
