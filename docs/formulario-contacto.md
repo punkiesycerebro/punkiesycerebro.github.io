@@ -13,7 +13,22 @@ no contiene la respuesta del proveedor, por lo que no permite determinar la caus
 - Una respuesta de activación nunca se considera entrega aunque incluya `success: true`.
 - Tiempo máximo de 20 segundos, sin reintentos automáticos ni borrado de campos ante fallo. Un timeout no prueba que el servidor no haya procesado el envío.
 - El estado de éxito indica aceptación por el servicio; no garantiza llegada a la bandeja de entrada.
-- Se ofrece el correo configurado como alternativa ante error.
+- Ante error se ofrecen WhatsApp de management y el correo configurado, con nombre,
+  correo, asunto y mensaje completos. El visitante debe confirmar el envío en la
+  aplicación elegida; no se envían mensajes automáticamente.
+
+## Incidente de tiempo de espera
+
+El propietario confirmó de nuevo la activación y conservar `juancamilo1504@gmail.com`.
+Su captura muestra que se agotaron los 20 segundos, sin respuesta del proveedor.
+También fallaron por timeout las consultas de solo lectura a la ayuda de FormSubmit
+durante la revisión. Esto no permite determinar si recibió el POST original ni
+asegurar que el correo llegó. Las alternativas mitigan el fallo, pero no reparan
+ni verifican la disponibilidad del proveedor externo.
+
+`NODE_PATH=/tmp/tienda-check/node_modules node tests/contacto-alternativas.cjs`
+comprueba el timeout simulado, los datos conservados, el texto íntegro en ambas
+alternativas, la seguridad del contenido y la ausencia de reintentos automáticos.
 
 ## Validación
 

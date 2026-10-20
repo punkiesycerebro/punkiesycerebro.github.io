@@ -85,12 +85,26 @@ function contactStatus(message, type) {
   status.setAttribute('role', type === 'error' ? 'alert' : 'status');
   const recipient = document.getElementById('formulario-contacto')?.dataset.destino;
   if (type === 'error' && recipient) {
+    const form = document.getElementById('formulario-contacto');
+    const field = name => String(form.elements.namedItem(name)?.value || '').trim();
+    const subject = field('asunto') || 'Contacto con Punkies y Cerebro';
+    const body = 'Nombre: ' + field('name') + '\nCorreo: ' + field('email') + '\nAsunto: ' + subject + '\n\n' + field('mensaje');
+    const note = document.createElement('p');
+    note.textContent = 'Puedes abrir tu mensaje completo en WhatsApp o en tu aplicación de correo y enviarlo desde allí. Si ya llegó el primer envío, no lo repitas.';
+    status.append(note);
+    const whatsapp = document.createElement('a');
+    whatsapp.href = 'https://wa.me/573045377640?text=' + encodeURIComponent(body);
+    whatsapp.target = '_blank';
+    whatsapp.rel = 'noopener noreferrer';
+    whatsapp.textContent = 'Abrir mensaje en WhatsApp ↗';
+    whatsapp.style.display = 'block';
+    whatsapp.style.textDecoration = 'underline';
     const alternative = document.createElement('a');
-    alternative.href = 'mailto:' + recipient;
-    alternative.textContent = 'También puedes escribirnos a ' + recipient + '.';
+    alternative.href = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    alternative.textContent = 'Abrir mensaje en el correo para ' + recipient + ' ↗';
     alternative.style.display = 'block';
     alternative.style.textDecoration = 'underline';
-    status.append(document.createTextNode(' '), alternative);
+    status.append(whatsapp, alternative);
   }
 }
 
