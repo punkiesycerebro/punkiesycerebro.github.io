@@ -49,6 +49,25 @@ function textBlock(f){const key=f[0],value=fieldValue(f)||'',multi=['acerca','de
 const selectHTML=(key,label,value,options,kind='app')=>`<div class="control"><label>${esc(label)}</label><select data-kind="${kind}" data-key="${key}">${options.map(([v,t])=>`<option value="${attr(v)}" ${value===v?'selected':''}>${esc(t)}</option>`).join('')}</select></div>`;
 const colorHTML=(key,label,obj,kind='app')=>{const val=/^#[a-fA-F0-9]{6}$/.test(obj[key])?obj[key]:'#ffffff';return `<div class="control"><label>${esc(label)}</label><div class="color-row"><input aria-label="Elegir color" type="color" value="${val}" data-kind="${kind}" data-key="${key}"><input aria-label="Código hexadecimal" type="text" maxlength="7" value="${val}" data-kind="${kind}" data-key="${key}"></div></div>`};
 const slider=(key,label,obj,min,max,step=1,kind='app')=>{const val=Number(obj[key])||min;return `<div class="control"><div class="slider-head"><label>${esc(label)}</label><output>${val}px</output></div><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" data-kind="${kind}" data-key="${key}"></div>`};
+function num(v,fallback){return Number.isFinite(Number(v))?Number(v):fallback}
+function advancedImage(kind,key,obj,label){
+ const ident=kind==='photo'?'photo':kind==='section'?'section':'app';
+ const p=obj[key]||'',uri=images[p]||p,scale=num(obj[key+'_zoom'],100),x=num(obj[key+'_x'],50),y=num(obj[key+'_y'],50);
+ const isBackground=(kind==='app'&&key.startsWith('fondo'))||kind==='section';
+ const opacity=num(obj[key+'_opacity'],100),dark=num(obj[key+'_overlay'],isBackground?35:0);
+ const fit=obj[key+'_fit']||'cover';
+ return `<div class="advanced-img"><h3>${esc(label)} · Ajuste visual</h3><p class="note">Arrastra la imagen sobre el marco para mover el encuadre. Puedes verla completa, acercarla y oscurecer el fondo sin modificar el original.</p>
+ ${p?`<div class="image-crop-frame" data-crop-kind="${ident}" data-crop-key="${key}" data-crop-index="${kind==='photo'?obj.__index:''}" title="Arrastra para desplazar el encuadre"><img draggable="false" src="${attr(uri)}" style="object-fit:${fit};object-position:${x}% ${y}%;transform:scale(${scale/100});opacity:${opacity/100}"><div class="crop-shade" style="background:rgba(0,0,0,${dark/100})"></div><div class="crop-cross">✥ Arrastrar para encuadrar</div></div>`:`<div class="crop-placeholder">Primero agrega una imagen</div>`}
+ <button type="button" class="file-btn" data-img-kind="${kind==='photo'?'galphoto':kind}" data-img-key="${key}" ${kind==='photo'?`data-gallery-img="${obj.__index}"`:''}>↥ ${p?'Reemplazar imagen':'Subir imagen'}</button>
+ ${selectHTML(key+'_fit','Cómo se ajusta',fit,[['cover','Llenar marco (recorta)'],['contain','Ver completa (sin recortar)'],['fill','Estirar al marco']],'imgprop:'+kind+':'+key+(kind==='photo'?':'+obj.__index:''))}
+ ${slider(key+'_zoom','Zoom (%)', {[key+'_zoom']:scale},50,250,5,'imgprop:'+kind+':'+key+(kind==='photo'?':'+obj.__index:''))}
+ ${slider(key+'_x','Punto focal horizontal (%)',{[key+'_x']:x},0,100,1,'imgprop:'+kind+':'+key+(kind==='photo'?':'+obj.__index:''))}
+ ${slider(key+'_y','Punto focal vertical (%)',{[key+'_y']:y},0,100,1,'imgprop:'+kind+':'+key+(kind==='photo'?':'+obj.__index:''))}
+ ${slider(key+'_opacity','Opacidad de imagen (%)',{[key+'_opacity']:opacity},0,100,5,'imgprop:'+kind+':'+key+(kind==='photo'?':'+obj.__index:''))}
+ ${slider(key+'_overlay','Oscurecer / capa negra (%)',{[key+'_overlay']:dark},0,95,5,'imgprop:'+kind+':'+key+(kind==='photo'?':'+obj.__index:''))}
+ <button type="button" class="action" data-reset-crop="${kind}:${key}${kind==='photo'?':'+obj.__index:''}">↺ Ajuste automático / restaurar encuadre</button>
+ </div>`;
+}
 const imgHTML=(key,label,obj,kind='app')=>{const p=obj[key]||'',uri=images[p]||p;
  return `<div class="control"><label>${esc(label)}</label>${p?`<img class="img-preview" src="${attr(uri)}" alt="${esc(label)}">`:''}<button type="button" class="file-btn" data-img-kind="${kind}" data-img-key="${key}">＋ Elegir imagen de mi computador</button><small>${esc(p||'No se ha elegido imagen')}</small>${p?`<button type="button" data-clear-img="${key}" data-img-kind="${kind}" class="action" style="margin-top:7px">Quitar imagen</button>`:''}</div>`};
 
@@ -88,7 +107,7 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
    h+=selectHTML('alineacion_portada','Alineación de portada',state.dis.alineacion_portada||'centro',[['centro','Centrada'],['izquierda','Izquierda']],'dis');
  }else if(tab==='imagenes'){
    h='<h2>Imágenes y fondos</h2><p class="note">Sube imágenes JPG, PNG o WebP. El editor las adapta y las incluye en el ZIP.</p>';
-   h+=imageFields.map(([k,l])=>imgHTML(k,l,state.app)).join('');
+   h+=imageFields.map(([k,l])=>advancedImage('app',k,state.app,l)).join('');
  }else if(tab==='secciones'){
    const all=[...sections,...(state.dis.extras||[]).map(x=>x.id)];
    if(!all.includes(selSection))selSection='inicio';const sect=state.dis.secciones?.[selSection]||{},extra=(state.dis.extras||[]).find(x=>x.id===selSection);
@@ -96,7 +115,7 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
    h+=`<div class="ordered">${(state.dis.orden||all).filter(k=>all.includes(k)).map(id=>`<div class="row-ordered" draggable="true" data-drag="${id}"><span>${esc(names[id]||((state.dis.extras||[]).find(x=>x.id===id)?.titulo||'Sección nueva'))}</span><button title="Subir" data-move="${id}" data-dir="-1">↑</button><button title="Bajar" data-move="${id}" data-dir="1">↓</button><button title="Editar" data-section="${id}">✎</button></div>`).join('')}</div>`;
    h+=`<button class="big-action" id="add-section">＋ Añadir nueva sección</button><h3>Editar sección seleccionada</h3>${selectHTML('sec','Sección',selSection,all.map(id=>[id,names[id]||(state.dis.extras||[]).find(x=>x.id===id)?.titulo||id]),'selectSection')}`;
    h+=`<label class="control-check"><input type="checkbox" data-kind="section" data-key="oculta" ${sect.oculta===true?'checked':''}> Ocultar esta sección</label>`;
-   if(selSection!=='inicio')h+=colorHTML('color','Color de fondo',sect,'section')+imgHTML('imagen','Imagen de fondo de sección',sect,'section');
+   if(selSection!=='inicio')h+=colorHTML('color','Color de fondo',sect,'section')+advancedImage('section','imagen',sect,'Imagen de fondo de sección');
    if(extra){h+=`<h3>Contenido del bloque añadido</h3>${['titulo','texto','boton','enlace'].map((k)=>`<div class="control"><label>${{titulo:'Título',texto:'Párrafo',boton:'Texto del botón',enlace:'Enlace HTTPS del botón'}[k]}</label>${k==='texto'?`<textarea data-kind="extra" data-key="${k}" rows="5">${esc(extra[k]||'')}</textarea>`:`<input type="text" value="${attr(extra[k]||'')}" data-kind="extra" data-key="${k}">`}</div>`).join('')}${imgHTML('imagen','Imagen del bloque',extra,'extra')}<button class="action danger" id="delete-extra">Eliminar sección nueva</button>`}
  }else if(tab==='galeria'){
    h='<h2>Galería visual</h2><p class="note">Elige la presentación, ajusta cada foto y cambia el orden con las flechas o arrastrando las tarjetas.</p>';
@@ -106,10 +125,10 @@ function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class
    h+=slider('columnas','Columnas (cuadrícula y mosaico)',state.gal,1,5,1,'gal');
    h+=slider('espacio','Separación entre fotografías',state.gal,0,55,1,'gal');
    h+='<button id="add-photo" class="big-action">＋ Añadir fotografía</button>';
-   h+=(state.gal.fotos||[]).map((f,i)=>`<div class="img-item" draggable="true" data-photo-drag="${i}"><div class="row-ordered"><strong>☰ Foto ${i+1}</strong><span></span><button data-photo-move="${i}" data-dir="-1" title="Anterior">↑</button><button data-photo-move="${i}" data-dir="1" title="Siguiente">↓</button></div>${f.imagen?`<img class="img-preview" src="${attr(images[f.imagen]||f.imagen)}" alt="Foto">`:''}<button type="button" class="file-btn" data-gallery-img="${i}">Cambiar fotografía</button><div class="control"><label>Descripción</label><input value="${attr(f.pie||'')}" type="text" data-gallery-caption="${i}"></div>${selectHTML('ajuste','Ajuste de esta imagen',f.ajuste||'cover',[['cover','Llenar marco (recorta)'],['contain','Mostrar completa (sin recortar)'],['fill','Estirar al marco']],'photo:'+i)}${slider('posX','Encuadre horizontal',f,0,100,1,'photo:'+i)}${slider('posY','Encuadre vertical',f,0,100,1,'photo:'+i)}${slider('alto','Altura individual',f,120,750,10,'photo:'+i)}<button class="action danger" data-remove-photo="${i}">Eliminar fotografía</button></div>`).join('');
+   h+=(state.gal.fotos||[]).map((f,i)=>`<div class="img-item" draggable="true" data-photo-drag="${i}"><div class="row-ordered"><strong>☰ Foto ${i+1}</strong><span></span><button data-photo-move="${i}" data-dir="-1" title="Anterior">↑</button><button data-photo-move="${i}" data-dir="1" title="Siguiente">↓</button></div>${f.imagen?`<img class="img-preview" src="${attr(images[f.imagen]||f.imagen)}" alt="Foto">`:''}<button type="button" class="file-btn" data-gallery-img="${i}">Cambiar fotografía</button><div class="control"><label>Descripción</label><input value="${attr(f.pie||'')}" type="text" data-gallery-caption="${i}"></div>${selectHTML('ajuste','Ajuste de esta imagen',f.ajuste||'cover',[['cover','Llenar marco (recorta)'],['contain','Mostrar completa (sin recortar)'],['fill','Estirar al marco']],'photo:'+i)}${slider('posX','Encuadre horizontal',f,0,100,1,'photo:'+i)}${slider('posY','Encuadre vertical',f,0,100,1,'photo:'+i)}${slider('alto','Altura individual',f,120,750,10,'photo:'+i)}${advancedImage('photo','imagen',{...f,__index:i},'Fotografía '+(i+1))}<button class="action danger" data-remove-photo="${i}">Eliminar fotografía</button></div>`).join('');
  }else if(tab==='enlaces'){
-   h='<h2>Enlaces y contacto</h2><p class="note">Actualiza redes y correo. Se reflejarán en las secciones de música y contacto.</p>';
-   h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo de contacto']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
+   h='<h2>Enlaces y contacto</h2><p class="note">Cambia las redes, el correo visible y el destinatario del formulario. Para activar el formulario, haz un envío de prueba y confirma el mensaje que te envíe FormSubmit al buzón elegido. Los visitantes podrán escribir nombre, asunto, correo y mensaje. El correo de destino quedará visible en el HTML como parte de la integración estática.</p>';
+   h+=[['spotify','Spotify'],['youtube','YouTube'],['instagram','Instagram'],['facebook','Facebook'],['contacto','Correo público de contacto'],['correo_formulario','Correo que recibe los mensajes del formulario']].map(([k,l])=>`<div class="control"><label>${l}</label><input type="text" data-kind="site" data-key="${k}" value="${attr(state.site[k]||'')}" placeholder="${k==='contacto'?'correo@ejemplo.com':'https://...'}"></div>`).join('');
  }
  T.innerHTML=h;
 }
@@ -131,6 +150,17 @@ function routeEvent(e){const target=e.target;const kind=target.dataset.kind,key=
   if(target.type==='range')target.closest('.control').querySelector('output').textContent=val+'px';return;
  }
 
+ if(kind.startsWith('imgprop:')){
+  const [_,scope,imgkey,index]=kind.split(':');
+  const obj=scope==='app'?state.app:scope==='section'?(state.dis.secciones[selSection]??={}):state.gal.fotos?.[Number(index)];
+  if(!obj)return;
+  const val=target.type==='range'?Number(target.value):target.value;
+  persistControl(obj,key,val);
+  if(target.type==='range')target.closest('.control')?.querySelector('output')&&(target.closest('.control').querySelector('output').textContent=val+(key.endsWith('_x')||key.endsWith('_y')||key.endsWith('_zoom')||key.endsWith('_opacity')||key.endsWith('_overlay')?'%':'px'));
+  const frame=target.closest('.advanced-img')?.querySelector('.image-crop-frame');
+  if(frame){const img=frame.querySelector('img');img.style.objectFit=obj[imgkey+'_fit']||'cover';img.style.objectPosition=`${num(obj[imgkey+'_x'],50)}% ${num(obj[imgkey+'_y'],50)}%`;img.style.transform=`scale(${num(obj[imgkey+'_zoom'],100)/100})`;img.style.opacity=num(obj[imgkey+'_opacity'],100)/100;frame.querySelector('.crop-shade').style.background=`rgba(0,0,0,${num(obj[imgkey+'_overlay'],0)/100})`}
+  return;
+ }
  if(kind.startsWith('photo:')){const i=Number(kind.split(':')[1]);const photo=state.gal.fotos?.[i];if(photo){persistControl(photo,key,target.type==='range'?Number(target.value):target.value);if(target.type==='range')target.closest('.control').querySelector('output').textContent=target.value+'px'}return}
  if(kind==='gal'){persistControl(state.gal,key,target.value);return}
  if(kind==='app'||kind==='dis'){
@@ -152,9 +182,10 @@ T.addEventListener('input',e=>{
 T.addEventListener('change',e=>{if(e.target.matches('select,[type=checkbox]'))routeEvent(e)});
 T.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.resetCrop){const [scope,key,index]=b.dataset.resetCrop.split(':');const obj=scope==='app'?state.app:scope==='section'?(state.dis.secciones[selSection]??={}):state.gal.fotos?.[Number(index)];if(obj){modify(()=>{Object.assign(obj,{[key+'_fit']:'contain',[key+'_zoom']:100,[key+'_x']:50,[key+'_y']:50,[key+'_opacity']:100,[key+'_overlay']:scope==='photo'?0:35})});renderProps()}return}
  if(b.dataset.format){modify(()=>{state.dis.formato??={};state.dis.formato[selText]??={};const obj=state.dis.formato[selText];obj[b.dataset.format]=!obj[b.dataset.format]});renderProps();return}
  if(b.id==='reset-format'){modify(()=>{if(state.dis.formato)delete state.dis.formato[selText]});renderProps();return}
- if(b.dataset.imgKind){imageTarget={kind:b.dataset.imgKind,key:b.dataset.imgKey};$('#fileinput').click();return}
+ if(b.dataset.imgKind){imageTarget={kind:b.dataset.imgKind,key:b.dataset.imgKey,i:b.dataset.galleryImg!==undefined?Number(b.dataset.galleryImg):undefined};$('#fileinput').click();return}
  if(b.dataset.clearImg){const k=b.dataset.clearImg,kind=b.dataset.imgKind;modify(()=>{if(kind==='section'){state.dis.secciones[selSection]??={};state.dis.secciones[selSection][k]=''}else if(kind==='extra'){const x=state.dis.extras.find(x=>x.id===selSection);if(x)x[k]=''}else state.app[k]=''});renderProps();return}
  if(b.dataset.galleryImg!==undefined){imageTarget={kind:'galphoto',i:Number(b.dataset.galleryImg)};$('#fileinput').click();return}
  if(b.dataset.photoMove!==undefined){const i=Number(b.dataset.photoMove),j=i+Number(b.dataset.dir);if(j>=0&&j<state.gal.fotos.length){modify(()=>{const a=state.gal.fotos;a.splice(j,0,a.splice(i,1)[0])});renderProps()}return}
@@ -167,6 +198,10 @@ T.addEventListener('click',e=>{
  if(b.id==='delete-extra'){modify(()=>{state.dis.extras=state.dis.extras.filter(x=>x.id!==selSection);state.dis.orden=state.dis.orden.filter(x=>x!==selSection);delete state.dis.secciones[selSection]});selSection='inicio';renderProps();return}
  if(b.id==='add-photo'){imageTarget={kind:'galnew'};$('#fileinput').click();return}
 });
+let cropDrag=null;
+T.addEventListener('pointerdown',e=>{const el=e.target.closest('.image-crop-frame');if(!el)return;const scope=el.dataset.cropKind,key=el.dataset.cropKey,i=Number(el.dataset.cropIndex);const obj=scope==='app'?state.app:scope==='section'?state.dis.secciones[selSection]:state.gal.fotos?.[i];if(!obj)return;cropDrag={el,scope,key,i,startX:e.clientX,startY:e.clientY,x:num(obj[key+'_x'],50),y:num(obj[key+'_y'],50)};el.setPointerCapture(e.pointerId);e.preventDefault()});
+T.addEventListener('pointermove',e=>{if(!cropDrag)return;const c=cropDrag,dx=(e.clientX-c.startX)/Math.max(1,c.el.clientWidth)*100,dy=(e.clientY-c.startY)/Math.max(1,c.el.clientHeight)*100;const obj=c.scope==='app'?state.app:c.scope==='section'?state.dis.secciones[selSection]:state.gal.fotos?.[c.i];if(!obj)return;obj[c.key+'_x']=Math.max(0,Math.min(100,Math.round(c.x-dx)));obj[c.key+'_y']=Math.max(0,Math.min(100,Math.round(c.y-dy)));c.el.querySelector('img').style.objectPosition=`${obj[c.key+'_x']}% ${obj[c.key+'_y']}%`;});
+T.addEventListener('pointerup',()=>{if(!cropDrag)return;cropDrag=null;commit();renderProps()});
 let draggedPhoto=null;
 T.addEventListener('dragstart',e=>{const item=e.target.closest('[data-photo-drag]');if(item){draggedPhoto=Number(item.dataset.photoDrag);e.dataTransfer.effectAllowed='move'}});
 T.addEventListener('dragover',e=>{if(e.target.closest('[data-photo-drag]'))e.preventDefault()});
