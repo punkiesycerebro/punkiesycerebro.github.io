@@ -47,3 +47,28 @@ necesaria para conocer la respuesta real y confirmar recepción.
 Referencias oficiales consultadas:
 - https://formsubmit.co/documentation
 - https://formsubmit.co/help
+
+## Alternativa preparada: Web3Forms
+
+El propietario pidió conservar el envío dentro de la página y evitar demoras. La
+propuesta de navegación directa a FormSubmit se cerró sin publicar. La captura
+posterior confirmó explícitamente `Form Activated` para el dominio; el propietario
+también confirmó recepción tardía de una prueba.
+
+Se preparó soporte AJAX para Web3Forms, sin activarlo en producción. Para conectar:
+crear un formulario asociado a `juancamilo1504@gmail.com`, obtener su Access Key
+pública y configurar `servicio_formulario: web3forms` y `web3forms_access_key` en
+`content/site.json`. El identificador no es una contraseña; se usa en el cliente
+como alias del destinatario, según la documentación del proveedor.
+
+El adaptador envía nombre, email, asunto y mensaje mediante JSON a la API oficial,
+sin navegación ni redirección y sin reintentar por otro proveedor. No se anuncia
+éxito hasta que la respuesta HTTP y `success` confirman aceptación. Una clave
+faltante bloquea el formulario, en vez de cambiar de proveedor silenciosamente.
+La prueba simulada verifica datos, destino, aceptación y permanencia en la página.
+No se garantiza rapidez o entrega real hasta conectar la clave y verificar una
+prueba en el buzón del propietario. El sitio publicado sigue usando FormSubmit.
+
+Referencias:
+- https://web3forms.com/
+- https://docs.web3forms.com/getting-started/examples/ajax-contact-form-using-javascript

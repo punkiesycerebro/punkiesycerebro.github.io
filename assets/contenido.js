@@ -44,9 +44,14 @@ window.renderCMSContent=function(d){
  const copias=[...new Set(String(d.copias_formulario||'').split(/[\s,;]+/).map(e=>e.trim()).filter(e=>validEmail(e)&&e.toLowerCase()!==destino.toLowerCase()))].slice(0,20);
  if(form && status){
   const submit=form.querySelector('button[type="submit"]');
-  if(validEmail(destino)){
-   form.action='https://formsubmit.co/'+encodeURIComponent(destino);
+  const web3=d.servicio_formulario==='web3forms';
+  const accessKey=String(d.web3forms_access_key||'').trim();
+  const validKey=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(accessKey);
+  if(validEmail(destino)&&(!web3||validKey)){
+   form.action=web3?'https://api.web3forms.com/submit':'https://formsubmit.co/'+encodeURIComponent(destino);
    form.dataset.destino=destino;
+   form.dataset.servicio=web3?'web3forms':'formsubmit';
+   form.dataset.accessKey=web3?accessKey:'';
    const cc=form.querySelector('[name="_cc"]');if(cc)cc.value=copias.join(',');
    const next=document.getElementById('form-next-url');if(next)next.value=new URL('gracias.html',window.location.href).href;
    // No anunciar éxito antes de que FormSubmit acepte la petición.
@@ -56,7 +61,7 @@ window.renderCMSContent=function(d){
    submit.disabled=false;
   }else{
    form.removeAttribute('action');delete form.dataset.destino;
-   status.dataset.state='error';status.textContent='Formulario pendiente de configurar: el administrador debe definir un correo principal válido.';
+   status.dataset.state='error';status.textContent='Formulario pendiente de configurar: el administrador debe revisar el destinatario y la conexión con el servicio de correo.';
    submit.disabled=true;
   }
  }
@@ -160,6 +165,18 @@ document.getElementById('formulario-contacto')?.addEventListener('submit', async
   // Only send optional recipients when configured, never an empty email address.
   const copies = field('_cc');
   if (copies) payload.set('_cc', copies);
+  const web3 = form.dataset.servicio === 'web3forms';
+  const endpoint = web3 ? 'https://api.web3forms.com/submit' : 'https://formsubmit.co/ajax/' + encodeURIComponent(recipient);
+  const body = web3 ? JSON.stringify({
+    access_key: form.dataset.accessKey,
+    name: field('name'),
+    email: field('email'),
+    subject: 'Nuevo mensaje a Punkies y Cerebro: ' + field('asunto').slice(0, 100),
+    asunto: field('asunto'),
+    message: field('mensaje'),
+    from_name: 'Punkies y Cerebro',
+    botcheck: false
+  }) : payload;
   const controller = new AbortController();
   // Delivery can precede the provider's acknowledgement. Do not treat a slow
   // acknowledgement as a failed delivery or invite an immediate second send.
@@ -175,10 +192,10 @@ document.getElementById('formulario-contacto')?.addEventListener('submit', async
   contactStatus('Enviando tu mensaje…', 'loading');
   try {
     // Standard form encoding avoids the JSON request's extra CORS preflight.
-    const response = await fetch('https://formsubmit.co/ajax/' + encodeURIComponent(recipient), {
+    const response = await fetch(endpoint, {
       method: 'POST',
-      headers: { Accept: 'application/json' },
-      body: payload,
+      headers: web3 ? { Accept: 'application/json', 'Content-Type': 'application/json' } : { Accept: 'application/json' },
+      body,
       mode: 'cors',
       signal: controller.signal
     });

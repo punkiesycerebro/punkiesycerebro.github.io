@@ -59,6 +59,34 @@ window.eval(fs.readFileSync('assets/contenido.js', 'utf8'));
   assert.equal(status.dataset.state, 'success', 'accept a delayed acknowledgement');
   assert.equal(form.elements.namedItem('mensaje').value, '');
   assert.equal(timers.size, 0, 'clear both timers after acceptance');
+
+  // Alternate provider stays inside the page. No real messages are sent.
+  const alternate = { ...config, servicio_formulario: 'web3forms', web3forms_access_key: '11111111-1111-4111-8111-111111111111' };
+  window.renderCMSContent(alternate);
+  for (const [name, value] of Object.entries(values)) form.elements.namedItem(name).value = value;
+  window.Date.now = () => Date.now() + 20000;
+  let alternateRequests = 0;
+  window.fetch = async (url, options) => {
+    alternateRequests++;
+    assert.equal(url, 'https://api.web3forms.com/submit');
+    assert.equal(options.headers['Content-Type'], 'application/json');
+    const sent = JSON.parse(options.body);
+    assert.equal(sent.access_key, alternate.web3forms_access_key);
+    assert.equal(sent.name, values.name);
+    assert.equal(sent.email, values.email);
+    assert.equal(sent.message, values.mensaje);
+    assert.equal(sent.asunto, values.asunto);
+    assert.equal(sent.botcheck, false);
+    return { ok: true, status: 200, json: async () => ({ success: true }) };
+  };
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(alternateRequests, 1);
+  assert.equal(status.dataset.state, 'success');
+  assert.equal(window.location.href, 'https://punkiesycerebro.com/', 'keep user on the same page');
+  window.renderCMSContent({ ...alternate, web3forms_access_key: '' });
+  assert.equal(form.querySelector('button[type=submit]').disabled, true, 'never silently send to another provider when its key is missing');
+  assert.equal(form.dataset.destino, undefined);
   dom.window.close();
   console.log('Contacto: timeout, alternativas, conservación de datos y aceptación después del aviso de demora: OK');
 })().catch(error => { dom.window.close(); console.error(error); process.exitCode = 1; });
