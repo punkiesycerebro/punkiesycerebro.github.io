@@ -15,8 +15,11 @@ GitHub Pages desde `main`. No se necesita hosting ni un certificado de pago.
   No se ha podido leer ni cambiar directamente Custom domain o Enforce HTTPS.
 - La consulta DNS y la apertura del dominio no están disponibles en este entorno.
   Un error de consulta aquí no demuestra que el dominio no exista o esté mal.
-- Faltan los registros actuales de GoDaddy para identificar los cambios exactos.
-  No se han cambiado registros DNS ni verificado el certificado del dominio.
+- La captura de GoDaddy confirma A @ = Parked, CNAME www =
+  punkiesycerebro.com, NS ns33/ns34.domaincontrol.com, CNAME _domainconnect,
+  SOA y TXT _dmarc. Se debe sustituir Parked, añadir los otros tres A y
+  cambiar www a punkiesycerebro.github.io. Conservar las demás filas.
+- No se han cambiado registros DNS ni verificado el certificado del dominio.
 
 ## Activación coordinada
 
