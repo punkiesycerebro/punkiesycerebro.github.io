@@ -315,5 +315,49 @@
       "imagen": "media/productos/jimmy-jazz/libro-vademecum-argolico-ii.png",
       "tallas": []
     }
+  ],
+  "discos": [
+    {
+      "titulo": "Demo Punkies y Cerebro",
+      "anio": "2005",
+      "imagen": "media/Logo PUNKIES Y CEREBRO.jpg",
+      "tipo": "descarga",
+      "enlace": "https://www.mediafire.com/file/b5vbto99n5wbwpk/Demo_2006_-_Punkies_y_Cerebro.rar"
+    },
+    {
+      "titulo": "Punkies a la escuela",
+      "anio": "2008",
+      "imagen": "media/discografia/punkies-a-la-escuela.png",
+      "tipo": "descarga",
+      "enlace": "https://www.mediafire.com/file/03ah3dvcsydr0y5/Punkies_A_La_Escuela_-_Punkies_y_Cerebro.rar"
+    },
+    {
+      "titulo": "La última revolución del punk rock",
+      "anio": "2009",
+      "imagen": "media/discografia/la-ultima-revolucion-del-punk-rock.png",
+      "tipo": "descarga",
+      "enlace": "https://www.mediafire.com/file/g68tc81v04w7huh/La_%C3%9Altima_Revoluci%C3%B3n_del_Punk_Rock_-_Punkies_y_Cerebro.rar"
+    },
+    {
+      "titulo": "Demo-Kratos",
+      "anio": "2012",
+      "imagen": "media/discografia/demo-kratos.png",
+      "tipo": "descarga",
+      "enlace": "https://www.mediafire.com/file/sveo006h21qr5bp/DEMO-KRATOS_2013_-_Punkies_y_Cerebro.rar"
+    },
+    {
+      "titulo": "Cualquier parecido con la realidad es pura coincidencia",
+      "anio": "2018",
+      "imagen": "media/discografia/cualquier-parecido-con-la-realidad.png",
+      "tipo": "spotify",
+      "enlace": "https://open.spotify.com/intl-es/album/1XTRRSSPB6INma3yJjbVnw?si=sWLZb_HzTIeo149pz4nZmg"
+    },
+    {
+      "titulo": "Este lado hacia el enemigo",
+      "anio": "2026",
+      "imagen": "media/este-lado-hacia-el-enemigo-caratula.jpeg",
+      "tipo": "proximamente",
+      "enlace": ""
+    }
   ]
 }

@@ -68,6 +68,17 @@ content:
     - name: anio
       label: Año
       type: string
+    - name: imagen
+      label: Carátula
+      type: image
+    - name: tipo
+      label: Tipo de enlace
+      type: select
+      options:
+        values: [descarga, spotify, proximamente]
+    - name: enlace
+      label: Enlace de descarga o Spotify
+      type: string
   - name: tienda
     label: Tienda
     type: object
