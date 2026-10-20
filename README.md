@@ -39,10 +39,13 @@ No se presentan carátulas, fechas, canciones, precios o productos sin confirmar
 La sección Música muestra la carátula oficial de Este lado hacia el enemigo, aportada por el propietario.
 Los nombres y funciones de las fotografías proceden de los archivos aportados por el propietario.
 
-El formulario usa FormSubmit por AJAX, con destinatario `correo_formulario` o `contacto`
-y copias opcionales `copias_formulario` en `content/site.json`. Los controles de destinatarios
-se mantienen fuera del navegador como configuración pública del sitio; no son secretos.
-La entrega real y la activación del servicio requieren verificación con los destinatarios.
+El formulario usa Web3Forms por AJAX, sin salir de la página, con la Access Key pública
+del formulario creado por el propietario para `punkiesycerebro@gmail.com`.
+`servicio_formulario`, `web3forms_access_key` y `correo_formulario` están en
+`content/site.json`. La clave pública identifica el destino configurado en Web3Forms;
+el correo de configuración se usa también en la alternativa mailto ante errores.
+El modo anterior FormSubmit se conserva compatible, con copias opcionales solo en ese modo.
+La recepción real requiere verificación en el buzón del destinatario.
 Las pruebas del rediseño simulan respuestas HTTP y no envían correos.
 
 ## Validación del rediseño
