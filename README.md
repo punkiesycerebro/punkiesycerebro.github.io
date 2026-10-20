@@ -34,7 +34,7 @@ Para revisión local: `python -m http.server 4173 --bind 127.0.0.1`.
 ## Contenido y formulario
 
 No se presentan carátulas, fechas, canciones, precios o productos sin confirmar.
-El emblema mostrado junto al anuncio del álbum es la identidad de la banda, no una portada.
+La sección Música muestra la carátula oficial de Este lado hacia el enemigo, aportada por el propietario.
 Los nombres y funciones de las fotografías proceden de los archivos aportados por el propietario.
 
 El formulario usa FormSubmit por AJAX, con destinatario `correo_formulario` o `contacto`
