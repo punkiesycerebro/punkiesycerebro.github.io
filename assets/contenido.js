@@ -54,7 +54,7 @@ window.renderCMSContent=function(d){
    form.dataset.accessKey=web3?accessKey:'';
    const cc=form.querySelector('[name="_cc"]');if(cc)cc.value=copias.join(',');
    const next=document.getElementById('form-next-url');if(next)next.value=new URL('gracias.html',window.location.href).href;
-   // No anunciar éxito antes de que FormSubmit acepte la petición.
+   // No anunciar éxito antes de que el servicio acepte la petición.
    if(status.dataset.state!=='success'&&status.dataset.state!=='error'){
      status.dataset.state='hint';status.textContent='Tus datos se utilizarán para responder a tu mensaje.';
    }
@@ -191,7 +191,7 @@ document.getElementById('formulario-contacto')?.addEventListener('submit', async
   submit.textContent = 'ENVIANDO MENSAJE…';
   contactStatus('Enviando tu mensaje…', 'loading');
   try {
-    // Standard form encoding avoids the JSON request's extra CORS preflight.
+    // Each provider uses its documented encoding; neither navigates away.
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: web3 ? { Accept: 'application/json', 'Content-Type': 'application/json' } : { Accept: 'application/json' },
