@@ -161,7 +161,12 @@ document.getElementById('formulario-contacto')?.addEventListener('submit', async
   const copies = field('_cc');
   if (copies) payload.set('_cc', copies);
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20000);
+  // Delivery can precede the provider's acknowledgement. Do not treat a slow
+  // acknowledgement as a failed delivery or invite an immediate second send.
+  const slowNotice = setTimeout(() => {
+    contactStatus('El servicio está tardando en confirmar. El mensaje podría haber llegado; espera sin volver a enviarlo.', 'loading');
+  }, 20000);
+  const timeout = setTimeout(() => controller.abort(), 60000);
   const originalLabel = submit.textContent;
   enviandoContacto = true;
   submit.disabled = true;
@@ -195,6 +200,7 @@ document.getElementById('formulario-contacto')?.addEventListener('submit', async
       : 'No pudimos confirmar el envío con el servicio de correo. Puede ser un problema de conexión o un bloqueo del servicio. Tus datos siguen aquí.';
     contactStatus(message, 'error');
   } finally {
+    clearTimeout(slowNotice);
     clearTimeout(timeout);
     enviandoContacto = false;
     submit.disabled = false;

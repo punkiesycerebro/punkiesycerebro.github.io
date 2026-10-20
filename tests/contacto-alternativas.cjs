@@ -41,6 +41,24 @@ window.eval(fs.readFileSync('assets/contenido.js', 'utf8'));
   assert.equal(status.querySelector('img'), null, 'message content must remain plain text');
   window.contactStatus('Aceptado', 'success');
   assert.equal(status.querySelectorAll('a').length, 0, 'clear stale alternatives on state change');
+
+  // A provider that accepts after 20 seconds must still be able to confirm.
+  const timers = new Map();
+  window.setTimeout = (fn, delay) => { timers.set(delay, fn); return delay; };
+  window.clearTimeout = id => timers.delete(id);
+  let accept;
+  window.fetch = () => new Promise(resolve => { accept = resolve; });
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  assert.ok(timers.has(60000), 'allow 60 seconds for acknowledgement');
+  timers.get(20000)();
+  assert.equal(status.dataset.state, 'loading', 'slow response is not a delivery failure');
+  assert.equal(form.querySelector('button[type=submit]').disabled, true, 'prevent duplicate sends while waiting');
+  for (const [name, value] of Object.entries(values)) assert.equal(form.elements.namedItem(name).value, value);
+  accept({ ok: true, status: 200, json: async () => ({ success: 'true' }) });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(status.dataset.state, 'success', 'accept a delayed acknowledgement');
+  assert.equal(form.elements.namedItem('mensaje').value, '');
+  assert.equal(timers.size, 0, 'clear both timers after acceptance');
   dom.window.close();
-  console.log('Contacto: timeout, conservación de datos, alternativas completas y ausencia de reintentos: OK');
+  console.log('Contacto: timeout, alternativas, conservación de datos y aceptación después del aviso de demora: OK');
 })().catch(error => { dom.window.close(); console.error(error); process.exitCode = 1; });
