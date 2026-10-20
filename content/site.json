@@ -85,7 +85,7 @@
       "producto": "Libro — Acta est fabula",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 60000,
       "imagen": "media/productos/jimmy-jazz/libro-acta-est-fabula.png",
       "tallas": []
     },
@@ -109,7 +109,7 @@
     },
     {
       "id": "libro-catalogo-de-tronquitos",
-      "producto": "Libro — Catálogo de tronquitos",
+      "producto": "Libro — Catálogo de tronquitos con anecdotario",
       "descripcion": "",
       "categoria": "Libro",
       "precio": 50000,
@@ -130,7 +130,7 @@
       "producto": "Libro — El libro del odio",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 60000,
       "imagen": "media/productos/jimmy-jazz/libro-el-libro-del-odio.png",
       "tallas": []
     },
@@ -139,7 +139,7 @@
       "producto": "Libro — En pocas palabras",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 15000,
       "imagen": "media/productos/jimmy-jazz/libro-en-pocas-palabras.png",
       "tallas": []
     },
@@ -157,7 +157,7 @@
       "producto": "Libro — Evolucionismo puro",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 60000,
       "imagen": "media/productos/jimmy-jazz/libro-evolucionismo-puro.png",
       "tallas": []
     },
@@ -184,7 +184,7 @@
       "producto": "Libro — Las fábulas de Bartolomé",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 30000,
       "imagen": "media/productos/jimmy-jazz/libro-las-fabulas-de-bartolome.png",
       "tallas": []
     },
@@ -193,7 +193,7 @@
       "producto": "Libro — Los monólogos de Bartolomé Koan",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 60000,
       "imagen": "media/productos/jimmy-jazz/libro-los-monologos-de-bartolome-koan.png",
       "tallas": []
     },
@@ -202,7 +202,7 @@
       "producto": "Libro — Los pecados capitales",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 15000,
       "imagen": "media/productos/jimmy-jazz/libro-los-pecados-capitales.png",
       "tallas": []
     },
@@ -211,7 +211,7 @@
       "producto": "Libro — Los santos disangelios",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 40000,
       "imagen": "media/productos/jimmy-jazz/libro-los-santos-disangelios.png",
       "tallas": []
     },
@@ -229,7 +229,7 @@
       "producto": "Libro — Nolens volens",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 60000,
       "imagen": "media/productos/jimmy-jazz/libro-nolens-volens.png",
       "tallas": []
     },
@@ -238,7 +238,7 @@
       "producto": "Libro — Pénsum",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 30000,
       "imagen": "media/productos/jimmy-jazz/libro-pensum.png",
       "tallas": []
     },
@@ -247,7 +247,7 @@
       "producto": "Libro — Píldoras con veneno",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 60000,
       "imagen": "media/productos/jimmy-jazz/libro-pildoras-con-veneno.png",
       "tallas": []
     },
@@ -256,16 +256,16 @@
       "producto": "Libro — Rockombia",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 15000,
       "imagen": "media/productos/jimmy-jazz/libro-rockombia.png",
       "tallas": []
     },
     {
       "id": "libro-tablaturas-de-canciones-rosa-ii",
-      "producto": "Libro — Tablaturas de canciones rosa II",
+      "producto": "Libro — Tablaturas de canciones rosa, volumen II",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 80000,
       "imagen": "media/productos/jimmy-jazz/libro-tablaturas-de-canciones-rosa-ii.png",
       "tallas": []
     },
@@ -274,7 +274,7 @@
       "producto": "Libro — Tablaturas de canciones rosa",
       "descripcion": "",
       "categoria": "Libro",
-      "precio": 50000,
+      "precio": 80000,
       "imagen": "media/productos/jimmy-jazz/libro-tablaturas-de-canciones-rosa.png",
       "tallas": []
     },
@@ -294,6 +294,15 @@
       "categoria": "Libro",
       "precio": 50000,
       "imagen": "media/productos/jimmy-jazz/libro-vademecum-argolico.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-vademecum-argolico-ii",
+      "producto": "Libro — Vademécum argólico, volumen II",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "",
       "tallas": []
     }
   ]
