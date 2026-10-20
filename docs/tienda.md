@@ -2,8 +2,9 @@
 
 La sección `#tienda` usa `assets/tienda.js`, `assets/tienda.css` y el catálogo
 `tienda` de `content/site.json`. No usa servicios de pago ni envía mensajes
-por sí sola: abre WhatsApp al +57 304 537 7640 con el pedido para que el cliente
-lo revise y pulse Enviar. El total está en COP y no incluye envío.
+por sí sola: abre WhatsApp con el pedido del vendedor para que el cliente
+lo revise y pulse Enviar. Punkies y Cerebro recibe sus productos en
++57 304 537 7640; Jimmy Jazz G.P., en +57 305 231 8020. El total está en COP y no incluye envío.
 
 Cada producto tiene `id` estable, `producto`, `descripcion`, `categoria`, `precio`
 (numérico en COP), `imagen` y `tallas` (lista vacía si no aplica). Pages CMS
@@ -42,3 +43,37 @@ Los cambios se comprobaron con node --check y git diff --check.
 No se envió ningún mensaje real. Falta revisión visual en navegador. Las tres fotos ya están incorporadas.
 
 Caso de referencia: CD ×1 + camisa M ×2 + camisa L ×1 + gorra ×1 = $275.000.
+
+## Jimmy Jazz G.P. y pedidos por vendedor
+
+El enlace del menú `#jimmy-jazz` lleva a la sección dedicada a Jimmy, con una
+presentación breve basada en la historia de la banda. Su catálogo independiente
+está en `tienda_jimmy` de `content/site.json` y se edita en Pages CMS con los
+mismos campos que la tienda de Punkies. Inicialmente está vacío, a la espera de
+los productos del propietario.
+
+`renderShop(tienda, tienda_jimmy)` determina el vendedor por la lista de origen.
+Los IDs de Jimmy usan internamente el prefijo reservado `jimmy:`; no incluir
+ese prefijo al editar IDs en el CMS. Esto permite que ambos catálogos tengan
+un mismo ID sin mezclar sus productos y conserva los carritos anteriores.
+El vendedor y el teléfono nunca proceden de datos guardados en el navegador.
+
+El carrito muestra vendedor, total general y subtotal de cada uno. Cada botón
+de WhatsApp incluye únicamente las líneas y el subtotal de su destinatario.
+En pedidos mixtos se muestran ambos botones y una explicación: el visitante
+debe abrirlos y enviar cada mensaje por separado. Disponibilidad, pago y envío
+se acuerdan con cada vendedor. Los botones abren mensajes preparados y no
+anuncian que se hayan enviado.
+
+La prueba `tests/carrito-vendedores.cjs` usa jsdom y productos ficticios solo
+en memoria. Verifica separación de mensajes y totales, teléfonos, IDs iguales,
+tallas, cambios, eliminaciones, restauración, carritos antiguos y bloqueos de
+almacenamiento, sincronización entre pestañas, integración con CMS y regreso
+a la sección de Jimmy. Para ejecutarla sin dependencias en el sitio:
+
+```sh
+npm install --prefix /tmp/pyc-tests jsdom
+NODE_PATH=/tmp/pyc-tests/node_modules node tests/carrito-vendedores.cjs
+```
+
+No se envían mensajes reales. No hay productos ficticios en el catálogo publicado.
