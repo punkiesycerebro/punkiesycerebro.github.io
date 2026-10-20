@@ -79,6 +79,222 @@
       "precio": 20000,
       "imagen": "media/productos/jimmy-jazz/disco-en-la-sima.png",
       "tallas": []
+    },
+    {
+      "id": "libro-acta-est-fabula",
+      "producto": "Libro — Acta est fabula",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-acta-est-fabula.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-bushi-kami-jutsu",
+      "producto": "Libro — Bushi Kami Jutsu",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-bushi-kami-jutsu.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-cantar-es-el-arte-de-la-palabra",
+      "producto": "Libro — Cantar es el arte de la palabra",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-cantar-es-el-arte-de-la-palabra.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-catalogo-de-tronquitos",
+      "producto": "Libro — Catálogo de tronquitos",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-catalogo-de-tronquitos.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-cuentos-para-antes-de-despertarse",
+      "producto": "Libro — Cuentos para antes de despertarse",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-cuentos-para-antes-de-despertarse.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-el-libro-del-odio",
+      "producto": "Libro — El libro del odio",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-el-libro-del-odio.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-en-pocas-palabras",
+      "producto": "Libro — En pocas palabras",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-en-pocas-palabras.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-ensayo-sobre-la-risa-y-otros-demonios",
+      "producto": "Libro — Ensayo sobre la risa y otros demonios",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-ensayo-sobre-la-risa-y-otros-demonios.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-evolucionismo-puro",
+      "producto": "Libro — Evolucionismo puro",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-evolucionismo-puro.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-g-p-la-historia",
+      "producto": "Libro — G.P.: la historia",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-g-p-la-historia.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-la-biblia-de-giri",
+      "producto": "Libro — La biblia de Giri",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-la-biblia-de-giri.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-las-fabulas-de-bartolome",
+      "producto": "Libro — Las fábulas de Bartolomé",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-las-fabulas-de-bartolome.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-los-monologos-de-bartolome-koan",
+      "producto": "Libro — Los monólogos de Bartolomé Koan",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-los-monologos-de-bartolome-koan.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-los-pecados-capitales",
+      "producto": "Libro — Los pecados capitales",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-los-pecados-capitales.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-los-santos-disangelios",
+      "producto": "Libro — Los santos disangelios",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-los-santos-disangelios.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-manual-de-cabuyeria",
+      "producto": "Libro — Manual de cabuyería",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-manual-de-cabuyeria.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-nolens-volens",
+      "producto": "Libro — Nolens volens",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-nolens-volens.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-pensum",
+      "producto": "Libro — Pénsum",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-pensum.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-pildoras-con-veneno",
+      "producto": "Libro — Píldoras con veneno",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-pildoras-con-veneno.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-rockombia",
+      "producto": "Libro — Rockombia",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-rockombia.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-tablaturas-de-canciones-rosa-ii",
+      "producto": "Libro — Tablaturas de canciones rosa II",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-tablaturas-de-canciones-rosa-ii.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-tablaturas-de-canciones-rosa",
+      "producto": "Libro — Tablaturas de canciones rosa",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-tablaturas-de-canciones-rosa.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-trifecta",
+      "producto": "Libro — Trifecta",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-trifecta.png",
+      "tallas": []
+    },
+    {
+      "id": "libro-vademecum-argolico",
+      "producto": "Libro — Vademécum argólico",
+      "descripcion": "",
+      "categoria": "Libro",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/libro-vademecum-argolico.png",
+      "tallas": []
     }
   ]
 }

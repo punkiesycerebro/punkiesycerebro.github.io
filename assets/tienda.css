@@ -80,3 +80,16 @@ body:has(#cart-dialog[open]) { overflow: hidden; }
  .nav-bar nav a { padding-inline: clamp(7px,1.3vw,25px); font-size: clamp(14px,1.5vw,20px); letter-spacing: .6px; }
  .cart-trigger { padding-inline: 12px; }
 }
+
+/* Catálogo compacto de Jimmy: libros primero, discos debajo. */
+.jimmy-category + .jimmy-category { margin-top: 46px; }
+.jimmy-category > h3 { margin: 0 0 22px; padding-bottom: 14px; border-bottom: 1px solid var(--line); font-size: 30px; }
+.jimmy-shop .product-grid { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 18px; }
+.jimmy-shop .product-card > img, .jimmy-shop .product-placeholder { height: 180px; aspect-ratio: auto; object-fit: contain; }
+.jimmy-shop .product-info { padding: 18px; }
+.jimmy-shop .product-info h4 { font: 400 22px/1.35 var(--display); margin: 0 0 12px; overflow-wrap: anywhere; letter-spacing: .5px; }
+.jimmy-shop .product-info .product-price { font-size: 26px; }
+.jimmy-shop .product-info form > button { font-size: 17px; padding-inline: 10px; }
+@media (max-width: 1100px) { .jimmy-shop .product-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } }
+@media (max-width: 760px) { .jimmy-shop .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; } }
+@media (max-width: 480px) { .jimmy-shop .product-grid { grid-template-columns: minmax(0,1fr); } }
