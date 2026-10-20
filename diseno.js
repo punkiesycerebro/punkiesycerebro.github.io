@@ -26,6 +26,22 @@
  window.aplicarDiseno=d=>{
   if(!d)return;const texts=d.textos||{};
   for(const [k,sel] of Object.entries(mapa))setText(document.querySelector(sel),texts[k]);
+  // Aplicación segura de formato individual: solo propiedades CSS permitidas.
+  const safeFont=/^(Barlow Condensed|DM Sans|Impact|Georgia|Arial|Verdana)$/;
+  const formatTargets={...mapa,banda:'#nombre-menu',subtitulo:'#subtitulo',album:'#album',descripcion:'#descripcion',acerca:'#acerca'};
+  for(const [key,sel] of Object.entries(formatTargets)){
+   const el=document.querySelector(sel);if(!el)continue;
+   const f=d.formato?.[key]||{};
+   el.style.fontWeight=f.negrita===true?'800':'';
+   el.style.fontStyle=f.cursiva===true?'italic':'';
+   el.style.textDecoration=f.subrayado===true?'underline':'';
+   el.style.textTransform=f.mayusculas===true?'uppercase':'';
+   el.style.color=HEX(f.color)?f.color:'';
+   el.style.fontFamily=safeFont.test(f.fuente||'')?`"${f.fuente}", sans-serif`:'';
+   el.style.textAlign=['left','center','right','justify'].includes(f.alinear)?f.alinear:'';
+   el.style.fontSize=Number(f.tamano)>=10&&Number(f.tamano)<=130?f.tamano+'px':'';
+   el.style.letterSpacing=Number(f.espaciado)>=0&&Number(f.espaciado)<=18?f.espaciado+'px':'';
+  }
   const root=document.documentElement;
   for(const [k,css,min,max] of [['espaciado','--editor-spacing',28,140],['radio_tarjetas','--editor-card-radius',0,36],['ancho_contenido','--editor-content-width',680,1500]]){
    const n=Number(d[k]);if(Number.isFinite(n))root.style.setProperty(css,Math.max(min,Math.min(max,n))+'px');

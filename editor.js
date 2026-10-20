@@ -20,7 +20,7 @@ const imageFields=[['fondo_portada','Fondo del pantano / portada'],['fondo_histo
 const colors=[['color_menu','Letras del menú'],['color_texto','Texto general'],['color_fondo','Fondo del sitio'],['color_secciones','Fondo de secciones'],['color_tarjetas','Fondo de tarjetas'],['color_acento','Color destacado / botones']];
 const fonts=[['Barlow Condensed','Punk / condensada'],['DM Sans','Moderna'],['Impact','Impact'],['Georgia','Georgia'],['Arial','Arial'],['Verdana','Verdana']];
 const fallbackAppearance={color_fondo:'#11140F',color_secciones:'#0C100C',color_texto:'#E9E7D8',color_menu:'#FFFFFF',color_acento:'#A5BD6A',color_tarjetas:'#1C2419',fuente_menu:'Barlow Condensed',fuente_titulos:'Barlow Condensed',fuente_cuerpo:'DM Sans',tamano_menu:15,tamano_marca:28,tamano_titulos:76,tamano_parrafos:16,tamano_historia:19,alto_portada:680,fondo_portada:'/assets/pantano.jpg',fondo_historia:'',logo_portada:'/assets/logo-letras.png',logo_menu:'',imagen_disco:'/assets/logo-emblema.png',mostrar_lema:true,mostrar_historia:true,mostrar_tienda:true,mostrar_contacto:true};
-const initial={site:{},app:fallbackAppearance,dis:{textos:{},secciones:{},orden:sections.slice(),extras:[]},gal:{titulo:'GALERÍA',fotos:[]}};
+const initial={site:{},app:fallbackAppearance,dis:{textos:{},secciones:{},orden:sections.slice(),extras:[],formato:{}},gal:{titulo:'GALERÍA',fotos:[]}};
 const state={site:{},app:{},dis:{},gal:{}};let tab='textos',selText='subtitulo',selSection='inicio',imageTarget=null,images={},pending=false,undo=[],toastTimeout=null,loaded=false;
 const clone=o=>JSON.parse(JSON.stringify(o));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -51,11 +51,32 @@ const colorHTML=(key,label,obj,kind='app')=>{const val=/^#[a-fA-F0-9]{6}$/.test(
 const slider=(key,label,obj,min,max,step=1,kind='app')=>{const val=Number(obj[key])||min;return `<div class="control"><div class="slider-head"><label>${esc(label)}</label><output>${val}px</output></div><input type="range" min="${min}" max="${max}" step="${step}" value="${val}" data-kind="${kind}" data-key="${key}"></div>`};
 const imgHTML=(key,label,obj,kind='app')=>{const p=obj[key]||'',uri=images[p]||p;
  return `<div class="control"><label>${esc(label)}</label>${p?`<img class="img-preview" src="${attr(uri)}" alt="${esc(label)}">`:''}<button type="button" class="file-btn" data-img-kind="${kind}" data-img-key="${key}">＋ Elegir imagen de mi computador</button><small>${esc(p||'No se ha elegido imagen')}</small>${p?`<button type="button" data-clear-img="${key}" data-img-kind="${kind}" class="action" style="margin-top:7px">Quitar imagen</button>`:''}</div>`};
+
+// Formato individual, editable sin afectar colores o letras de las demás secciones.
+const textAligns=[['left','Izquierda'],['center','Centrado'],['right','Derecha'],['justify','Justificado']];
+function formatControls(key){
+ const f=state.dis.formato?.[key]||{};
+ return `<div class="format-panel"><h3>Formato individual del texto</h3><p class="note">Solo cambia el elemento seleccionado. Elige primero el texto desde la vista previa.</p>
+ <div class="format-tools">
+ <button type="button" class="format-toggle ${f.negrita?'active':''}" data-format="negrita" aria-pressed="${!!f.negrita}" title="Negrita"><b>B</b></button>
+ <button type="button" class="format-toggle ${f.cursiva?'active':''}" data-format="cursiva" aria-pressed="${!!f.cursiva}" title="Cursiva"><i>I</i></button>
+ <button type="button" class="format-toggle ${f.subrayado?'active':''}" data-format="subrayado" aria-pressed="${!!f.subrayado}" title="Subrayado"><u>U</u></button>
+ <button type="button" class="format-toggle ${f.mayusculas?'active':''}" data-format="mayusculas" aria-pressed="${!!f.mayusculas}" title="Mayúsculas">AA</button>
+ </div>
+ ${colorHTML('color','Color de este texto',f,'format')}
+ ${selectHTML('fuente','Tipografía específica',f.fuente||'',[['','Heredar la tipografía general'],...fonts],'format')}
+ ${selectHTML('alinear','Alineación',f.alinear||'',[['','Predeterminada'],...textAligns],'format')}
+ ${slider('tamano','Tamaño de este texto',f,10,130,1,'format')}
+ ${slider('espaciado','Separación entre letras',f,0,18,1,'format')}
+ <button type="button" id="reset-format" class="action">Restaurar formato de este texto</button>
+ </div>`;
+}
+
 function renderProps(){if(!Object.keys(state.site).length){T.innerHTML='<p class="note">Esperando los datos de la web...</p>';return}
  let h='';
  if(tab==='textos'){
    const f=fields.find(x=>x[0]===selText)||fields[1];
-   h=`<h2>Editar textos</h2><p class="note">Haz clic sobre un texto de la vista previa o selecciónalo aquí.</p>${selectHTML('field','Texto que quieres editar',selText,fields.map(x=>[x[0],x[1]]),'selection')}${textBlock(f)}<h3>Otros contenidos</h3><p class="note">Los conciertos, discos y productos continúan en Pages CMS; así conservamos las fichas y enlaces de la banda.</p><a class="action" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://app.pagescms.org/">Abrir Pages CMS ↗</a>`;
+   h=`<h2>Editar textos</h2><p class="note">Haz clic sobre un texto de la vista previa o selecciónalo aquí.</p>${selectHTML('field','Texto que quieres editar',selText,fields.map(x=>[x[0],x[1]]),'selection')}${textBlock(f)}${formatControls(selText)}<h3>Otros contenidos</h3><p class="note">Los conciertos, discos y productos continúan en Pages CMS; así conservamos las fichas y enlaces de la banda.</p><a class="action" style="text-decoration:none;display:inline-block" target="_blank" rel="noopener" href="https://app.pagescms.org/">Abrir Pages CMS ↗</a>`;
  }else if(tab==='estilo'){
    h='<h2>Colores y fuentes</h2><p class="note">Cambia una opción y verás el resultado inmediatamente.</p>';
    h+=colors.map(([k,l])=>colorHTML(k,l,state.app)).join('');
@@ -97,6 +118,14 @@ function routeEvent(e){const target=e.target;const kind=target.dataset.kind,key=
   modify(()=>{if(f[3]==='site')state.site[key]=target.value;else state.dis.textos[key]=target.value});return
  }
  if(kind==='site'){persistControl(state.site,key,target.value);return}
+ if(kind==='format'){
+  let val=target.value;if(target.type==='range')val=Number(val);
+  if(key==='color'&&target.type==='text'&&!/^#[0-9a-fA-F]{6}$/.test(val))return;
+  modify(()=>{state.dis.formato??={};state.dis.formato[selText]??={};state.dis.formato[selText][key]=val});
+  if(key==='color'&&target.type==='color')T.querySelectorAll('[data-kind="format"][data-key="color"][type="text"]').forEach(x=>x.value=val);
+  if(target.type==='range')target.closest('.control').querySelector('output').textContent=val+'px';return;
+ }
+
  if(kind==='gal'){persistControl(state.gal,key,target.value);return}
  if(kind==='app'||kind==='dis'){
   let val=target.value;if(target.type==='range')val=Number(val);
@@ -117,6 +146,8 @@ T.addEventListener('input',e=>{
 T.addEventListener('change',e=>{if(e.target.matches('select,[type=checkbox]'))routeEvent(e)});
 T.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.format){modify(()=>{state.dis.formato??={};state.dis.formato[selText]??={};const obj=state.dis.formato[selText];obj[b.dataset.format]=!obj[b.dataset.format]});renderProps();return}
+ if(b.id==='reset-format'){modify(()=>{if(state.dis.formato)delete state.dis.formato[selText]});renderProps();return}
  if(b.dataset.imgKind){imageTarget={kind:b.dataset.imgKind,key:b.dataset.imgKey};$('#fileinput').click();return}
  if(b.dataset.clearImg){const k=b.dataset.clearImg,kind=b.dataset.imgKind;modify(()=>{if(kind==='section'){state.dis.secciones[selSection]??={};state.dis.secciones[selSection][k]=''}else if(kind==='extra'){const x=state.dis.extras.find(x=>x.id===selSection);if(x)x[k]=''}else state.app[k]=''});renderProps();return}
  if(b.dataset.galleryImg!==undefined){imageTarget={kind:'galphoto',i:Number(b.dataset.galleryImg)};$('#fileinput').click();return}
@@ -161,6 +192,22 @@ frame.addEventListener('load',()=>{loaded=true;hookPreview();setTimeout(previewN
 $('#desktop').addEventListener('click',()=>{$('#frame-shell').classList.remove('mobile');$('#desktop').classList.add('active');$('#mobile').classList.remove('active')});
 $('#mobile').addEventListener('click',()=>{$('#frame-shell').classList.add('mobile');$('#desktop').classList.remove('active');$('#mobile').classList.add('active')});
 $('#undo').addEventListener('click',()=>{if(!undo.length){alertMsg('No hay cambios para deshacer');return}const previous=undo.pop();Object.keys(state).forEach(k=>state[k]=previous[k]);commit();renderProps();alertMsg('Último cambio deshecho')});
+$('#backup').addEventListener('click',()=>{
+ const doc={version:3,created:new Date().toISOString(),state,images};
+ const blob=new Blob([JSON.stringify(doc)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='punkies-borrador-respaldo.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);alertMsg('Respaldo descargado. Guárdalo en un lugar seguro.')
+});
+$('#restore').addEventListener('click',()=>$('#restorefile').click());
+$('#restorefile').addEventListener('change',async(e)=>{
+ const f=e.target.files?.[0];e.target.value='';if(!f)return;
+ if(f.size>25000000){alertMsg('Archivo de respaldo demasiado grande');return}
+ try{const b=JSON.parse(await f.text());if(b.version!==3||!b.state?.site?.banda||!b.state?.dis){throw Error('No es un respaldo compatible')}
+  if(!confirm('¿Reemplazar el borrador actual por el contenido de este respaldo?'))return;
+  snapshot();for(const k of Object.keys(state)){if(b.state[k])state[k]=b.state[k]}
+  for(const [path,data] of Object.entries(b.images||{})){if(/^\/media\/visual\/[a-zA-Z0-9_.\-]+$/.test(path)&&/^data:image\/(png|jpeg|webp);base64,/.test(data)){images[path]=data;saveAsset(path,data)}}
+  state.dis.formato??={};commit();renderProps();alertMsg('Respaldo restaurado')
+ }catch(err){alertMsg('No se pudo abrir ese respaldo: '+err.message)}
+});
 $('#clear').addEventListener('click',async()=>{if(!confirm('¿Descartar todos los cambios de este editor y volver a la versión publicada?'))return;localStorage.removeItem(projectBase);clearAssets();location.reload()});
 async function fileToData(file){return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{
  const canvas=document.createElement('canvas');const scale=Math.min(1,1800/Math.max(im.width,im.height));canvas.width=Math.round(im.width*scale);canvas.height=Math.round(im.height*scale);canvas.getContext('2d').drawImage(im,0,0,canvas.width,canvas.height);
@@ -205,7 +252,7 @@ async function start(){setStatus('Leyendo tu web...');assetsDb=await openDB();aw
  fetchJson('content/site.json',null),fetchJson('content/apariencia.json',fallbackAppearance),fetchJson('content/galeria.json',{titulo:'GALERÍA',fotos:[]}),fetchJson('content/diseno.json',initial.dis)]);
  if(!site||typeof site!=='object'||!site.banda){T.innerHTML='<h2>No se encontraron los datos</h2><p class="note">Falta <code>content/site.json</code> en el repositorio. No edites hasta subir ese archivo.</p>';setStatus('Falta site.json');return}
  Object.assign(state,{site,app:{...fallbackAppearance,...(app||{})},gal:gal||{titulo:'GALERÍA',fotos:[]},dis:dis||clone(initial.dis)});
- state.dis.textos??={};state.dis.secciones??={};state.dis.extras??=[];state.dis.orden??=sections.slice();state.gal.fotos??=[];serverBaseline=clone(state);
+ state.dis.textos??={};state.dis.secciones??={};state.dis.extras??=[];state.dis.formato??={};state.dis.orden??=sections.slice();state.gal.fotos??=[];serverBaseline=clone(state);
  const past=localStorage.getItem(projectBase);if(past){try{const remembered=JSON.parse(past);if(remembered?.state?.site?.banda){Object.assign(state,remembered.state);pending=true;setStatus('● Borrador local recuperado');alertMsg('Se recuperaron los cambios que dejaste en este navegador')}}catch{}}
  if(!pending)setStatus('✓ Lista para editar · sin publicar');renderProps();previewNow();
 }
