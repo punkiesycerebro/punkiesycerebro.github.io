@@ -16,7 +16,7 @@
       "descripcion": "Edición 2018.",
       "categoria": "CD · 2018",
       "precio": 50000,
-      "imagen": "",
+      "imagen": "media/productos/cd-cualquier-parecido-2018.jpeg",
       "tallas": []
     },
     {
@@ -25,7 +25,7 @@
       "descripcion": "Escoge tu talla antes de añadir al carrito.",
       "categoria": "Camisa",
       "precio": 60000,
-      "imagen": "",
+      "imagen": "media/productos/camisa-mod-2.jpeg",
       "tallas": [
         "S",
         "M",
@@ -39,7 +39,7 @@
       "descripcion": "",
       "categoria": "Gorra",
       "precio": 45000,
-      "imagen": "",
+      "imagen": "media/productos/gorra-punkies.jpeg",
       "tallas": []
     }
   ]

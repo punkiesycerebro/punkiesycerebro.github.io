@@ -17,18 +17,18 @@ actual. Funciona en memoria si el navegador bloquea almacenamiento. Al volver,
 descarta productos o tallas eliminados del catálogo. Escucha cambios de otras
 pestañas. No supone disponibilidad de inventario: se confirma por WhatsApp.
 
-## Fotos pendientes
+## Fotos de los productos
 
-Las tres fotos fueron visibles en el chat, pero no llegaron al entorno como
-archivos descargables. Las rutas C:/Users/jcrestrepo/Downloads/ pertenecen al
-computador del propietario y no son accesibles desde este entorno. Por eso
-`imagen` está vacío y se muestra «Imagen pendiente», sin sustituirlas por otras
-fotos. Subir los originales por Pages CMS o agregarlos a `media/productos/` y
-actualizar `imagen` antes de completar la publicación:
+Las tres fotos originales aportadas en `Tienda.zip` están en `media/productos/`:
 
-- CD_cualquier parecido.jpeg
-- Camisa 2.jpeg
-- Gorra.jpeg
+- `cd-cualquier-parecido-2018.jpeg`: CD de 2018.
+- `camisa-mod-2.jpeg`: camisa Mod 2.
+- `gorra-punkies.jpeg`: gorra.
+
+El catálogo referencia estos archivos locales. Las fotos se conservan sin
+recortes ni modificaciones; las tarjetas usan `object-fit: contain` para
+mostrar el producto completo. Se verificaron formato JPEG, integridad y rutas.
+Se pueden sustituir desde el campo `imagen` en Pages CMS.
 
 ## Validación
 
@@ -39,6 +39,6 @@ estado vacío, cierre y vuelta a tienda, recuperación al recargar, sincronizaci
 entre pestañas, limpieza de datos inválidos, almacenamiento bloqueado y mensaje
 codificado con destinatario, productos, tallas, cantidades, subtotales y total.
 Los cambios se comprobaron con node --check y git diff --check.
-No se envió ningún mensaje real. Falta revisión visual en navegador y fotos.
+No se envió ningún mensaje real. Falta revisión visual en navegador. Las tres fotos ya están incorporadas.
 
 Caso de referencia: CD ×1 + camisa M ×2 + camisa L ×1 + gorra ×1 = $275.000.
