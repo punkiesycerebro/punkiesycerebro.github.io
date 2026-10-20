@@ -73,15 +73,29 @@ content:
     type: object
     list: true
     fields:
+    - name: id
+      label: Identificador único (no cambiar después de publicar)
+      type: string
     - name: producto
       label: Producto
       type: string
+    - name: descripcion
+      label: Descripción
+      type: text
+    - name: categoria
+      label: Categoría
+      type: string
     - name: precio
-      label: Precio
+      label: Precio en COP (solo números, sin puntos)
+      type: number
+    - name: imagen
+      label: Foto del producto
+      type: image
+    - name: tallas
+      label: Tallas disponibles (dejar vacío si no aplica)
       type: string
-    - name: enlace
-      label: Enlace compra
-      type: string
+      list: true
+
 - name: apariencia
   label: Apariencia, colores, letras e imágenes
   type: file

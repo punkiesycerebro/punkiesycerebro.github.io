@@ -17,8 +17,10 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/logo-emblema.png">
   <link rel="preload" href="assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/site.css?v=20261020-formacion">
-  <script src="assets/contenido.js?v=20261020-contacto-2" defer></script>
+  <link rel="stylesheet" href="assets/site.css?v=20261020-tienda">
+  <link rel="stylesheet" href="assets/tienda.css?v=20261020-1">
+  <script src="assets/tienda.js?v=20261020-1" defer></script>
+  <script src="assets/contenido.js?v=20261020-tienda" defer></script>
   <script src="assets/site.js?v=20261020-3" defer></script>
 </head>
 <body>
@@ -35,6 +37,7 @@
   <nav id="menu" aria-label="Navegación principal">
     <a href="#inicio" aria-current="location">Inicio</a><a href="#musica">Música</a><a href="#conciertos">Conciertos</a><a href="#historia">Historia</a><a href="#galeria">Galería</a><a href="#tienda">Tienda</a><a href="#contacto">Contacto</a>
   </nav>
+  <button class="cart-trigger" type="button" data-open-cart aria-haspopup="dialog" aria-controls="cart-dialog">CARRITO <span data-cart-count>0</span></button>
 </div>
 <main id="contenido">
 <section class="cover" aria-labelledby="hero-title">
@@ -59,10 +62,23 @@
 <button type="button" class="gallery-item" data-full="media/Juan%20Camilo%20R_Bateria.jpeg" data-caption="Juan Camilo R · Batería y Coros" aria-label="Ampliar foto de Juan Camilo R"><img src="media/Juan%20Camilo%20R_Bateria.jpeg" alt="Juan Camilo R en concierto" width="1080" height="720" loading="lazy"><span>Juan Camilo R <span aria-hidden="true">+</span></span></button>
 <button type="button" class="gallery-item" data-full="media/Alejo_Guitarra.jpeg" data-caption="Alejo Cuadros · Guitarra y Coros" aria-label="Ampliar foto de Alejo Cuadros"><img src="media/Alejo_Guitarra.jpeg" alt="Alejo Cuadros en concierto" width="1024" height="1535" loading="lazy"><span>Alejo Cuadros <span aria-hidden="true">+</span></span></button>
 <button type="button" class="gallery-item" data-full="media/Sebas_Guitarra.jpeg" data-caption="Sebas Prieto · Guitarra y Coros" aria-label="Ampliar foto de Sebas Prieto"><img src="media/Sebas_Guitarra.jpeg" alt="Sebas Prieto en concierto" width="1024" height="1536" loading="lazy"><span>Sebas Prieto <span aria-hidden="true">+</span></span></button></div></section>
-<section class="section shop" id="tienda" aria-labelledby="shop-title"><div><p class="eyebrow">MATERIAL OFICIAL</p><h2 id="shop-title">TIENDA</h2><p>Discos físicos y material de la banda.</p></div><div id="tienda-lista" class="items"><p class="empty">Estamos preparando el lanzamiento de nuestros productos.</p></div></section>
+<section class="section shop" id="tienda" aria-labelledby="shop-title">
+  <div class="shop-heading"><div><p class="eyebrow">MATERIAL OFICIAL</p><h2 id="shop-title">LLEVA EL RUIDO CONTIGO.</h2><p>Discos, camisas y gorras de Punkies y Cerebro. Precios en pesos colombianos (COP).</p></div><button class="btn secondary" type="button" data-open-cart aria-haspopup="dialog" aria-controls="cart-dialog">VER CARRITO (<span data-cart-count>0</span>) →</button></div>
+  <div id="tienda-lista" class="product-grid"><p class="empty">Cargando productos… Si no aparecen, recarga la página.</p></div>
+  <p class="shop-status" id="shop-status" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p class="shop-note">Arma tu pedido y envíalo por WhatsApp. Allí confirmamos disponibilidad, pago y envío.</p>
+</section>
 <section class="section contact" id="contacto" aria-labelledby="contact-title"><div class="contact-heading"><p class="eyebrow">SIGAMOS HACIENDO RUIDO</p><h2 id="contact-title">HABLEMOS.</h2><p>Conciertos, prensa, colaboraciones y contratación.</p><div class="buttons" id="contactLinks"></div></div><div class="contact-form-area"><h3>ENVÍANOS UN MENSAJE</h3><form id="formulario-contacto" method="POST" action="#contacto" autocomplete="on"><div class="contact-form-row"><label>Nombre<input required name="name" type="text" maxlength="120" autocomplete="name" placeholder="Tu nombre"></label><label>Correo electrónico<input required name="email" type="email" maxlength="180" autocomplete="email" placeholder="tucorreo@ejemplo.com"></label></div><label>Asunto<input required name="asunto" type="text" maxlength="180" placeholder="¿Sobre qué quieres escribirnos?"></label><label>Mensaje<textarea required name="mensaje" rows="5" maxlength="5000" placeholder="Escribe aquí tu mensaje"></textarea></label><input type="hidden" name="_subject" value="Nuevo mensaje desde Punkies y Cerebro"><input type="hidden" name="_cc" value=""><input type="hidden" name="_next" id="form-next-url" value=""><input type="hidden" name="_captcha" value="false"><input class="form-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="btn primary" type="submit" disabled>ENVIAR MENSAJE →</button><p class="form-alert" id="form-alert" role="status" aria-live="polite" aria-atomic="true">Formulario pendiente de configurar.</p></form></div></section>
 </main>
 <footer><img src="assets/logo-letras.png" alt="Punkies y Cerebro" width="909" height="198" loading="lazy"><p>MEDELLÍN, COLOMBIA · PUNK ROCK LIBRE E INDEPENDIENTE</p><a href="#inicio">VOLVER ARRIBA ↑</a></footer>
+<dialog id="cart-dialog" aria-labelledby="cart-title">
+  <div class="cart-heading"><div><p class="eyebrow">TU SELECCIÓN</p><h2 id="cart-title">CARRITO DE COMPRA</h2></div><button class="btn secondary" type="button" data-close-cart aria-label="Cerrar carrito">×</button></div>
+  <div id="cart-items"></div>
+  <p id="cart-status" class="shop-status" role="status" aria-live="polite" aria-atomic="true"></p>
+  <div class="cart-summary"><p>Total de productos <strong id="cart-total">$0</strong></p><p class="shop-note">Precios en COP. El envío se acuerda por WhatsApp y no está incluido en este total.</p></div>
+  <div class="cart-actions"><button class="btn secondary" type="button" data-close-cart>SEGUIR COMPRANDO</button><a class="btn primary" id="cart-checkout" target="_blank" rel="noopener noreferrer" hidden>COMPRAR POR WHATSAPP ↗</a></div>
+  <p class="shop-note" id="checkout-note" hidden>Se abrirá WhatsApp con tu pedido listo. Pulsa Enviar en WhatsApp para hacérnoslo llegar.</p>
+</dialog>
 <dialog id="photo-dialog" aria-label="Fotografía ampliada de la banda"><button class="dialog-close" type="button" aria-label="Cerrar fotografía">Cerrar ×</button><img id="dialog-image" alt=""><p id="dialog-caption"></p></dialog>
 <noscript><p class="noscript-note">Puedes escuchar a la banda en <a href="https://open.spotify.com/intl-es/artist/6Nq4YQd4JdWvtY3HrgvYK7">Spotify</a> y <a href="https://www.youtube.com/@punkiesycerebro">YouTube</a>. Para enviar el formulario, activa JavaScript o escribe a <a href="mailto:juancamilo1504@gmail.com">juancamilo1504@gmail.com</a>.</p></noscript>
 </body>

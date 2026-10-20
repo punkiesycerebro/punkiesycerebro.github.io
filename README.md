@@ -10,7 +10,8 @@ No necesita framework, compilación, cuentas adicionales ni un editor visual.
 - `assets/site.js`: menú móvil y visor accesible de fotografías.
 - `assets/contenido.js`: contenido de `content/site.json` y formulario AJAX reutilizado.
 - `assets/fonts/`: Anton y su licencia SIL Open Font License.
-- `content/site.json`: historia, enlaces, contacto y listas opcionales de discos, conciertos y productos.
+- `content/site.json`: historia, enlaces, contacto y listas de discos, conciertos y productos.
+- `assets/tienda.js` y `assets/tienda.css`: catálogo, selector de tallas y cantidades, carrito local y pedido por WhatsApp. Véase `docs/tienda.md`.
 - `media/`: fotografías y logos originales; no eliminarlos ni sobrescribirlos.
 - `archivo.html`: versión anterior conservada, marcada noindex.
 - `propuesta/`: versiones de diseño anteriores, marcadas noindex.

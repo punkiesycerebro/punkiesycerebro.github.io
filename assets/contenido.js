@@ -63,8 +63,7 @@ window.renderCMSContent=function(d){
  const gigs=(d.conciertos||[]).map(c=>`<div class="item"><strong>${safe(c.fecha)} · ${safe(c.ciudad)}</strong><span>${safe(c.lugar)}</span>${button(c.entradas,'Entradas')}</div>`).join('');
  document.getElementById('conciertos-lista').innerHTML=gigs||'<div class="empty">Próximas fechas por anunciar.</div>';
  document.getElementById('discos').innerHTML=(d.discos||[]).map(c=>`<div class="item"><strong>${safe(c.titulo)}</strong><span>${safe(c.anio)}</span></div>`).join('');
- const merch=(d.tienda||[]).map(c=>`<div class="item"><strong>${safe(c.producto)}</strong><span>${safe(c.precio)}</span>${button(c.enlace,'Ver producto')}</div>`).join('');
- document.getElementById('tienda-lista').innerHTML=merch||'<div class="empty">Estamos preparando el lanzamiento de nuestros productos.</div>';
+ window.renderShop?.(d.tienda||[]);
 };
 fetch('content/site.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('No se encontró content/site.json');return r.json()}).then(window.renderCMSContent).catch(err=>console.error('Error cargando contenido:',err));
 
