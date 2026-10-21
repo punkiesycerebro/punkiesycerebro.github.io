@@ -148,6 +148,15 @@
       "tallas": []
     },
     {
+      "id": "disco-con-las-manos-arriba-gp",
+      "producto": "Disco — Con las manos arriba — GP",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-con-las-manos-arriba-gp.png",
+      "tallas": []
+    },
+    {
       "id": "disco-de-gp-para-la-sociedad",
       "producto": "Disco — De GP para la sociedad",
       "descripcion": "",
