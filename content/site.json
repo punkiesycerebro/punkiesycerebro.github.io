@@ -575,7 +575,8 @@
       "precio_dia": 30000,
       "descripcion": "¡Nos vemos en Bello para una noche de punk rock!",
       "ubicacion": "https://www.google.com/maps/search/?api=1&query=Kings+Rock+Pub+Cra.+50+%23+37-14+Bello",
-      "entradas": ""
+      "entradas": "",
+      "reservas": "https://wa.me/573205912900?text=Hola%2C%20quiero%20reservar%20para%20el%20concierto%20de%20Punkies%20y%20Cerebro%20y%20Los%20Celibatos%20del%2030%20de%20octubre%20en%20Kings%20Rock%20Pub."
     }
   ]
 }

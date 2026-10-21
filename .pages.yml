@@ -81,6 +81,9 @@ content:
     - name: ubicacion
       label: URL de ubicación
       type: string
+    - name: reservas
+      label: URL de reservas por WhatsApp
+      type: string
     - name: entradas
       label: URL entradas
       type: string
