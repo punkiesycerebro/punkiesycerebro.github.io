@@ -116,6 +116,19 @@ Su carátula original de `CASIORQUESTA.zip` se conserva en
 27 libros y tres discos. Los pedidos de este álbum usan el mismo carrito y
 el WhatsApp de Jimmy, +57 305 231 8020.
 
+## Nueva tanda de discos de Jimmy Jazz
+
+Se incorporaron 17 discos de `Discos_Jimmy Jazz.zip`, con sus imágenes originales
+y manteniendo Libros antes de Discos. Los discos cuestan $20.000 COP, salvo los
+identificados como GP, a $30.000: Bodas de sangre, De GP para la sociedad,
+La sagrada familia del mal, Los pecados capitales, Pintura de guerra y Punk Unpunked.
+Los pecados capitales y Punk Unpunked se identificaron como GP por sus carátulas,
+aunque sus nombres de archivo no incluían esa sigla.
+
+`Conlas manos arriba - GP.png` contiene la misma carátula de Aquí no se mueve nadie.
+Se consultó al propietario antes de incorporar ese disco; por ahora queda pendiente.
+El catálogo suma 27 libros y 20 discos, todos con pedidos al WhatsApp de Jimmy.
+
 ## Próximamente en la tienda de Punkies
 
 Este lado hacia el enemigo · 2026 abre el grupo Discos, seguido del CD de 2018.

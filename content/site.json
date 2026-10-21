@@ -103,6 +103,159 @@
       "tallas": []
     },
     {
+      "id": "disco-aqui-no-se-mueve-nadie",
+      "producto": "Disco — Aquí no se mueve nadie",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-aqui-no-se-mueve-nadie.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-bodas-de-sangre-gp",
+      "producto": "Disco — Bodas de sangre — GP",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-bodas-de-sangre-gp.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-canciones-de-manicomio",
+      "producto": "Disco — Canciones de manicomio",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-canciones-de-manicomio.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-como-hacer-enemigos",
+      "producto": "Disco — Cómo hacer enemigos",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-como-hacer-enemigos.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-confonico",
+      "producto": "Disco — Confónico",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-confonico.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-de-gp-para-la-sociedad",
+      "producto": "Disco — De GP para la sociedad",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-de-gp-para-la-sociedad.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-dies-irae",
+      "producto": "Disco — Dies Irae",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-dies-irae.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-el-unico",
+      "producto": "Disco — El único",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-el-unico.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-en-obra-negra",
+      "producto": "Disco — En obra negra",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-en-obra-negra.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-ideas-de-amor-y-muerte",
+      "producto": "Disco — Ideas de amor y muerte",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-ideas-de-amor-y-muerte.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-la-sagrada-familia-del-mal-gp",
+      "producto": "Disco — La sagrada familia del mal — GP",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-la-sagrada-familia-del-mal-gp.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-los-pecados-capitales-gp",
+      "producto": "Disco — Los pecados capitales — GP",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-los-pecados-capitales-gp.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-pintura-de-guerra-gp",
+      "producto": "Disco — Pintura de guerra — GP",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-pintura-de-guerra-gp.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-plegarias",
+      "producto": "Disco — Plegarias",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-plegarias.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-punk-unpunked-gp",
+      "producto": "Disco — Punk Unpunked — GP",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 30000,
+      "imagen": "media/productos/jimmy-jazz/disco-punk-unpunked-gp.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-todas-las-cartas-sobre-la-mesa",
+      "producto": "Disco — Todas las cartas sobre la mesa",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-todas-las-cartas-sobre-la-mesa.png",
+      "tallas": []
+    },
+    {
+      "id": "disco-unpunkies",
+      "producto": "Disco — UNPUNKIES",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-unpunkies.png",
+      "tallas": []
+    },
+    {
       "id": "libro-acta-est-fabula",
       "producto": "Libro — Acta est fabula",
       "descripcion": "",
