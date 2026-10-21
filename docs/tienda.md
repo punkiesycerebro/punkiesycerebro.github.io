@@ -108,6 +108,14 @@ el pedido con esos importes y la recuperación de carritos guardados usando
 los precios actuales, incluso si el navegador contiene importes anteriores.
 Los precios de los discos no cambian.
 
+## CASIORQUESTA
+
+Se añadió Disco — CASIORQUESTA a Jimmy Jazz por $20.000 COP, en el grupo Discos.
+Su carátula original de `CASIORQUESTA.zip` se conserva en
+`media/productos/jimmy-jazz/disco-casiorquesta.png`. El catálogo de Jimmy tiene
+27 libros y tres discos. Los pedidos de este álbum usan el mismo carrito y
+el WhatsApp de Jimmy, +57 305 231 8020.
+
 ## Próximamente en la tienda de Punkies
 
 Este lado hacia el enemigo · 2026 abre el grupo Discos, seguido del CD de 2018.

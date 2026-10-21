@@ -94,6 +94,15 @@
       "tallas": []
     },
     {
+      "id": "disco-casiorquesta",
+      "producto": "Disco — CASIORQUESTA",
+      "descripcion": "",
+      "categoria": "Disco",
+      "precio": 20000,
+      "imagen": "media/productos/jimmy-jazz/disco-casiorquesta.png",
+      "tallas": []
+    },
+    {
       "id": "libro-acta-est-fabula",
       "producto": "Libro — Acta est fabula",
       "descripcion": "",
