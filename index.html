@@ -17,11 +17,12 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/logo-emblema.png">
   <link rel="preload" href="assets/fonts/Anton-Regular.ttf" as="font" type="font/ttf" crossorigin>
-  <link rel="stylesheet" href="assets/site.css?v=20261021-emblema">
+  <link rel="stylesheet" href="assets/site.css?v=20261021-visitas">
   <link rel="stylesheet" href="assets/tienda.css?v=20261020-compacta">
   <script src="assets/tienda.js?v=20261021-usb" defer></script>
   <script src="assets/contenido.js?v=20261021-reservas" defer></script>
   <script src="assets/site.js?v=20261021-emblema" defer></script>
+  <script src="assets/visitas.js?v=20261021-1" defer></script>
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -81,7 +82,7 @@
 </section>
 <section class="section contact" id="contacto" aria-labelledby="contact-title"><div class="contact-heading"><h2 id="contact-title">HABLEMOS.</h2><p>Contratación, conciertos, colaboraciones y prensa.</p><div class="buttons" id="contactLinks"></div><div class="booking-contact"><h3>Management &amp; Booking</h3><address>Phone: <a href="tel:+573045377640">+57 304 537 76 40</a><br>Email: <a href="mailto:punkiesycerebro@gmail.com">punkiesycerebro@gmail.com</a><br>Juan Camilo R.</address></div></div><div class="contact-form-area"><h3>ENVÍANOS UN MENSAJE</h3><form id="formulario-contacto" method="POST" action="#contacto" autocomplete="on"><div class="contact-form-row"><label>Nombre<input required name="name" type="text" maxlength="120" autocomplete="name" placeholder="Tu nombre"></label><label>Correo electrónico<input required name="email" type="email" maxlength="180" autocomplete="email" placeholder="tucorreo@ejemplo.com"></label></div><label>Asunto<input required name="asunto" type="text" maxlength="180" placeholder="¿Sobre qué quieres escribirnos?"></label><label>Mensaje<textarea required name="mensaje" rows="5" maxlength="5000" placeholder="Escribe aquí tu mensaje"></textarea></label><input type="hidden" name="_subject" value="Nuevo mensaje desde Punkies y Cerebro"><input type="hidden" name="_cc" value=""><input type="hidden" name="_next" id="form-next-url" value=""><input type="hidden" name="_captcha" value="false"><input class="form-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true"><button class="btn primary" type="submit" disabled>ENVIAR MENSAJE →</button><p class="form-alert" id="form-alert" role="status" aria-live="polite" aria-atomic="true">Formulario pendiente de configurar.</p></form></div></section>
 </main>
-<footer><img src="assets/logo-letras.png" alt="Punkies y Cerebro" width="909" height="198" loading="lazy"><p>MEDELLÍN, COLOMBIA · PUNK ROCK LIBRE E INDEPENDIENTE</p><a href="#inicio">VOLVER ARRIBA ↑</a></footer>
+<footer><div class="footer-brand"><img src="assets/logo-letras.png" alt="Punkies y Cerebro" width="909" height="198" loading="lazy"><p>MEDELLÍN, COLOMBIA · PUNK ROCK LIBRE E INDEPENDIENTE</p></div><div class="visit-counter" role="group" aria-labelledby="visit-counter-label"><p id="visit-counter-label"><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>VISITAS AL SITIO</p><output id="visit-count" aria-live="polite" aria-label="Cargando contador de visitas">—</output><p id="visit-count-note" class="visit-count-note" hidden></p></div><a href="#inicio">VOLVER ARRIBA ↑</a></footer>
 <dialog id="cart-dialog" aria-labelledby="cart-title">
   <div class="cart-heading"><div><p class="eyebrow">TU SELECCIÓN</p><h2 id="cart-title">CARRITO DE COMPRA</h2></div><button class="btn secondary" type="button" data-close-cart aria-label="Cerrar carrito">×</button></div>
   <div id="cart-items"></div>
