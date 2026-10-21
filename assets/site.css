@@ -76,19 +76,19 @@ h3 { font-size: 26px; letter-spacing: 1px; margin-top: 0; }
 .shows, .shop { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 10%; }
 .shows h2 { max-width: 540px; }
 .shows > *, .show-info { min-width: 0; }
-.show-card { display: flex; align-items: flex-start; gap: 20px; padding: 24px 0; border-top: 1px solid var(--line); }
-.show-date { flex: 0 0 84px; display: flex; flex-direction: column; align-items: center; padding: 18px 10px; background: var(--red); font: 400 18px/1.3 var(--display); }
-.show-date strong { font-size: 52px; font-weight: 400; }
-.show-info { flex: 1; overflow-wrap: anywhere; }
-.show-info h3 { font: 400 clamp(25px,2.4vw,36px)/1.25 var(--display); margin: 0 0 10px; }
+.show-card { display: flex; align-items: stretch; margin-bottom: 24px; border: 1px solid #666; border-radius: 6px; background: #131313; overflow: hidden; }
+.show-date { flex: 0 0 104px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 10px; background: var(--red); font: 400 22px/1.3 var(--display); }
+.show-date strong { font-size: 68px; font-weight: 400; }
+.show-info { flex: 1; padding: 24px; overflow-wrap: anywhere; }
+.show-info h3 { font: 400 clamp(25px,2.4vw,36px)/1.25 var(--display); margin: 0 0 10px; text-transform: uppercase; }
 .show-info p { margin: 0 0 16px; }
-.show-info .show-eyebrow { color: var(--bright-red); text-transform: uppercase; font-size: 12px; font-weight: 700; letter-spacing: 1px; }
+.show-info .show-eyebrow { display: inline-block; padding: 6px 10px; background: var(--red); color: #fff; text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: .5px; }
 .show-detail, .show-venue { color: var(--muted); }
 .show-venue strong { color: var(--text); }
 .show-prices { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 14px 0; margin-bottom: 16px; border-block: 1px solid var(--line); }
 .show-prices strong { color: var(--bright-red); white-space: nowrap; }
 .show-info .btn { font-size: 13px; }
-@media (max-width: 520px) { .show-card { gap: 14px; } .show-date { flex-basis: 64px; padding: 14px 6px; font-size: 16px; } .show-date strong { font-size: 42px; } }
+@media (max-width: 520px) { .show-info { padding: 18px 14px; } .show-date { flex-basis: 64px; padding: 14px 6px; font-size: 16px; } .show-date strong { font-size: 42px; } }
 .story { background: #121212; }
 .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10%; }
 .story-grid p { margin-top: 0; color: var(--muted); }
