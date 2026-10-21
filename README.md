@@ -10,6 +10,7 @@ No necesita framework, compilación, cuentas adicionales ni un editor visual.
 - `assets/site.css`: diseño responsive negro/blanco/rojo y tipografía local.
 - `assets/site.js`: menú móvil y visor accesible de fotografías.
 - `assets/contenido.js`: contenido de `content/site.json` y formulario AJAX reutilizado.
+- `assets/visitas.js`: contador compartido de cargas de página junto al logo original; véase `docs/contador-visitas.md`.
 - `assets/fonts/`: Anton y su licencia SIL Open Font License.
 - `content/site.json`: historia, enlaces, contacto y listas de discos, conciertos y productos.
 - `assets/tienda.js` y `assets/tienda.css`: catálogos de Punkies y Jimmy Jazz G.P., selector de tallas y cantidades, carrito compartido y pedidos separados por WhatsApp. Véase `docs/tienda.md`.

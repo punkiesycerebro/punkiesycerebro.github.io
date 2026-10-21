@@ -130,6 +130,15 @@ cite { display: block; font-style: normal; font-size: 11px; letter-spacing: 1px;
 footer { display: flex; justify-content: space-between; align-items: center; padding: 35px 4%; gap: 30px; }
 footer img { width: 220px; }
 footer p, footer a { font-size: 10px; letter-spacing: 1px; color: var(--muted); }
+footer { flex-wrap: wrap; }
+.footer-brand { flex: 1 1 300px; }
+.footer-brand p { margin-bottom: 0; }
+.visit-counter { flex: 0 1 auto; max-width: 100%; padding: 18px 20px; background: #131313; border: 1px solid var(--line); border-top: 3px solid var(--red); }
+.visit-counter #visit-counter-label { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 700; font-size: 12px; margin: 0 0 12px; }
+#visit-count { display: flex; gap: 3px; font: 400 clamp(24px,4vw,36px)/1.4 var(--display); font-variant-numeric: tabular-nums; }
+#visit-count span { min-width: .85em; padding: 4px 3px; text-align: center; border: 1px solid #555; border-radius: 3px; background: #080808; }
+.visit-count-note { margin: 10px 0 0; letter-spacing: 0; }
+@media (max-width: 760px) { .footer-brand { flex-basis: auto; } }
 #photo-dialog { padding: 55px 18px 18px; border: 1px solid #666; background: #080808; color: #fff; max-width: 95vw; max-height: 94vh; }
 #photo-dialog::backdrop { background: #000e; }
 #dialog-image { max-height: 74vh; width: auto; max-width: 85vw; margin: auto; object-fit: contain; }
