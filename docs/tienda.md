@@ -144,3 +144,15 @@ carritos restaurados y de las altas al carrito. Las pruebas verifican el orden,
 el reconocimiento de la categoría «CD · 2018», la ausencia de controles de compra
 y la exclusión del álbum de pedidos incluso ante datos guardados o formularios
 manipulados. El resto del carrito y los catálogos conservan su funcionamiento.
+
+## Memorias USB de Jimmy Jazz
+
+El catálogo de Jimmy añade el grupo Memorias USB, después de Libros y Discos.
+Incluye MPUNK 3 — GP, MPUNK 3 — Jimmy Jazz y MPUNK 3 — Punkies y Cerebro,
+a $50.000 COP cada una, incluidas las de GP. Se conservaron las tres imágenes
+originales de `usb.zip` en `media/productos/jimmy-jazz/memoria-usb-mpunk-3-*.png`.
+
+Los tres productos pertenecen al catálogo de Jimmy y sus pedidos se dirigen a
+su WhatsApp, incluso el modelo de Punkies y Cerebro. El catálogo suma 27 libros,
+21 discos y tres memorias USB. Las pruebas verifican grupo, orden, precio y
+presencia de las tres variantes en el pedido de Jimmy, sin mezclarlas con Punkies.

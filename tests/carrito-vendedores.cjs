@@ -69,18 +69,20 @@ setTimeout(()=>{assert.equal(cms.document.querySelectorAll('#jimmy-tienda-lista 
 
 // Exercise the actual published catalogue as well as the isolation fixtures.
 const actual=load();actual.renderShop(data.tienda,data.tienda_jimmy);
-assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,48);
-assert.deepEqual([...actual.document.querySelectorAll('[data-jimmy-category]')].map(el=>el.dataset.jimmyCategory),['libros','discos']);
+assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,51);
+assert.deepEqual([...actual.document.querySelectorAll('[data-jimmy-category]')].map(el=>el.dataset.jimmyCategory),['libros','discos','usb']);
 assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] .product-card').length,27);
 assert.equal(actual.document.querySelectorAll('[data-jimmy-category="discos"] .product-card').length,21);
 assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] h4').length,27);
+assert.equal(actual.document.querySelectorAll('[data-jimmy-category="usb"] .product-card').length,3);
+assert.equal(actual.document.querySelector('#jimmy-usb-title').textContent,'MEMORIAS USB');
 const inputs=[...actual.document.querySelectorAll('#jimmy-tienda-lista input')];
 assert.equal(new Set(inputs.map(el=>el.id)).size,inputs.length,'quantity IDs are unique across groups');
 assert.equal(data.tienda_jimmy.filter(p=>p.categoria==='Libro').reduce((total,p)=>total+p.precio,0),1295000);
 assert.equal(data.tienda_jimmy.find(p=>p.id==='libro-pildoras-de-la-ira').precio,30000);
 for(const product of data.tienda_jimmy){if(product.imagen)assert.ok(fs.statSync(root+product.imagen).isFile());add(actual,'jimmy:'+product.id,1);}
 assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-placeholder').length,0);
-assert.match(msg(actual,'jimmy'),/1[.]785[.]000/);
+assert.match(msg(actual,'jimmy'),/1[.]935[.]000/);
 assert.equal(checkout(actual,'jimmy').url.pathname,'/573052318020');
 assert.equal(checkout(actual,'punkies').url,null);
 assert.match(msg(actual,'jimmy'),/Las píldoras de la ira/);
@@ -90,6 +92,10 @@ assert.match(msg(actual,'jimmy'),/Humores/);
 assert.match(msg(actual,'jimmy'),/CASIORQUESTA/);
 for(const disc of data.tienda_jimmy.filter(p=>p.categoria==='Disco')){
   assert.equal(disc.precio,/\bGP\b/.test(disc.producto)?30000:20000,disc.producto);
+}
+for(const usb of data.tienda_jimmy.filter(p=>p.categoria==='Memoria USB')){
+  assert.equal(usb.precio,50000,usb.producto);
+  assert.ok(msg(actual,'jimmy').includes(usb.producto));
 }
 
 // Stored carts must use current prices and full updated titles.
