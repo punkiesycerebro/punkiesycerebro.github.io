@@ -107,6 +107,7 @@
       const category = String(product.categoria || '').trim().toLocaleLowerCase('es');
       if (/^libros?$/.test(category)) return 'libros';
       if (/^(discos?|cd|vinilos?)(?:\s|$)/.test(category)) return 'discos';
+      if (product.seller === 'jimmy' && /^memorias? usb$/.test(category)) return 'usb';
       return 'otros';
     };
     const cards = (seller, group = null) => catalog
@@ -122,7 +123,7 @@
       const content = cards('punkies', group);
       return content ? `<section class="catalog-category" data-punkies-category="${group}" aria-labelledby="punkies-${group}-title"><h3 id="punkies-${group}-title">${title}</h3><div class="product-grid">${content}</div></section>` : '';
     }).join('') || '<p class="empty">Pronto tendremos más productos.</p>';
-    if (jimmyHost) jimmyHost.innerHTML = [['libros', 'LIBROS'], ['discos', 'DISCOS'], ['otros', 'OTROS PRODUCTOS']].map(([group, title]) => {
+    if (jimmyHost) jimmyHost.innerHTML = [['libros', 'LIBROS'], ['discos', 'DISCOS'], ['usb', 'MEMORIAS USB'], ['otros', 'OTROS PRODUCTOS']].map(([group, title]) => {
       const content = cards('jimmy', group);
       return content ? `<section class="jimmy-category catalog-category" data-jimmy-category="${group}" aria-labelledby="jimmy-${group}-title"><h3 id="jimmy-${group}-title">${title}</h3><div class="product-grid">${content}</div></section>` : '';
     }).join('') || '<p class="empty">Pronto encontrarás aquí los productos de Jimmy Jazz G.P.</p>';

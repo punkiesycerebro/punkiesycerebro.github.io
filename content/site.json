@@ -488,6 +488,33 @@
       "precio": 50000,
       "imagen": "media/productos/jimmy-jazz/libro-vademecum-argolico-ii.png",
       "tallas": []
+    },
+    {
+      "id": "memoria-usb-mpunk-3-gp",
+      "producto": "Memoria USB — MPUNK 3 — GP",
+      "descripcion": "",
+      "categoria": "Memoria USB",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/memoria-usb-mpunk-3-gp.png",
+      "tallas": []
+    },
+    {
+      "id": "memoria-usb-mpunk-3-jimmy-jazz",
+      "producto": "Memoria USB — MPUNK 3 — Jimmy Jazz",
+      "descripcion": "",
+      "categoria": "Memoria USB",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/memoria-usb-mpunk-3-jimmy-jazz.png",
+      "tallas": []
+    },
+    {
+      "id": "memoria-usb-mpunk-3-punkies-y-cerebro",
+      "producto": "Memoria USB — MPUNK 3 — Punkies y Cerebro",
+      "descripcion": "",
+      "categoria": "Memoria USB",
+      "precio": 50000,
+      "imagen": "media/productos/jimmy-jazz/memoria-usb-mpunk-3-punkies-y-cerebro.png",
+      "tallas": []
     }
   ],
   "discos": [
