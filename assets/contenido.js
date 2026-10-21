@@ -65,8 +65,16 @@ window.renderCMSContent=function(d){
    submit.disabled=true;
   }
  }
- const gigs=(d.conciertos||[]).map(c=>`<div class="item"><strong>${safe(c.fecha)} · ${safe(c.ciudad)}</strong><span>${safe(c.lugar)}</span>${button(c.entradas,'Entradas')}</div>`).join('');
- document.getElementById('conciertos-lista').innerHTML=gigs||'<div class="empty">Próximas fechas por anunciar.</div>';
+ const dateKey=c=>/^\d{4}-\d{2}-\d{2}$/.test(c.fecha_iso||'')?c.fecha_iso:'9999-99-99';
+ const ticketPrice=value=>Number.isSafeInteger(value)&&value>0?'$'+new Intl.NumberFormat('es-CO').format(value):'';
+ const gigs=(Array.isArray(d.conciertos)?d.conciertos:[]).filter(c=>c&&typeof c==='object').slice().sort((a,b)=>dateKey(a).localeCompare(dateKey(b))).map(c=>{
+  const date=dateKey(c),months=['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC'];
+  const month=months[Number(date.slice(5,7))-1];
+  const badge=month?`<time class="show-date" datetime="${safe(date)}"><span>${month}</span><strong>${safe(date.slice(8))}</strong><span>${safe(date.slice(0,4))}</span></time>`:'';
+  const prices=[ticketPrice(c.preventa)?`<span>Preventa: <strong>${ticketPrice(c.preventa)}</strong></span>`:'',ticketPrice(c.precio_dia)?`<span>Día del evento: <strong>${ticketPrice(c.precio_dia)}</strong></span>`:''].join('');
+  return `<article class="show-card">${badge}<div class="show-info">${c.titulo?`<p class="show-eyebrow">Una noche de punk rock en ${safe(c.ciudad)}</p><h3>${safe(c.titulo)}</h3>`:''}${c.detalle?`<p class="show-detail">${safe(c.detalle)}</p>`:''}<p class="show-venue"><strong>${safe(c.lugar)}</strong>${c.direccion?`<br>${safe(c.direccion)}`:''}${c.ciudad?` · ${safe(c.ciudad)}`:''}</p><p>${safe(c.fecha)}${c.puertas?`<br>Apertura de puertas: <strong>${safe(c.puertas)}</strong>`:''}</p>${prices?`<div class="show-prices">${prices}</div>`:''}${c.descripcion?`<p>${safe(c.descripcion)}</p>`:''}<div class="buttons">${button(c.ubicacion,'Ver ubicación')}${button(c.entradas,'Entradas')}</div></div></article>`;
+ }).join('');
+ document.getElementById('conciertos-lista').innerHTML=gigs+'<p class="empty">Próximas fechas por anunciar.</p>';
  document.getElementById('discos').innerHTML=(Array.isArray(d.discos)?d.discos:[]).map(c=>{
   let image='';
   try { if(c.imagen){const url=new URL(c.imagen,location.href);if(url.origin===location.origin||url.protocol==='https:')image=`<img src="${safe(url.href)}" alt="Carátula de ${safe(c.titulo)}" loading="lazy">`;} } catch {}

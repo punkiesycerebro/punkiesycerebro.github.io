@@ -560,5 +560,22 @@
       "tipo": "proximamente",
       "enlace": ""
     }
+  ],
+  "conciertos": [
+    {
+      "fecha_iso": "2026-10-30",
+      "fecha": "Viernes 30 de octubre de 2026",
+      "ciudad": "Bello",
+      "titulo": "Punkies y Cerebro + Los Celibatos",
+      "detalle": "Los Celibatos · Tributo a Klamydia",
+      "lugar": "Kings Rock Pub",
+      "direccion": "Cra. 50 # 37-14",
+      "puertas": "9:00 p. m.",
+      "preventa": 25000,
+      "precio_dia": 30000,
+      "descripcion": "¡Nos vemos en Bello para una noche de punk rock!",
+      "ubicacion": "https://www.google.com/maps/search/?api=1&query=Kings+Rock+Pub+Cra.+50+%23+37-14+Bello",
+      "entradas": ""
+    }
   ]
 }
