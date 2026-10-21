@@ -126,8 +126,10 @@ Los pecados capitales y Punk Unpunked se identificaron como GP por sus carátula
 aunque sus nombres de archivo no incluían esa sigla.
 
 `Conlas manos arriba - GP.png` contiene la misma carátula de Aquí no se mueve nadie.
-Se consultó al propietario antes de incorporar ese disco; por ahora queda pendiente.
-El catálogo suma 27 libros y 20 discos, todos con pedidos al WhatsApp de Jimmy.
+El propietario aportó después la carátula correcta en `Con las manos arriba - GP.zip`.
+Se incorporó como Disco — Con las manos arriba — GP por $30.000 COP, con el original
+en `media/productos/jimmy-jazz/disco-con-las-manos-arriba-gp.png`.
+El catálogo completo suma 27 libros y 21 discos, todos con pedidos al WhatsApp de Jimmy.
 
 ## Próximamente en la tienda de Punkies
 

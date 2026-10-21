@@ -69,10 +69,10 @@ setTimeout(()=>{assert.equal(cms.document.querySelectorAll('#jimmy-tienda-lista 
 
 // Exercise the actual published catalogue as well as the isolation fixtures.
 const actual=load();actual.renderShop(data.tienda,data.tienda_jimmy);
-assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,47);
+assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-card').length,48);
 assert.deepEqual([...actual.document.querySelectorAll('[data-jimmy-category]')].map(el=>el.dataset.jimmyCategory),['libros','discos']);
 assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] .product-card').length,27);
-assert.equal(actual.document.querySelectorAll('[data-jimmy-category="discos"] .product-card').length,20);
+assert.equal(actual.document.querySelectorAll('[data-jimmy-category="discos"] .product-card').length,21);
 assert.equal(actual.document.querySelectorAll('[data-jimmy-category="libros"] h4').length,27);
 const inputs=[...actual.document.querySelectorAll('#jimmy-tienda-lista input')];
 assert.equal(new Set(inputs.map(el=>el.id)).size,inputs.length,'quantity IDs are unique across groups');
@@ -80,7 +80,7 @@ assert.equal(data.tienda_jimmy.filter(p=>p.categoria==='Libro').reduce((total,p)
 assert.equal(data.tienda_jimmy.find(p=>p.id==='libro-pildoras-de-la-ira').precio,30000);
 for(const product of data.tienda_jimmy){if(product.imagen)assert.ok(fs.statSync(root+product.imagen).isFile());add(actual,'jimmy:'+product.id,1);}
 assert.equal(actual.document.querySelectorAll('#jimmy-tienda-lista .product-placeholder').length,0);
-assert.match(msg(actual,'jimmy'),/1[.]755[.]000/);
+assert.match(msg(actual,'jimmy'),/1[.]785[.]000/);
 assert.equal(checkout(actual,'jimmy').url.pathname,'/573052318020');
 assert.equal(checkout(actual,'punkies').url,null);
 assert.match(msg(actual,'jimmy'),/Las píldoras de la ira/);
