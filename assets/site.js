@@ -26,6 +26,29 @@ document.addEventListener('keydown', event => {
 });
 matchMedia('(min-width: 761px)').addEventListener('change', closeMenu);
 
+// Show the small home emblem only after the large masthead leaves the screen.
+const masthead = document.querySelector('.masthead');
+const navBar = document.querySelector('.nav-bar');
+const navHome = document.querySelector('.nav-home');
+function updateNavEmblem() {
+  const stuck = masthead.getBoundingClientRect().bottom <= 0;
+  navBar.classList.toggle('is-stuck', stuck);
+  navHome.setAttribute('aria-hidden', String(!stuck));
+  navHome.tabIndex = stuck ? 0 : -1;
+}
+updateNavEmblem();
+if ('IntersectionObserver' in window) {
+  new IntersectionObserver(updateNavEmblem, { threshold: [0, 1] }).observe(masthead);
+} else {
+  window.addEventListener('scroll', updateNavEmblem, { passive: true });
+  window.addEventListener('resize', updateNavEmblem);
+}
+navHome.addEventListener('click', () => {
+  closeMenu();
+  navigation.querySelector('[aria-current]')?.removeAttribute('aria-current');
+  navigation.querySelector('a[href="#inicio"]').setAttribute('aria-current', 'location');
+});
+
 // Native dialog handles keyboard focus and Escape; original photographs stay intact.
 const photoDialog = document.getElementById('photo-dialog');
 const dialogImage = document.getElementById('dialog-image');
