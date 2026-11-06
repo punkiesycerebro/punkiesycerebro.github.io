@@ -32,3 +32,21 @@ Comprobaciones sin entorno de ejecución:
 
 El entorno de ejecución está fallido: no se pudo ejecutar Chromium ni las regresiones
 DOM del carrito y contacto en este cambio. No se modifican sus scripts ni datos.
+
+## PDF completo descargable
+
+El botón principal «Descargar EPK en PDF» apunta a
+`media/prensa/punkies-y-cerebro-epk.pdf`, un PDF A4 de cuatro páginas con
+portada y logo original, biografía y formación, discografía y contacto/materiales.
+Tiene texto seleccionable, fuentes incrustadas y enlaces clicables. El álbum
+próximo se conserva marcado Próximamente. No se inventa un rider técnico.
+
+Para regenerarlo tras cambios de biografía o discografía:
+`python scripts/generar-epk.py` (requiere Pillow y reportlab).
+La biografía se lee de `content/punkies-y-cerebro-biografia.txt` y la discografía
+y redes, de `content/site.json`. Las imágenes provienen de archivos originales.
+La fecha de edición se debe actualizar al generar una nueva versión.
+
+La versión PDF se revisó renderizando sus cuatro páginas, verificando márgenes,
+texto, número de páginas y enlaces. La descarga es directa, del mismo dominio,
+sin servicios externos ni generación de PDF en el navegador del visitante.
