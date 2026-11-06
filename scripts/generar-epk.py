@@ -179,7 +179,7 @@ text(EMAIL, M, 575, 16)
 c.linkURL('mailto:'+EMAIL, (M, 568, W-M, 595), relative=0, thickness=0)
 para('Contratación, conciertos, colaboraciones y prensa.', M, 547, CW, 11, 18)
 link('HABLAR POR WHATSAPP', WA, M, 479, (CW-16)/2, primary=True)
-link('DESCARGAR RIDER TÉCNICO', SITE+'media/prensa/punkies-y-cerebro-rider-tecnico.pdf', M+(CW+16)/2, 479, (CW-16)/2)
+link('DESCARGAR RIDER TÉCNICO', SITE+'media/prensa/punkies-y-cerebro-rider-tecnico.pdf?v=20261106-dos-toms', M+(CW+16)/2, 479, (CW-16)/2)
 label('MATERIAL ORIGINAL PARA DIFUSIÓN', M, 435)
 resources = [
     ('FOTOS DE LOS INTEGRANTES', SITE+'#epk'),

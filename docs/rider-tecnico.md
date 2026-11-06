@@ -30,3 +30,15 @@ Validación: PDF del rider de tres páginas y EPK de siete, verificación de má
 contactos, texto, numeración, enlaces PDF y filas del Word. Revisión visual del
 plano actualizado y su inclusión en el EPK. No se modifican catálogos, formularios
 ni sus scripts.
+
+## Distribución de batería confirmada con fotografías
+
+El propietario confirmó una configuración con un tom de aire y un tom de piso.
+Se actualizó el backline a dos toms y su microfonía a dos SM57 o similares, uno por
+tom. La lista de platillos corresponde a las fotografías: un ride, dos crash y
+hi-hat, sin splash. Se conservan los tres overheads y el resto de microfonía y
+amplificación previamente aprobados. El plano también indica los dos toms.
+
+La página, rider PDF/Word, plano y anexo técnico del EPK se regeneraron con la
+misma configuración. Se mantienen cinco monitores, cuatro mezclas y cuatro voces
+más un micrófono de respaldo.
