@@ -32,9 +32,9 @@ for name,path in [('Body',fonts/'Vera.ttf'),('Bold',fonts/'VeraBd.ttf'),('Title'
 pdfmetrics.registerFontFamily('Body',normal='Body',bold='Bold',italic='Body',boldItalic='Bold')
 
 drums=[
- ['Cascos','1 bombo, 1 redoblante y 3 toms (1, 2 y 3).'],
+ ['Cascos','1 bombo, 1 redoblante, 1 tom de aire y 1 tom de piso.'],
  ['Pedal de bombo','1 pedal sencillo.'],
- ['Platillos','1 ride, 2 crash, 1 splash y 1 hi-hat (Charles).'],
+ ['Platillos','1 ride, 2 crash y 1 hi-hat (Charles).'],
  ['Soportes','Parales y bases necesarios para todos los elementos.'],
  ['Asiento','1 sillín adecuado para el baterista.'],
 ]
@@ -46,7 +46,7 @@ amps=[
 mics=[
  ['Hi-hat (Charles)','1','SM81 o similar.'],
  ['Redoblante','1','SM57 o similar.'],
- ['Toms 1, 2 y 3','3','SM57 o similar; uno por tom.'],
+ ['Tom de aire y tom de piso','2','SM57 o similar; uno por tom.'],
  ['Bombo','1','AKG D112 o similar.'],
  ['Overheads','3','SM81 o similar.'],
  ['Guitarras 1 y 2','2','SM57 o SM58, o similar; uno por guitarra.'],
@@ -132,7 +132,7 @@ def mon(cx,cy,n,mix):
  c.setFont('Bold',8);c.setFillColor(white);c.drawCentredString(cx,cy-3,str(n))
  c.setFont('Body',6.5);c.setFillColor(INK);c.drawCentredString(cx,cy-20,'Mezcla '+mix)
 cx=M+CW/2
-box(cx,316,160,55,'JUAN CAMILO R.','Batería y coros','V4')
+box(cx,316,160,55,'JUAN CAMILO R.','Batería y coros','V4 · 1 tom de aire + 1 de piso')
 mon(cx-32,271,4,'D');mon(cx+32,271,5,'D')
 box(M+94,219,165,55,'ALEJANDRO CUADROS','Guitarra 1 y coros','V2')
 box(W-M-94,219,165,55,'SEBASTIÁN PRIETO','Guitarra 2 y coros','V3')
