@@ -296,3 +296,13 @@ footer { flex-wrap: wrap; }
 @media (min-width: 761px) and (max-width: 1100px) { .nav-bar #menu a { padding-inline: 6px; font-size: clamp(12px,1.5vw,16px); letter-spacing: .3px; } }
 @media (max-width: 900px) { .epk-hero, .epk-grid { grid-template-columns: minmax(0,1fr); gap: 24px; } .epk-press-photos { grid-template-columns: repeat(2,minmax(0,1fr)); } }
 @media (max-width: 480px) { .epk-release { align-items: flex-start; flex-direction: column; } .epk-release > img { flex-basis: auto; width: 130px; } .epk-press-photos { gap: 12px; } .epk-photo-download > span { padding: 10px; } .epk-booking-actions { flex-basis: 100%; } }
+
+/* Definición del EPK y referencia de montaje ampliable del set confirmado. */
+.epk-definition { color: var(--muted); font-size: 14px; line-height: 1.6; margin: -10px 0 24px; }
+.epk-drum-guide { display: flex; align-items: center; width: min(100%,660px); margin: 24px 0 0; border: 1px solid var(--line); background: #161616; }
+.epk-drum-guide > a { flex: 0 0 260px; display: block; }
+.epk-drum-guide img { width: 100%; height: auto; background: #fff; }
+.epk-drum-guide figcaption { flex: 1; padding: 20px; color: var(--muted); font-size: 13px; line-height: 1.6; border-left: 3px solid var(--red); }
+.epk-drum-guide figcaption strong { color: #fff; }
+.epk-drum-guide .epk-text-link { margin-top: 12px; font-size: 13px; }
+@media (max-width: 600px) { .epk-drum-guide { display: block; width: min(100%,300px); } .epk-drum-guide figcaption { border-left: 0; border-top: 3px solid var(--red); } }
