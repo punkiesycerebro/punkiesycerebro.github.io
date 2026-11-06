@@ -37,7 +37,7 @@ pdfmetrics.registerFont(TTFont('BodyBold', str(fonts / 'VeraBd.ttf')))
 pdfmetrics.registerFont(TTFont('Anton', str(ROOT / 'assets/fonts/Anton-Regular.ttf')))
 OUT.parent.mkdir(parents=True, exist_ok=True)
 c = canvas.Canvas(str(OUT), pagesize=A4, pageCompression=1)
-c.setTitle('Punkies y Cerebro — EPK | Kit de prensa')
+c.setTitle('Punkies y Cerebro — EPK | Electronic Press Kit')
 c.setAuthor('Punkies y Cerebro')
 c.setSubject('Biografía, formación, música, materiales de prensa, contratación y rider técnico')
 c.setCreator('Punkies y Cerebro · EPK oficial')
@@ -105,7 +105,8 @@ def page(number, section):
 
 # 01 — Cover, preserving the original wordmark.
 page(1, 'KIT DE PRENSA')
-photo('assets/logo-letras.png', M, 643, CW, 112)
+photo('assets/logo-letras.png', M, 663, CW, 112)
+text('Electronic Press Kit · Kit de prensa electrónico', M, 650, 11, color=MUTED)
 text('PUNK ROCK LIBRE.', M, 594, 38, 'Anton')
 text('DESDE MEDELLÍN.', M, 547, 38, 'Anton')
 text('Medellín, Colombia   /   Desde 2005   /   Punk rock', M, 515, 10, color=MUTED)
@@ -179,7 +180,7 @@ text(EMAIL, M, 575, 16)
 c.linkURL('mailto:'+EMAIL, (M, 568, W-M, 595), relative=0, thickness=0)
 para('Contratación, conciertos, colaboraciones y prensa.', M, 547, CW, 11, 18)
 link('HABLAR POR WHATSAPP', WA, M, 479, (CW-16)/2, primary=True)
-link('DESCARGAR RIDER TÉCNICO', SITE+'media/prensa/punkies-y-cerebro-rider-tecnico.pdf?v=20261106-dos-toms', M+(CW+16)/2, 479, (CW-16)/2)
+link('DESCARGAR RIDER TÉCNICO', SITE+'media/prensa/punkies-y-cerebro-rider-tecnico.pdf?v=20261106-guia-bateria', M+(CW+16)/2, 479, (CW-16)/2)
 label('MATERIAL ORIGINAL PARA DIFUSIÓN', M, 435)
 resources = [
     ('FOTOS DE LOS INTEGRANTES', SITE+'#epk'),

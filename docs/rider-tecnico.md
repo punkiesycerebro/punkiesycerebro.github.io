@@ -20,8 +20,9 @@ Archivos públicos en media/prensa/:
 - punkies-y-cerebro-epk.pdf: EPK completo de siete páginas con el mismo rider.
 
 Regeneración:
-1. python scripts/generar-rider.py
-2. python scripts/generar-epk.py
+1. python scripts/generar-set-bateria.py
+2. python scripts/generar-rider.py
+3. python scripts/generar-epk.py
 
 Dependencias: Pillow, reportlab, PyMuPDF y python-docx. Los originales gráficos
 se conservan. Las vistas previas del rider se generan solo en /tmp.
@@ -42,3 +43,15 @@ amplificación previamente aprobados. El plano también indica los dos toms.
 La página, rider PDF/Word, plano y anexo técnico del EPK se regeneraron con la
 misma configuración. Se mantienen cinco monitores, cuatro mezclas y cuatro voces
 más un micrófono de respaldo.
+
+## Guía ilustrada de montaje
+
+`punkies-y-cerebro-set-bateria.png` es una vista cenital rotulada de la distribución
+confirmada por el baterista: un tom de aire, uno de piso, bombo, redoblante, ride,
+dos crash y hi-hat. El asiento y el frente/público indican la orientación. Es un
+esquema ilustrado sin medidas, no una fotografía ni un plano a escala.
+
+Se muestra como una imagen pequeña ampliable y descargable junto al rider en la
+web y dentro de la primera página de los PDF/Word del rider. El EPK completo
+incluye esa misma página. Se genera con `scripts/generar-set-bateria.py`.
+La microfonía, los cinco monitores y las cuatro mezclas permanecen sin cambios.

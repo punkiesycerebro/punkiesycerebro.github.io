@@ -43,7 +43,8 @@ Tiene texto seleccionable, fuentes incrustadas y enlaces clicables. El álbum
 próximo se conserva marcado Próximamente. El rider técnico incorpora las especificaciones aportadas y confirmadas por el propietario.
 
 Para regenerarlo tras cambios de biografía o discografía:
-Primero `python scripts/generar-rider.py` y después `python scripts/generar-epk.py`
+Primero `python scripts/generar-set-bateria.py`, luego `python scripts/generar-rider.py`
+y después `python scripts/generar-epk.py`
 (requieren Pillow, reportlab, PyMuPDF y python-docx).
 La biografía se lee de `content/punkies-y-cerebro-biografia.txt` y la discografía
 y redes, de `content/site.json`. Las imágenes provienen de archivos originales.
@@ -70,3 +71,13 @@ para estos dos antecedentes. La presentación con Evaristo se distingue de los
 festivales. Se conservan los demás eventos y fechas aprobados de la historia.
 El generador lee ahora el apartado de trayectoria de la biografía descargable
 para mantenerlo coherente con el PDF.
+
+## Definición de EPK y guía de batería
+
+Debajo del título EPK aparece «Electronic Press Kit · Kit de prensa electrónico»,
+antes del logo original. La portada del PDF incluye la misma definición.
+En Producción técnica se incorpora una miniatura de la distribución de batería
+con opción de ampliar y descargar; el rider y su anexo en el EPK también la incluyen.
+Se comprobaron el diseño en Chromium a 1600 y 390 px, la carga de la imagen,
+la ausencia de desbordamiento horizontal, el Word de tres páginas y la revisión
+visual de las páginas PDF afectadas.

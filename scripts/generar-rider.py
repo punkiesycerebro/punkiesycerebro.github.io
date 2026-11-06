@@ -24,6 +24,9 @@ PREVIEW=Path('/tmp/pyc-rider-publicado')
 PREVIEW.mkdir(parents=True,exist_ok=True)
 PDF=OUT/'punkies-y-cerebro-rider-tecnico.pdf'
 DOCX=OUT/'punkies-y-cerebro-rider-tecnico.docx'
+SET_IMAGE=OUT/'punkies-y-cerebro-set-bateria.png'
+if not SET_IMAGE.is_file():
+ raise FileNotFoundError('Genera primero el set con python scripts/generar-set-bateria.py')
 W,H=A4
 M=40; CW=W-80
 RED=HexColor('#c90c19'); INK=HexColor('#191919'); GREY=HexColor('#eeeeee')
@@ -72,13 +75,13 @@ def para(s,x,top,width=CW,size=10,leading=15,color=INK):
  p=Paragraph(escape(s),ParagraphStyle('p',fontName='Body',fontSize=size,leading=leading,textColor=color))
  _,h=p.wrap(width,H);p.drawOn(c,x,top-h);return top-h
 
-def table(headers,rows,widths,top):
+def table(headers,rows,widths,top,x=M):
  style=ParagraphStyle('cell',fontName='Body',fontSize=9.4,leading=14,textColor=INK)
  hs=ParagraphStyle('head',parent=style,fontName='Bold',fontSize=8.4,leading=12,textColor=white)
  vals=[[Paragraph(escape(v),hs) for v in headers]]+[[Paragraph(escape(str(v)),style) for v in row] for row in rows]
  t=Table(vals,colWidths=widths,hAlign='LEFT')
  t.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),INK),('ROWBACKGROUNDS',(0,1),(-1,-1),[white,GREY]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('LINEBELOW',(0,0),(-1,0),2,RED),('LINEBELOW',(0,1),(-1,-1),.4,HexColor('#cccccc'))]))
- _,h=t.wrap(CW,H);t.drawOn(c,M,top-h);return top-h
+ _,h=t.wrap(sum(widths),H);t.drawOn(c,x,top-h);return top-h
 
 def title(s,y):text(s,M,y,31,'Title')
 def sub(s,y):text(s,M,y,13,'Bold');return y-18
@@ -99,7 +102,11 @@ def page(n,title_text):
 page(1,'01 / BACKLINE')
 para('Backline solicitado para la presentación de Punkies y Cerebro.',M,635,size=9.5,color=HexColor('#555555'))
 sub('BATERÍA COMPLETA',573)
-y=table(['ELEMENTO','REQUISITO'],drums,[130,CW-130],552)
+y=table(['ELEMENTO','REQUISITO'],drums,[90,210],552)
+text('GUÍA DE MONTAJE',M+315,566,9,'Bold',RED)
+c.drawImage(ImageReader(str(SET_IMAGE)),M+315,363,width=200,height=180,preserveAspectRatio=True,anchor='c')
+text('Ver distribución ampliada',M+315,346,8,'Bold',RED)
+c.linkURL('https://punkiesycerebro.com/media/prensa/punkies-y-cerebro-set-bateria.png',(M+315,342,W-M,548),relative=0,thickness=0)
 sub('AMPLIFICADORES',y-37)
 y=table(['INSTRUMENTO','CANT.','MODELO / REFERENCIA'],amps,[142,49,CW-191],y-58)
 para('Para coordinación técnica: Juan Camilo R. · +57 304 537 76 40.',M,y-18,size=9,color=HexColor('#555555'))
@@ -154,8 +161,8 @@ for name in ['Heading 1','Heading 2']:
 header=sec.header.paragraphs[0];header.text='PUNKIES Y CEREBRO  |  RIDER TÉCNICO';header.runs[0].bold=True;header.runs[0].font.size=Pt(12)
 footer=sec.footer.paragraphs[0];footer.text='RIDER TÉCNICO · NOVIEMBRE DE 2026\nMalopters Records · Producciones\n+57 304 537 76 40 · punkiesycerebro@gmail.com · juancamilo1504@gmail.com';footer.runs[0].font.size=Pt(8)
 
-def dt(headers,rows):
- t=doc.add_table(rows=1,cols=len(headers));t.style='Light Shading Accent 1'
+def dt(headers,rows,container=doc):
+ t=container.add_table(rows=1,cols=len(headers));t.style='Light Shading Accent 1'
  for cell,label in zip(t.rows[0].cells,headers):cell.text=label
  prop=t.rows[0]._tr.get_or_add_trPr();repeat=OxmlElement('w:tblHeader');prop.append(repeat)
  for row in rows:
@@ -166,7 +173,17 @@ def dt(headers,rows):
 
 doc.add_heading('01 / Backline',0)
 doc.add_paragraph('Rider técnico de Punkies y Cerebro. Edición: noviembre de 2026.')
-doc.add_heading('Batería completa',1);dt(['Elemento','Requisito'],drums)
+doc.add_heading('Batería completa',1)
+layout=doc.add_table(rows=1,cols=2);layout.autofit=False
+layout.columns[0].width=Cm(10.5);layout.columns[1].width=Cm(6.5)
+left,right=layout.rows[0].cells
+for cell in [left,right]:
+ cell.paragraphs[0].paragraph_format.space_after=Pt(0)
+ cell.paragraphs[0].paragraph_format.space_before=Pt(0)
+dt(['Elemento','Requisito'],drums,left)
+right.add_paragraph('Guía de montaje')
+right.add_paragraph().add_run().add_picture(str(SET_IMAGE),width=Cm(5.7))
+right.add_paragraph('Vista desde el baterista. Esquema no a escala.')
 doc.add_heading('Amplificadores',1);dt(['Instrumento','Cantidad','Modelo / referencia'],amps)
 doc.add_paragraph('Para coordinación técnica: Juan Camilo R. · +57 304 537 76 40.')
 doc.add_page_break()
