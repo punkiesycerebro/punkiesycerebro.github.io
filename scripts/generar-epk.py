@@ -22,7 +22,9 @@ DATA = json.loads((ROOT / 'content/site.json').read_text())
 RIDER = ROOT / 'media/prensa/punkies-y-cerebro-rider-tecnico.pdf'
 if not RIDER.is_file():
     raise FileNotFoundError('Genera primero el rider con python scripts/generar-rider.py')
-BIO = (ROOT / 'content/punkies-y-cerebro-biografia.txt').read_text().split('\n\n', 1)[1].split('\n\nFORMACIÓN')[0]
+PRESS_TEXT = (ROOT / 'content/punkies-y-cerebro-biografia.txt').read_text()
+BIO = PRESS_TEXT.split('\n\n', 1)[1].split('\n\nEN LOS ESCENARIOS DE COLOMBIA')[0]
+TRAJECTORY = PRESS_TEXT.split('EN LOS ESCENARIOS DE COLOMBIA\n\n', 1)[1].split('\n\nFORMACIÓN', 1)[0]
 SITE = 'https://punkiesycerebro.com/'
 WA = 'https://wa.me/573045377640?text=' + quote('Hola, quiero información de contratación de Punkies y Cerebro. Vi su EPK.')
 EMAIL = 'punkiesycerebro@gmail.com'
@@ -137,8 +139,8 @@ for i, (name, role, image) in enumerate(band):
     photo(image, x+4, 230, pw-8, 196)
     text(name, x, 205, 11, 'Anton')
     text(role, x, 189, 8, color=MUTED)
-label('EN LOS ESCENARIOS DE COLOMBIA', M, 140)
-para('Su trayectoria incluye Ibagué Ciudad Rock, Antimili Sonoro en Bogotá, Manizales Antifascista y Rock Fest Tarqui, Huila, entre otros festivales.', M, 120, CW, 10, 16)
+label('EN LOS ESCENARIOS DE COLOMBIA', M, 154)
+para(TRAJECTORY, M, 134, CW, 10, 16)
 c.showPage()
 
 # 03 — All releases, with real links and upcoming material identified.

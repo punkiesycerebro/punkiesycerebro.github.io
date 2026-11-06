@@ -60,3 +60,13 @@ el rider PDF independiente. El EPK completo también incluye el rider al final,
 con numeración global de siete páginas. El botón de management que antes solicitaba
 el rider por correo ahora permite descargarlo. La URL del EPK usa una versión de
 caché nueva para descargar el archivo actualizado.
+
+## Trayectoria ampliada
+
+Se añadieron Manizales Grita Rock y la presentación junto a Evaristo Páramos,
+según lo aportado por el propietario, en la historia visible y completa, biografía
+del EPK, apartado de escenarios, texto descargable y PDF. No se añadieron fechas
+para estos dos antecedentes. La presentación con Evaristo se distingue de los
+festivales. Se conservan los demás eventos y fechas aprobados de la historia.
+El generador lee ahora el apartado de trayectoria de la biografía descargable
+para mantenerlo coherente con el PDF.
