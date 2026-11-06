@@ -6,7 +6,8 @@ No necesita framework, compilación, cuentas adicionales ni un editor visual.
 
 ## Estructura
 
-- `index.html`: portada, fotografías originales, nuevo álbum y acceso a los contenidos existentes.
+- `index.html`: portada, fotografías originales, nuevo álbum, EPK y acceso a los contenidos existentes.
+- `content/punkies-y-cerebro-biografia.txt`: biografía descargable para prensa; véase `docs/epk.md`.
 - `assets/site.css`: diseño responsive negro/blanco/rojo y tipografía local.
 - `assets/site.js`: menú móvil y visor accesible de fotografías.
 - `assets/contenido.js`: contenido de `content/site.json` y formulario AJAX reutilizado.
