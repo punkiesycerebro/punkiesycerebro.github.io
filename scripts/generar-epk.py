@@ -6,6 +6,7 @@ from urllib.parse import quote
 import json
 import reportlab
 from PIL import Image
+import fitz
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import HexColor
@@ -18,6 +19,9 @@ from reportlab.platypus import Paragraph
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'media/prensa/punkies-y-cerebro-epk.pdf'
 DATA = json.loads((ROOT / 'content/site.json').read_text())
+RIDER = ROOT / 'media/prensa/punkies-y-cerebro-rider-tecnico.pdf'
+if not RIDER.is_file():
+    raise FileNotFoundError('Genera primero el rider con python scripts/generar-rider.py')
 BIO = (ROOT / 'content/punkies-y-cerebro-biografia.txt').read_text().split('\n\n', 1)[1].split('\n\nFORMACIÓN')[0]
 SITE = 'https://punkiesycerebro.com/'
 WA = 'https://wa.me/573045377640?text=' + quote('Hola, quiero información de contratación de Punkies y Cerebro. Vi su EPK.')
@@ -33,7 +37,7 @@ OUT.parent.mkdir(parents=True, exist_ok=True)
 c = canvas.Canvas(str(OUT), pagesize=A4, pageCompression=1)
 c.setTitle('Punkies y Cerebro — EPK | Kit de prensa')
 c.setAuthor('Punkies y Cerebro')
-c.setSubject('Biografía, formación, música, materiales de prensa y contratación')
+c.setSubject('Biografía, formación, música, materiales de prensa, contratación y rider técnico')
 c.setCreator('Punkies y Cerebro · EPK oficial')
 
 
@@ -94,7 +98,7 @@ def page(number, section):
     c.line(M, 40, W-M, 40)
     text('punkiesycerebro.com', M, 24, 8, color=MUTED)
     c.linkURL(SITE+'#epk', (M, 20, M+160, 36), relative=0, thickness=0)
-    text(f'EPK · {number:02d} / 04', W-M-83, 24, 8, color=MUTED)
+    text(f'EPK · {number:02d} / 07', W-M-83, 24, 8, color=MUTED)
 
 
 # 01 — Cover, preserving the original wordmark.
@@ -162,7 +166,7 @@ link('SPOTIFY DE LA BANDA', DATA['spotify'], M, 95, (CW-16)/2)
 link('VIDEOS EN YOUTUBE', DATA['youtube'], M+(CW+16)/2, 95, (CW-16)/2)
 c.showPage()
 
-# 04 — Contact, rider request and original downloadable press materials.
+# 04 — Contact, approved rider and original downloadable press materials.
 page(4, 'PRENSA Y CONTRATACIÓN')
 text('HABLEMOS.', M, 725, 60, 'Anton')
 label('MANAGEMENT & BOOKING', M, 680)
@@ -173,7 +177,7 @@ text(EMAIL, M, 575, 16)
 c.linkURL('mailto:'+EMAIL, (M, 568, W-M, 595), relative=0, thickness=0)
 para('Contratación, conciertos, colaboraciones y prensa.', M, 547, CW, 11, 18)
 link('HABLAR POR WHATSAPP', WA, M, 479, (CW-16)/2, primary=True)
-link('SOLICITAR RIDER TÉCNICO', 'mailto:'+EMAIL+'?subject='+quote('Solicitud de rider técnico — Punkies y Cerebro'), M+(CW+16)/2, 479, (CW-16)/2)
+link('DESCARGAR RIDER TÉCNICO', SITE+'media/prensa/punkies-y-cerebro-rider-tecnico.pdf', M+(CW+16)/2, 479, (CW-16)/2)
 label('MATERIAL ORIGINAL PARA DIFUSIÓN', M, 435)
 resources = [
     ('FOTOS DE LOS INTEGRANTES', SITE+'#epk'),
@@ -192,4 +196,23 @@ for i, (label_text, key) in enumerate([('SPOTIFY', 'spotify'), ('YOUTUBE', 'yout
 text('Kit de prensa · Noviembre de 2026', M, 72, 9, color=MUTED)
 c.showPage()
 c.save()
+# Append the same approved technical rider available on the website.
+base = fitz.open(OUT)
+rider = fitz.open(RIDER)
+if len(rider) != 3:
+    raise ValueError('Revisar la paginación del rider antes de generar el EPK')
+merged = fitz.open()
+merged.insert_pdf(base)
+merged.insert_pdf(rider)
+merged.set_metadata(base.metadata)
+for i in range(4, len(merged)):
+    page_pdf = merged[i]
+    page_pdf.add_redact_annot(fitz.Rect(W-M-95, H-56, W-M+2, H-42), fill=(1,1,1))
+    page_pdf.apply_redactions()
+    page_pdf.insert_text((W-M-83, H-46), f'EPK · {i+1:02d} / 07', fontsize=8, fontname='helv', color=(.1,.1,.1))
+payload = merged.tobytes(garbage=4, deflate=True)
+merged.close()
+rider.close()
+base.close()
+OUT.write_bytes(payload)
 print(OUT)
