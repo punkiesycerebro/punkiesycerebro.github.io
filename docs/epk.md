@@ -12,7 +12,7 @@ Incluye:
 - Fotos originales de los cuatro integrantes, panorámica y logos descargables.
 - Biografía de prensa descargable como texto UTF-8.
 - Management de Juan Camilo R., WhatsApp +57 304 537 76 40 y punkiesycerebro@gmail.com.
-- Solicitud de rider técnico por correo: no se publica un rider inventado.
+- Rider técnico aprobado, plano de escenario y descargas; véase `docs/rider-tecnico.md`.
 
 La biografía del HTML y content/punkies-y-cerebro-biografia.txt deben actualizarse juntas.
 Los enlaces musicales proceden de content/site.json, sin modificar sus datos ni catálogos.
@@ -36,17 +36,27 @@ DOM del carrito y contacto en este cambio. No se modifican sus scripts ni datos.
 ## PDF completo descargable
 
 El botón principal «Descargar EPK en PDF» apunta a
-`media/prensa/punkies-y-cerebro-epk.pdf`, un PDF A4 de cuatro páginas con
-portada y logo original, biografía y formación, discografía y contacto/materiales.
+`media/prensa/punkies-y-cerebro-epk.pdf`, un PDF A4 de siete páginas con
+portada y logo original, biografía y formación, discografía, contacto/materiales y
+las tres páginas del rider técnico.
 Tiene texto seleccionable, fuentes incrustadas y enlaces clicables. El álbum
-próximo se conserva marcado Próximamente. No se inventa un rider técnico.
+próximo se conserva marcado Próximamente. El rider técnico incorpora las especificaciones aportadas y confirmadas por el propietario.
 
 Para regenerarlo tras cambios de biografía o discografía:
-`python scripts/generar-epk.py` (requiere Pillow y reportlab).
+Primero `python scripts/generar-rider.py` y después `python scripts/generar-epk.py`
+(requieren Pillow, reportlab, PyMuPDF y python-docx).
 La biografía se lee de `content/punkies-y-cerebro-biografia.txt` y la discografía
 y redes, de `content/site.json`. Las imágenes provienen de archivos originales.
 La fecha de edición se debe actualizar al generar una nueva versión.
 
-La versión PDF se revisó renderizando sus cuatro páginas, verificando márgenes,
+La versión PDF se revisó renderizando sus páginas, verificando márgenes,
 texto, número de páginas y enlaces. La descarga es directa, del mismo dominio,
 sin servicios externos ni generación de PDF en el navegador del visitante.
+
+## Rider aprobado
+
+La sección Producción técnica muestra el resumen y el plano y permite descargar
+el rider PDF independiente. El EPK completo también incluye el rider al final,
+con numeración global de siete páginas. El botón de management que antes solicitaba
+el rider por correo ahora permite descargarlo. La URL del EPK usa una versión de
+caché nueva para descargar el archivo actualizado.
