@@ -54,6 +54,15 @@
       "precio": 45000,
       "imagen": "media/productos/gorra-punkies.jpeg",
       "tallas": []
+    },
+    {
+      "id": "boton-metalico",
+      "producto": "Botón metálico",
+      "descripcion": "",
+      "categoria": "Accesorios",
+      "precio": 30000,
+      "imagen": "media/productos/Boton Metalico.jpeg",
+      "tallas": []
     }
   ],
   "tienda_jimmy": [
