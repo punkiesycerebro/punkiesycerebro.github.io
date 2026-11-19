@@ -366,3 +366,75 @@ footer { flex-wrap: wrap; }
 .nav-bar .nav-home:hover { background: #151515; }
 .nav-bar .menu-toggle { background: linear-gradient(180deg,#c61524,#7e0711); text-shadow: none; box-shadow: inset 0 1px 0 #ef536055; }
 @media (prefers-reduced-motion: reduce) { .nav-bar nav a, .nav-bar nav a::after { transition: none; } }
+
+/* Estilo editorial negro y rojo, coordinado con la barra aprobada.
+   Apoyo y navegación conservan sus reglas; contenido y controles no cambian. */
+main .section { padding-block: clamp(44px,5vw,76px); border-bottom-color: #303030; }
+main .section > *, .story-grid > *, .contact > * { min-width: 0; }
+main .eyebrow { color: #ef4053; font: 400 clamp(14px,1.4vw,18px)/1.4 var(--display); letter-spacing: 2px; margin-bottom: 14px; }
+main h2 { letter-spacing: .3px; }
+main .section h3 { line-height: 1.3; }
+main .hero-copy { padding-block: 30px; border-bottom-color: #303030; background: #080808; }
+main .hero-copy h1 { font-size: clamp(28px,3.4vw,54px); letter-spacing: .6px; }
+main .hero-copy p { color: #bdbdbd; letter-spacing: 3px; margin-block: 10px 20px; }
+.member figcaption { flex-direction: column; align-items: flex-start; gap: 3px; padding: 48px 18px 18px; background: linear-gradient(transparent,#000e); }
+.member figcaption strong { border-left: 2px solid #df2033; padding-left: 9px; font: 400 clamp(14px,1.3vw,18px)/1.3 var(--display); letter-spacing: .3px; }
+.member figcaption span { padding-left: 11px; color: #d1d1d1; font-size: 12px; }
+main .btn { font-family: var(--display); font-weight: 400; letter-spacing: .7px; text-align: center; border-color: #555; border-radius: 4px; }
+main .btn.primary { background: linear-gradient(180deg,#c61524,#a40816 48%,#7e0711); border-color: #c61524; box-shadow: inset 0 1px 0 #ef536044,0 2px 4px #0005; }
+main .btn.primary:hover { background: linear-gradient(180deg,#df2033,#a7081a); color: #fff; border-color: #ed4052; }
+main .btn:not(.primary):hover { background: #202020; border-color: #d3293b; color: #fff; }
+main .album { background: #0b0b0b; }
+main .album h2 { font-size: clamp(32px,3.8vw,58px); line-height: 1.17; max-width: 780px; }
+main .album .release { color: #ef4053; font: 400 18px/1.4 var(--display); letter-spacing: 2px; margin-top: 14px; }
+main .album .translation { color: #bcbcbc; }
+.album-cover img { border: 1px solid #3a3a3a; box-shadow: 0 8px 24px #0005; }
+.spotify-preview { padding-top: 28px; border-top: 1px solid #303030; }
+.discography { padding-top: 10px; }
+.discography-card { border-color: #303030; border-radius: 5px; background: #131313; }
+.discography-info { padding: 22px; }
+.discography-info h4 { font-size: 22px; }
+.discography-year { color: #ef4053; }
+main .shows, main .story-grid, main .contact { column-gap: clamp(24px,5vw,72px); }
+main .shows h2, main .story-grid h2 { font-size: clamp(32px,3.4vw,52px); line-height: 1.2; }
+.show-card { border-color: #3b3b3b; background: #111; }
+.show-date { background: linear-gradient(180deg,#c61524,#7e0711); }
+.show-info .show-eyebrow { background: #9e0a18; }
+.show-prices strong { color: #ef4053; }
+main .story { background: #111; }
+.story-grid p { line-height: 1.85; }
+main blockquote { border-left-color: #d8293d; font-size: clamp(19px,1.8vw,25px); }
+.band-lineup li { font-size: 16px; }
+.band-lineup strong { color: #ef4053; }
+.history-full summary { font: 400 18px/1.5 var(--display); letter-spacing: .8px; }
+main .gallery .section-heading > p { max-width: 360px; }
+.gallery-item { border-radius: 5px; }
+.gallery-item > span { align-items: center; gap: 12px; font-family: var(--display); letter-spacing: .6px; padding: 15px; }
+.gallery-item:hover > span { background: #9e0a18; }
+main .shop { background: #101010; }
+main .jimmy-shop { background: #090909; }
+.shop .product-card { background: #141414; border-color: #333; border-radius: 6px; }
+.shop .product-card > img { border-radius: 5px 5px 0 0; background: #111; }
+.shop .product-info .product-category { color: #ef4053; letter-spacing: 1.5px; }
+.shop .product-info h4 { line-height: 1.4; }
+.shop .product-info .product-price { padding-top: 18px; margin-bottom: 20px; font-size: 27px; }
+.shop .product-info .product-options select, .shop .product-info .product-options input { border-color: #505050; border-radius: 3px; }
+main .catalog-category > h3 { border-bottom-color: #363636; padding-left: 12px; border-left: 3px solid #b60e20; }
+main .epk { background: #0c0c0c; }
+.epk-panel, .epk-release, .epk-booking { background: #131313; border-color: #333; border-radius: 5px; }
+.epk-booking { border-top-color: #b60e20; }
+.epk-text-link:hover { color: #ff6170; }
+main .contact { background: #090909; }
+main .contact h2 { font-size: clamp(52px,6.4vw,88px); line-height: 1.15; }
+.contact-form-area h3 { margin-bottom: 24px; }
+.contact-form-area input, .contact-form-area textarea { border-color: #555; background: #131313; border-radius: 3px; }
+.booking-contact h3 { color: #fff; }
+@media (max-width: 760px) {
+  main .section { padding-block: 44px; }
+  main .hero-copy { padding-block: 26px; }
+  main .hero-copy h1 { font-size: clamp(26px,7.6vw,42px); }
+  main .album h2 { font-size: clamp(32px,8vw,46px); }
+  .member figcaption { padding: 40px 12px 14px; }
+  .member figcaption span { font-size: 11px; }
+  main .shows h2, main .story-grid h2 { font-size: clamp(32px,8vw,44px); }
+}
